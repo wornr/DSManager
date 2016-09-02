@@ -4,11 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using DSManager.Model.Enums;
+
 namespace DSManager.Utilities {
     public static class ValueToText {
-        public static string translate(long value, bool groupsOnly = true) {
+        /// <summary>Translates numeric value to it's text representation.</summary>
+        /// <param name="currency">Currency type to append to display.</param>
+        /// <param name="groupsOnly">If true 1000 => thousand otherwise 1000 => one thousand.</param>
+        public static string translate(long value, Currency currency = Currency.None, bool groupsOnly = true) {
             string text = "";
-
+            
             string[] unities = { "jeden", "dwa", "trzy", "cztery", "pięć", "sześć", "siedem", "osiem", "dziewięć" };
             string[] dozensUnities = { "jedenaście", "dwanaście", "trzynaście", "czternaście", "piętnaście", "szesnaście", "siedemnaście", "osiemnaście", "dziewiętnaście" };
             string[] dozens = {"dziesięć", "dwadzieścia", "trzydzieści", "czterdzieści", "pięćdziesiąt", "szesćdziesiąt", "siedemdziesiąt", "osiemdziesiąt", "dziewięćdziesiąt" };
@@ -19,6 +24,11 @@ namespace DSManager.Utilities {
                 {"bilion", "biliony", "bilionów"},
                 {"biliard", "biliardy", "biliardów"},
                 {"trylion", "tryliardy", "tryliardów"}
+            };
+            string[,] currencies = {{"złoty", "złote", "złotych"},
+                {"euro", "euro", "euro"},
+                {"dolar", "dolary", "dolarów"},
+                {"funt", "funty", "funtów"}
             };
 
             int h, d, dU, u, g = 0, e, shift;
@@ -62,6 +72,16 @@ namespace DSManager.Utilities {
 
                 g += 1 + shift;
                 value /= 1000;
+            }
+
+            if(currency > 0) {
+                if(value == 1) {
+                    text += currencies[(int)currency - 1, 0];
+                } else if(value > 1 && value < 5) {
+                    text += currencies[(int)currency - 1, 1];
+                } else {
+                    text += currencies[(int)currency - 1, 2];
+                }
             }
 
             return text;
