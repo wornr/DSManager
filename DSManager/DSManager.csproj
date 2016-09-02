@@ -75,8 +75,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="Utilities\ValueToText.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -120,9 +121,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Localization\" />
-    <Folder Include="Models\" />
+    <Folder Include="Resources\Icons\" />
     <Folder Include="Resources\Images\" />
-    <Folder Include="Views\" />
+    <Folder Include="View\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DSManager.Model\DSManager.Model.csproj">
+      <Project>{7e77b531-fb26-40d8-b12b-3f8b986c15d4}</Project>
+      <Name>DSManager.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

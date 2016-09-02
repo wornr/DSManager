@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSManager", "DSManager\DSManager.csproj", "{C121148D-A761-4D03-A9F4-1A0981D28E1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSManager.Model", "DSManager.Model\DSManager.Model.csproj", "{7E77B531-FB26-40D8-B12B-3F8B986C15D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{C121148D-A761-4D03-A9F4-1A0981D28E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C121148D-A761-4D03-A9F4-1A0981D28E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C121148D-A761-4D03-A9F4-1A0981D28E1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E77B531-FB26-40D8-B12B-3F8B986C15D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E77B531-FB26-40D8-B12B-3F8B986C15D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E77B531-FB26-40D8-B12B-3F8B986C15D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E77B531-FB26-40D8-B12B-3F8B986C15D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
