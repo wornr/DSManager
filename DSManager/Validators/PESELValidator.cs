@@ -12,13 +12,17 @@ namespace DSManager.Validators {
         /// <param name="pesel">PESEL number</param>
         /// <returns>true if PESEL is valid, false otherwise</returns>
         public static bool validate(string pesel) {
-            if(pesel == null || pesel.Length != 11 ||
-               (int.Parse(pesel.Substring(2, 2)) > 12 && int.Parse(pesel.Substring(2, 2)) < 21) ||
-               (int.Parse(pesel.Substring(2, 2)) > 32 && int.Parse(pesel.Substring(2, 2)) < 41) ||
-               (int.Parse(pesel.Substring(2, 2)) > 52 && int.Parse(pesel.Substring(2, 2)) < 61) ||
-               (int.Parse(pesel.Substring(2, 2)) > 72 && int.Parse(pesel.Substring(2, 2)) < 81) ||
-               int.Parse(pesel.Substring(2, 2)) > 92)
-                    return false;
+            if(pesel == null || pesel.Length != 11)
+                return false;
+            else {
+                int monthPart = int.Parse(pesel.Substring(2, 2));
+                if((monthPart > 12 && monthPart < 21) ||
+                    (monthPart > 32 && monthPart < 41) ||
+                    (monthPart > 52 && monthPart < 61) ||
+                    (monthPart > 72 && monthPart < 81) ||
+                    int.Parse(pesel.Substring(2, 2)) > 92)
+                        return false;
+            }
 
             int processedNumber, controlNumber = 0, multiplier = 1;
 

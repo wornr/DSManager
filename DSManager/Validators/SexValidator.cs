@@ -8,6 +8,12 @@ using DSManager.Model.Enums;
 
 namespace DSManager.Validators {
     public static class SexValidator {
+        /// <summary>
+        /// Checks if given sex is correct with sex coded in PESEL number
+        /// </summary>
+        /// <param name="sex">Sex enum</param>
+        /// <param name="pesel">PESEL number</param>
+        /// <returns>true if sex is correct with sex coded in PESEL number, false otherwise</returns>
         public static bool validate(Sex sex, string pesel) {
             if(sex == Sex.None || !PESELValidator.validate(pesel))
                 return false;
