@@ -32,6 +32,12 @@ namespace DSManager.Utilities {
             };
 
             int h, d, dU, u, g = 0, e, shift;
+            string sign = "";
+
+            if(value < 0) {
+                sign = "minus ";
+                value = Math.Abs(value);
+            }
 
             while(value != 0) {
                 h = (int)value % 1000 / 100;
@@ -84,7 +90,7 @@ namespace DSManager.Utilities {
                 }
             }
 
-            return text;
+            return sign + text;
         }
     }
 }
