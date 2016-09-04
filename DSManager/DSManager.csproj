@@ -130,6 +130,10 @@
       <Project>{7e77b531-fb26-40d8-b12b-3f8b986c15d4}</Project>
       <Name>DSManager.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DSManager.PDF\DSManager.PDF.csproj">
+      <Project>{57b8be72-96e4-41ac-8819-cfe3f5af6df7}</Project>
+      <Name>DSManager.PDF</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
