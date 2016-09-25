@@ -74,14 +74,27 @@
     <Compile Include="Enums\CourseType.cs" />
     <Compile Include="Enums\Currency.cs" />
     <Compile Include="Enums\DrivingLicenseCategory.cs" />
-    <Compile Include="Enums\Sex.cs" />
+    <Compile Include="Mappings\CarMap.cs" />
+    <Compile Include="Mappings\CarPermissionsMap.cs" />
+    <Compile Include="Mappings\ClassesDatesMap.cs" />
+    <Compile Include="Mappings\CourseMap.cs" />
+    <Compile Include="Mappings\DrivingLicenseMap.cs" />
+    <Compile Include="Mappings\DrivingLicensePermissionsMap.cs" />
+    <Compile Include="Mappings\DurationTimeMap.cs" />
+    <Compile Include="Mappings\ExamsDatesMap.cs" />
+    <Compile Include="Mappings\InstructorMap.cs" />
+    <Compile Include="Mappings\InstructorPermissionsMap.cs" />
+    <Compile Include="Mappings\MinimalAgeMap.cs" />
+    <Compile Include="Mappings\ParticipantMap.cs" />
+    <Compile Include="Mappings\PaymentMap.cs" />
+    <Compile Include="Mappings\PricesMap.cs" />
+    <Compile Include="Mappings\StudentMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Mappings\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

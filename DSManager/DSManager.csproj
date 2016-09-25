@@ -79,7 +79,6 @@
     <Compile Include="Validators\BirthDateValidator.cs" />
     <Compile Include="Validators\PESELValidator.cs" />
     <Compile Include="Utilities\ValueToText.cs" />
-    <Compile Include="Validators\SexValidator.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
