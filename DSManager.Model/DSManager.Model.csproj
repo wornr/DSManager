@@ -52,9 +52,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\BaseEntity.cs" />
+    <Compile Include="Entities\Car.cs" />
+    <Compile Include="Entities\CarPermissions.cs" />
+    <Compile Include="Entities\ClassesDates.cs" />
+    <Compile Include="Entities\Course.cs" />
+    <Compile Include="Entities\Dates.cs" />
+    <Compile Include="Entities\Dictionaries\DurationTime.cs" />
+    <Compile Include="Entities\Dictionaries\MinimalAge.cs" />
+    <Compile Include="Entities\Dictionaries\Prices.cs" />
+    <Compile Include="Entities\DrivingLicense.cs" />
+    <Compile Include="Entities\DrivingLicensePermissions.cs" />
+    <Compile Include="Entities\ExamsDates.cs" />
+    <Compile Include="Entities\Instructor.cs" />
+    <Compile Include="Entities\InstructorPermissions.cs" />
+    <Compile Include="Entities\Payment.cs" />
+    <Compile Include="Entities\Person.cs" />
+    <Compile Include="Entities\Participant.cs" />
+    <Compile Include="Entities\Student.cs" />
     <Compile Include="Enums\CourseKind.cs" />
     <Compile Include="Enums\CourseType.cs" />
     <Compile Include="Enums\Currency.cs" />
+    <Compile Include="Enums\DrivingLicenseCategory.cs" />
     <Compile Include="Enums\Sex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -62,7 +81,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Entities\" />
     <Folder Include="Mappings\" />
     <Folder Include="Services\" />
   </ItemGroup>
