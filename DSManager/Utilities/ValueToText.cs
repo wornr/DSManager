@@ -29,6 +29,7 @@ namespace DSManager.Utilities {
                 {"cent", "centy", "centów"},
                 {"pens", "pensy", "pensów"}
             };
+        private static string sign = "minus ";
 
         private static string parse(long value, bool groupsOnly = true) {
             string result = ""; // result
@@ -82,12 +83,13 @@ namespace DSManager.Utilities {
         /// <summary>
         /// Translates numeric value to it's text representation
         /// </summary>
-        /// <param name="value">numeric value of type long</param>
+        /// <param name="value">numeric value of type decimal</param>
         /// <param name="currency">Currency type which has to be displayed.</param>
         /// <param name="groupsOnly">If true 1000 => thousand otherwise 1000 => one thousand.</param>
         /// <returns>Text representation of given value with/without currency depending of currency param</returns>
-        public static string translate(double value, Currency currency = Currency.None, bool groupsOnly = true) {
-            string sign = "", totalCurrency = "", decimalCurrency = "";
+        public static string translate(decimal value, Currency currency = Currency.None, bool groupsOnly = true) {
+            string totalCurrency = "", decimalCurrency = "";
+            bool showSign = false;
 
             string[] values = value.ToString().Split('.');
 
@@ -103,7 +105,7 @@ namespace DSManager.Utilities {
             }
 
             if(totalPart < 0) {
-                sign = "minus ";
+                showSign = true;
                 totalPart = Math.Abs(totalPart);
             }
 
@@ -126,9 +128,9 @@ namespace DSManager.Utilities {
             }
 
             if(values.Length == 2)
-                return sign + parse(totalPart, groupsOnly) + totalCurrency + " " + parse(decimalPart, groupsOnly) + decimalCurrency;
+                return (showSign ? sign + " " : "") + parse(totalPart, groupsOnly) + totalCurrency + " " + parse(decimalPart, groupsOnly) + decimalCurrency;
             else
-                return sign + parse(totalPart, groupsOnly) + totalCurrency;
+                return (showSign ? sign + " " : "") + parse(totalPart, groupsOnly) + totalCurrency;
         }
     }
 }
