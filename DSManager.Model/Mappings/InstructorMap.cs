@@ -11,17 +11,17 @@ namespace DSManager.Model.Mappings {
     class InstructorMap : ClassMap<Instructor> {
         public InstructorMap() {
             Id(x => x.Id);
-            Map(x => x.FirstName);
-            Map(x => x.SecondName);
-            Map(x => x.LastName);
-            Map(x => x.PESEL);
-            Map(x => x.BirthDate);
-            Map(x => x.City);
-            Map(x => x.Street);
-            Map(x => x.HouseNr);
-            Map(x => x.ApartmentNr);
-            Map(x => x.PhoneNr);
-            Map(x => x.PermissionsNr);
+            Map(x => x.FirstName).Not.Nullable();
+            Map(x => x.SecondName).Nullable();
+            Map(x => x.LastName).Not.Nullable();
+            Map(x => x.PESEL).Nullable();
+            Map(x => x.BirthDate).Not.Nullable();
+            Map(x => x.City).Not.Nullable();
+            Map(x => x.Street).Not.Nullable();
+            Map(x => x.HouseNr).Not.Nullable();
+            Map(x => x.ApartmentNr).Nullable();
+            Map(x => x.PhoneNr).Nullable();
+            Map(x => x.PermissionsNr).Not.Nullable();
 
             HasMany(x => x.Participants);
             HasMany(x => x.Permissions);

@@ -8,6 +8,6 @@ using DSManager.Model.Enums;
 
 namespace DSManager.Model.Entities {
     public class ExamsDates : Dates {
-        public virtual bool IsPassed { get; set; }
+        public virtual bool? IsPassed { get; set; }
     }
 }

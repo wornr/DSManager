@@ -13,7 +13,7 @@ namespace DSManager.Model.Mappings {
             CompositeId().KeyProperty(x => x.Category)
                 .KeyProperty(x => x.CourseKind)
                 .KeyProperty(x => x.StartDate);
-            Map(x => x.Time);
+            Map(x => x.Time).Not.Nullable();
         }
     }
 }

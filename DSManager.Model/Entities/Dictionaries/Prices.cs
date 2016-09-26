@@ -16,5 +16,13 @@ namespace DSManager.Model.Entities.Dictionaries {
 
         public virtual DateTime EndDate { get; set; }
         public virtual decimal Price { get; set; }
+
+        public override bool Equals(object obj) {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode() {
+            return base.GetHashCode();
+        }
     }
 }

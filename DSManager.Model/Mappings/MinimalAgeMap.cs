@@ -12,7 +12,7 @@ namespace DSManager.Model.Mappings {
         public MinimalAgeMap() {
             CompositeId().KeyProperty(x => x.Category)
                 .KeyProperty(x => x.StartDate);
-            Map(x => x.Age);
+            Map(x => x.Age).Not.Nullable();
         }
     }
 }

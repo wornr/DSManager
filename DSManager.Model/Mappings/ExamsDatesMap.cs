@@ -11,9 +11,9 @@ namespace DSManager.Model.Mappings {
     class ExamsDatesMap : ClassMap<ExamsDates> {
         public ExamsDatesMap() {
             Id(x => x.Id);
-            Map(x => x.CourseKind);
-            Map(x => x.StartDate);
-            Map(x => x.IsPassed);
+            Map(x => x.CourseKind).Not.Nullable();
+            Map(x => x.StartDate).Not.Nullable();
+            Map(x => x.IsPassed).Nullable();
 
             References(x => x.Participant);
             References(x => x.Instructor);

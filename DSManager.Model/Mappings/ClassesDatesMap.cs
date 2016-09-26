@@ -11,10 +11,10 @@ namespace DSManager.Model.Mappings {
     class ClassesDatesMap : ClassMap<ClassesDates> {
         public ClassesDatesMap() {
             Id(x => x.Id);
-            Map(x => x.CourseKind);
-            Map(x => x.StartDate);
-            Map(x => x.EndDate);
-            Map(x => x.Distance);
+            Map(x => x.CourseKind).Not.Nullable();
+            Map(x => x.StartDate).Not.Nullable();
+            Map(x => x.EndDate).Nullable();
+            Map(x => x.Distance).Nullable();
 
             References(x => x.Participant);
             References(x => x.Instructor);

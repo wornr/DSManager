@@ -11,12 +11,12 @@ namespace DSManager.Model.Mappings {
     class ParticipantMap : ClassMap<Participant> {
         public ParticipantMap() {
             Id(x => x.Id);
-            Map(x => x.KEOSNr);
-            Map(x => x.PKKNr);
-            Map(x => x.CoursePrice);
-            Map(x => x.EndDate);
-            Map(x => x.CertificateNr);
-            Map(x => x.IsTheory);
+            Map(x => x.KEOSNr).Not.Nullable();
+            Map(x => x.PKKNr).Not.Nullable();
+            Map(x => x.CoursePrice).Not.Nullable();
+            Map(x => x.EndDate).Nullable();
+            Map(x => x.CertificateNr).Nullable();
+            Map(x => x.IsTheory).Not.Nullable();
 
             References(x => x.Student);
             References(x => x.Instructor);

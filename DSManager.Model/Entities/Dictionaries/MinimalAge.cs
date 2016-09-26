@@ -14,5 +14,13 @@ namespace DSManager.Model.Entities.Dictionaries {
         #endregion
 
         public virtual int Age { get; set; }
+
+        public override bool Equals(object obj) {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode() {
+            return base.GetHashCode();
+        }
     }
 }

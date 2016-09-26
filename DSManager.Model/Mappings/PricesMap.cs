@@ -14,7 +14,7 @@ namespace DSManager.Model.Mappings {
                 .KeyProperty(x => x.CourseType)
                 .KeyProperty(x => x.StartDate);
             Map(x => x.EndDate);
-            Map(x => x.Price);
+            Map(x => x.Price).Not.Nullable();
         }
     }
 }

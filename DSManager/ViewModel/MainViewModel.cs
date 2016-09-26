@@ -1,5 +1,7 @@
 using GalaSoft.MvvmLight;
 
+using DSManager.Model;
+
 namespace DSManager.ViewModel
 {
     /// <summary>
@@ -29,6 +31,7 @@ namespace DSManager.ViewModel
             ////{
             ////    // Code runs "for real"
             ////}
+            NHibernateConfiguration NHibernateConfiguration = new NHibernateConfiguration();
         }
     }
 }

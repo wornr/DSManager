@@ -11,8 +11,8 @@ namespace DSManager.Model.Mappings {
     class DrivingLicenseMap : ClassMap<DrivingLicense> {
         public DrivingLicenseMap() {
             Id(x => x.Id);
-            Map(x => x.IssueDate);
-            Map(x => x.DrivingLicenseNr);
+            Map(x => x.IssueDate).Not.Nullable();
+            Map(x => x.DrivingLicenseNr).Not.Nullable();
 
             HasMany(x => x.DrivingLicensePermissions);
             References(x => x.Student);
