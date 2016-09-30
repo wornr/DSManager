@@ -12,7 +12,8 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
-        <Image x:Name="loginImage" Grid.Column="0" Source="/DSManager;component/Resources/Images/user.png" Height="110" HorizontalAlignment="Right"/>
+        <Image x:Name="personImage" Source="/DSManager;component/Resources/Images/user.png" Height="110" HorizontalAlignment="Right"/>
+        <Image x:Name="lockImage" Source="/DSManager;component/Resources/Images/lock.png" Margin="120,40,10,-40"/>
         <StackPanel Grid.Column="1" VerticalAlignment="Center">
             <TextBlock x:Name="loginInfoBlock" Text="Wprowadź dane uwierzytelniające" HorizontalAlignment="Center" Margin="0,5"/>
             <Grid HorizontalAlignment="Center" Margin="0,5">
