@@ -29,7 +29,7 @@ namespace DSManager.Utilities {
                 {"cent", "centy", "centów"},
                 {"pens", "pensy", "pensów"}
             };
-        private static string sign = "minus ";
+        private static string sign = "minus";
 
         private static string parse(long value, bool groupsOnly = true) {
             string result = ""; // result

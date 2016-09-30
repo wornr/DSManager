@@ -1,0 +1,46 @@
+﻿<Window x:Class="DSManager.View.SignInWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DSManager.View"
+        mc:Ignorable="d"
+        Title="Logowanie" Height="300" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <Image x:Name="loginImage" Grid.Column="0" Source="/DSManager;component/Resources/Images/user.png" Height="110" HorizontalAlignment="Right"/>
+        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+            <TextBlock x:Name="loginInfoBlock" Text="Wprowadź dane uwierzytelniające" HorizontalAlignment="Center" Margin="0,5"/>
+            <Grid HorizontalAlignment="Center" Margin="0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock x:Name="loginBlock" TextWrapping="Wrap" Text="Login" Margin="2,5"/>
+                    <TextBlock x:Name="passwordBlock" TextWrapping="Wrap" Text="Hasło" Margin="2,5"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBox x:Name="loginTxt" TextWrapping="Wrap" Height="23" Width="145" Margin="2,2"/>
+                    <!-- TODO dodac watermark -->
+                    <PasswordBox x:Name="passwordTxt" Height="23" Width="145" Margin="2,2"/>
+                    <!-- TODO dodac watermark -->
+                </StackPanel>
+            </Grid>
+            <Grid HorizontalAlignment="Center" Margin="0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="signInBtn" Grid.Column="0" Content="Zaloguj" Width="65" IsDefault="True" Margin="5,2"/>
+                <Button x:Name="cancelBtn" Grid.Column="1" Content="Anuluj" Width="65" IsCancel="True" Margin="5,2"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>

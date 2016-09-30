@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
         Title="DS Manager" Width="1000" Height="650">
-    <Grid>
-        
+<Grid>
+        <Image Source="Resources/Images/car v2.png" Width="250"/>
+
     </Grid>
 </Window>
