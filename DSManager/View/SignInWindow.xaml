@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DSManager.View"
+        xmlns:iconButton="clr-namespace:DSManager.Controls.IconButton;assembly=DSManager.Controls"
+        xmlns:watermarkTextBox="clr-namespace:DSManager.Controls.WatermarkTextBox;assembly=DSManager.Controls"
         mc:Ignorable="d"
-        Title="Logowanie" Height="300" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Logowanie" Height="300" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" Topmost="True" WindowStyle="None">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -27,10 +29,9 @@
                     <TextBlock x:Name="passwordBlock" TextWrapping="Wrap" Text="Hasło" Margin="2,5"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
-                    <TextBox x:Name="loginTxt" TextWrapping="Wrap" Height="23" Width="145" Margin="2,2"/>
+                    <watermarkTextBox:WatermarkTextBox x:Name="loginTxt" Height="23" Width="145" Margin="2,2" Watermark="Login"/>
                     <!-- TODO dodac watermark -->
-                    <PasswordBox x:Name="passwordTxt" Height="23" Width="145" Margin="2,2"/>
-                    <!-- TODO dodac watermark -->
+                    <PasswordBox x:Name="passwordTxt" Height="23" Width="145" Margin="2,2" VerticalContentAlignment="Center"/>
                 </StackPanel>
             </Grid>
             <Grid HorizontalAlignment="Center" Margin="0,5">
@@ -39,8 +40,8 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="signInBtn" Grid.Column="0" Content="Zaloguj" Width="65" IsDefault="True" Margin="5,2"/>
-                <Button x:Name="cancelBtn" Grid.Column="1" Content="Anuluj" Width="65" IsCancel="True" Margin="5,2"/>
+                <iconButton:IconButton x:Name="signInBtn" Text="Zaloguj" ImageSource="/DSManager;component/Resources/Icons/keys.png" IsDefault="True" Width="80" Margin="5,2"/>
+                <iconButton:IconButton x:Name="cancelBtn" Grid.Column="1" Text="Anuluj" ImageSource="/DSManager;component/Resources/Icons/cancel.png" IsCancel="True" Width="80" Margin="5,2"/>
             </Grid>
         </StackPanel>
     </Grid>

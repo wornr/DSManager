@@ -154,9 +154,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Localization\" />
-    <Folder Include="Resources\Icons\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DSManager.Controls\DSManager.Controls.csproj">
+      <Project>{2b59f5b6-1adf-49fe-a8e6-898ca6f37f3a}</Project>
+      <Name>DSManager.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DSManager.Model\DSManager.Model.csproj">
       <Project>{7e77b531-fb26-40d8-b12b-3f8b986c15d4}</Project>
       <Name>DSManager.Model</Name>
@@ -169,6 +172,12 @@
   <ItemGroup>
     <Resource Include="Resources\Images\lock.png" />
     <Resource Include="Resources\Images\user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\keys.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\cancel.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets')" />

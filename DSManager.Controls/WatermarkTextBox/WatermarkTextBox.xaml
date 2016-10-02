@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="DSManager.Controls.WatermarkTextBox.WatermarkTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DSManager.Controls.WatermarkTextBox"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Name="watermarkTextBox">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="WatermarkTextBoxStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Style="{StaticResource WatermarkTextBoxStyle}">
+        <TextBox x:Name="SearchTermTextBox" Height="{Binding ElementName=watermarkTextBox, Path=Height}" Width="{Binding ElementName=watermarkTextBox, Path=Width}"/>
+        <!-- TODO add passwordBox handling -->
+        <!--<PasswordBox Height="{Binding ElementName=watermarkTextBox, Path=Height}" Width="{Binding ElementName=watermarkTextBox, Path=Width}" x:Name="SearchTermTextBox"/>-->
+        <TextBlock IsHitTestVisible="False" Text="{Binding ElementName=watermarkTextBox, Path=Watermark}"/>
+    </Grid>
+</UserControl>
