@@ -15,7 +15,7 @@
     </UserControl.Resources>
 
     <Grid Style="{StaticResource WatermarkTextBoxStyle}">
-        <TextBox x:Name="SearchTermTextBox" Height="{Binding ElementName=watermarkTextBox, Path=Height}" Width="{Binding ElementName=watermarkTextBox, Path=Width}"/>
+        <TextBox x:Name="SearchTermTextBox" Text="{Binding ElementName=watermarkTextBox, Path=Text}" Height="{Binding ElementName=watermarkTextBox, Path=Height}" Width="{Binding ElementName=watermarkTextBox, Path=Width}"/>
         <!-- TODO add passwordBox handling -->
         <!--<PasswordBox Height="{Binding ElementName=watermarkTextBox, Path=Height}" Width="{Binding ElementName=watermarkTextBox, Path=Width}" x:Name="SearchTermTextBox"/>-->
         <TextBlock IsHitTestVisible="False" Text="{Binding ElementName=watermarkTextBox, Path=Watermark}"/>

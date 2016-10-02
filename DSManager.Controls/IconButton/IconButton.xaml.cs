@@ -24,9 +24,12 @@ namespace DSManager.Controls.IconButton {
 
         public static readonly DependencyProperty IsDefaultProperty = DependencyProperty.Register("IsDefault", typeof(bool), typeof(IconButton), new FrameworkPropertyMetadata(false));
         public static readonly DependencyProperty IsCancelProperty = DependencyProperty.Register("IsCancel", typeof(bool), typeof(IconButton), new FrameworkPropertyMetadata(false));
-        public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register("ImageSource", typeof(ImageSource), typeof(IconButton), new FrameworkPropertyMetadata(null));
+        public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register("Icon", typeof(ImageSource), typeof(IconButton), new FrameworkPropertyMetadata(null));
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(IconButton), new FrameworkPropertyMetadata(string.Empty));
 
+        public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent("Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(IconButton));
+
+        #region Properties
         public bool IsDefault {
             get { return GetValue(IsDefaultProperty).Equals(true); }
             set { SetValue(IsDefaultProperty, value); }
@@ -35,7 +38,7 @@ namespace DSManager.Controls.IconButton {
             get { return GetValue(IsCancelProperty).Equals(true); }
             set { SetValue(IsCancelProperty, value); }
         }
-        public ImageSource ImageSource {
+        public ImageSource Icon {
             get { return GetValue(ImageSourceProperty) as ImageSource; }
             set { SetValue(ImageSourceProperty, value); }
         }
@@ -43,5 +46,16 @@ namespace DSManager.Controls.IconButton {
             get { return GetValue(TextProperty).ToString(); }
             set { SetValue(TextProperty, value); }
         }
+        #endregion
+
+        #region Events
+        public event RoutedEventHandler Click {
+            add { AddHandler(ClickEvent, value); }
+            remove { RemoveHandler(ClickEvent, value); }
+        }
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            RaiseEvent(new RoutedEventArgs(ClickEvent));
+        }
+        #endregion
     }
 }

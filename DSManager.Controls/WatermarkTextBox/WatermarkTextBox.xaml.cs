@@ -23,10 +23,16 @@ namespace DSManager.Controls.WatermarkTextBox {
         }
 
         public static readonly DependencyProperty WatermarkProperty = DependencyProperty.Register("Watermark", typeof(string), typeof(WatermarkTextBox), new FrameworkPropertyMetadata(string.Empty));
+        public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(WatermarkTextBox), new FrameworkPropertyMetadata(string.Empty));
 
         public string Watermark {
             get { return GetValue(WatermarkProperty).ToString(); }
             set { SetValue(WatermarkProperty, value); }
+        }
+
+        public string Text {
+            get { return GetValue(TextProperty).ToString(); }
+            set { SetValue(TextProperty, value); }
         }
     }
 }

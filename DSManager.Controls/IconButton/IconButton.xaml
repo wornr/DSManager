@@ -13,10 +13,10 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    
-    <Button Style="{StaticResource IconButtonStyle}" IsDefault="{Binding ElementName=iconBtn, Path=IsDefault}" IsCancel="{Binding ElementName=iconBtn, Path=IsCancel}">
+
+    <Button Style="{StaticResource IconButtonStyle}" Click="Button_Click" IsDefault="{Binding ElementName=iconBtn, Path=IsDefault}" IsCancel="{Binding ElementName=iconBtn, Path=IsCancel}">
         <WrapPanel>
-            <Image Source="{Binding ElementName=iconBtn, Path=ImageSource}"/>
+            <Image Source="{Binding ElementName=iconBtn, Path=Icon}"/>
             <TextBlock Text="{Binding ElementName=iconBtn, Path=Text}"/>
         </WrapPanel>
     </Button>

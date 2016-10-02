@@ -29,9 +29,9 @@
                     <TextBlock x:Name="passwordBlock" TextWrapping="Wrap" Text="Hasło" Margin="2,5"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
-                    <watermarkTextBox:WatermarkTextBox x:Name="loginTxt" Height="23" Width="145" Margin="2,2" Watermark="Login"/>
+                    <watermarkTextBox:WatermarkTextBox x:Name="login" Height="23" Width="145" Margin="2,2" Watermark="Login"/>
                     <!-- TODO dodac watermark -->
-                    <PasswordBox x:Name="passwordTxt" Height="23" Width="145" Margin="2,2" VerticalContentAlignment="Center"/>
+                    <PasswordBox x:Name="password" Height="23" Width="145" Margin="2,2" VerticalContentAlignment="Center"/>
                 </StackPanel>
             </Grid>
             <Grid HorizontalAlignment="Center" Margin="0,5">
@@ -39,9 +39,9 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-
-                <iconButton:IconButton x:Name="signInBtn" Text="Zaloguj" ImageSource="/DSManager;component/Resources/Icons/keys.png" IsDefault="True" Width="80" Margin="5,2"/>
-                <iconButton:IconButton x:Name="cancelBtn" Grid.Column="1" Text="Anuluj" ImageSource="/DSManager;component/Resources/Icons/cancel.png" IsCancel="True" Width="80" Margin="5,2"/>
+                
+                <iconButton:IconButton x:Name="signInBtn" Grid.Column="0" Text="Zaloguj" Icon="/DSManager;component/Resources/Icons/keys.png" IsDefault="True" Width="80" Margin="5,2"/>
+                <iconButton:IconButton x:Name="cancelBtn" Grid.Column="1" Text="Anuluj" Icon="/DSManager;component/Resources/Icons/cancel.png" IsCancel="True" Width="80" Margin="5,2"/>
             </Grid>
         </StackPanel>
     </Grid>
