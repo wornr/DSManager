@@ -5,27 +5,45 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using FluentNHibernate.Cfg;
-using FluentNHibernate.Cfg.Db;
+
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
+
+using FluentNHibernate.Cfg;
+using FluentNHibernate.Cfg.Db;
+
 using DSManager.Model.Entities;
+using DSManager.Model.Enums;
 
 namespace DSManager.Model {
-    public class NHibernateConfiguration {
-        private ISessionFactory _sessionFactory;
-        private readonly string _dbPath;
+    public static class NHibernateConfiguration {
+        private static ISessionFactory _sessionFactory;
+        private static readonly string _dbPath;
+        private static bool _createAdmin = false;
 
-        public NHibernateConfiguration() {
+        static NHibernateConfiguration() {
             _dbPath = Path.Combine(Directory.GetCurrentDirectory(), "database.sqlite");
             _sessionFactory = CreateSessionFactory(_dbPath);
         }
 
-        public ISessionFactory SessionFactory {
+        public static void Initialize() {
+            if(_createAdmin) {
+                using(var session = _sessionFactory.OpenSession()) {
+                    User admin = new User();
+                    admin.Login = "admin";
+                    admin.Password = "21232f297a57a5a743894a0e4a801fc3"; // md5(admin)
+                    admin.AccountType = AccountType.Boss;
+                    admin.Active = true;
+                    session.Save(admin);
+                }
+            }
+        }
+
+        public static ISessionFactory SessionFactory {
             get { return _sessionFactory ?? (_sessionFactory = CreateSessionFactory(_dbPath)); }
         }
 
-        private ISessionFactory CreateSessionFactory(string _dbPath) {
+        private static ISessionFactory CreateSessionFactory(string _dbPath) {
             Assembly assembly = Assembly.GetExecutingAssembly();
 
             return Fluently.Configure()
@@ -35,10 +53,16 @@ namespace DSManager.Model {
                 .BuildSessionFactory();
         }
 
-        private void BuildSchema(NHibernate.Cfg.Configuration config) {
-            if(!File.Exists(_dbPath))
-                    new SchemaExport(config)
-                        .Create(false, true);
+        private static void BuildSchema(NHibernate.Cfg.Configuration config) {
+            if(!File.Exists(_dbPath)) {
+                new SchemaExport(config)
+                    .Create(false, true);
+                _createAdmin = true;
+            }
+        }
+
+        public static ISession OpenSession() {
+            return SessionFactory.OpenSession();
         }
     }
 }
