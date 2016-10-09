@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using FluentNHibernate.Mapping;
+
 using DSManager.Model.Entities;
 
 namespace DSManager.Model.Mappings {

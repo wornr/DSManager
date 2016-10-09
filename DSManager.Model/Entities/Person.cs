@@ -16,5 +16,6 @@ namespace DSManager.Model.Entities {
         public virtual string HouseNr { get; set; }
         public virtual string ApartmentNr { get; set; }
         public virtual string PhoneNr { get; set; }
+        public virtual string Email { get; set; }
     }
 }

@@ -9,8 +9,8 @@ namespace DSManager.Model.Entities {
         #region Relations
         public virtual Student Student { get; set; }
         public virtual Instructor Instructor { get; set; }
-        public virtual IList<Payment> Payments { get; set; }
         public virtual Course Course { get; set; }
+        public virtual IList<Payment> Payments { get; set; }
         public virtual IList<ClassesDates> ClassesDates { get; set; }
         public virtual IList<ExamsDates> ExamsDates { get; set; }
         #endregion

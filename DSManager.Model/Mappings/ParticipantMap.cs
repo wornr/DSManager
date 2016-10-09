@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using FluentNHibernate.Mapping;
+
 using DSManager.Model.Entities;
 
 namespace DSManager.Model.Mappings {
@@ -20,8 +21,8 @@ namespace DSManager.Model.Mappings {
 
             References(x => x.Student);
             References(x => x.Instructor);
-            HasMany(x => x.Payments);
             References(x => x.Course);
+            HasMany(x => x.Payments);
             HasMany(x => x.ClassesDates);
             HasMany(x => x.ExamsDates);
         }

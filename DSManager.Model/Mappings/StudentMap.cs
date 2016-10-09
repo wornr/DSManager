@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using FluentNHibernate.Mapping;
+
 using DSManager.Model.Entities;
 
 namespace DSManager.Model.Mappings {
@@ -21,6 +22,7 @@ namespace DSManager.Model.Mappings {
             Map(x => x.HouseNr).Not.Nullable().Length(10);
             Map(x => x.ApartmentNr).Nullable().Length(10);
             Map(x => x.PhoneNr).Nullable().Length(20);
+            Map(x => x.Email).Nullable().Length(100);
 
             References(x => x.DrivingLicense);
             HasMany(x => x.Participants);
