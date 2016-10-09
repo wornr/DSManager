@@ -12,12 +12,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace DSManager.View {
+namespace DSManager.View.Windows {
     /// <summary>
-    /// Interaction logic for SignInWindow.xaml
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class SignInWindow : Window {
-        public SignInWindow() {
+    public partial class MainWindow : Window {
+        public MainWindow() {
             InitializeComponent();
         }
     }

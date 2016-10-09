@@ -1,13 +1,16 @@
-﻿<Window x:Class="DSManager.View.SignInWindow"
+﻿<Window x:Class="DSManager.View.Windows.SignInWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DSManager.View"
+        xmlns:res="clr-namespace:DSManager.Properties"
+        xmlns:local="clr-namespace:DSManager.View.Windows"
         xmlns:iconButton="clr-namespace:DSManager.Controls.IconButton;assembly=DSManager.Controls"
         xmlns:watermarkTextBox="clr-namespace:DSManager.Controls.WatermarkTextBox;assembly=DSManager.Controls"
         mc:Ignorable="d"
-        Title="Logowanie" Height="300" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" Topmost="True" WindowStyle="None">
+        x:Name="signInWindow" Title="{x:Static res:Resources.SignInWindow}" Icon="/DSManager;component/Resources/Icons/app.ico" Height="300" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" UseLayoutRounding="True" Topmost="True" WindowStyle="None"
+        FocusManager.FocusedElement="{Binding ElementName=login}"
+        DataContext="{Binding Source={StaticResource Locator}, Path=SignIn}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -29,9 +32,13 @@
                     <TextBlock x:Name="passwordBlock" TextWrapping="Wrap" Text="Hasło" Margin="2,5"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
-                    <watermarkTextBox:WatermarkTextBox x:Name="login" Height="23" Width="145" Margin="2,2" Watermark="Login"/>
+                    <!-- TODO poprawic bindowanie Text (nie działa) -->
+                    <!--<watermarkTextBox:WatermarkTextBox x:Name="login" Text="{Binding Login}" Height="23" Width="145" Margin="2,2" Watermark="Login"/>-->
                     <!-- TODO dodac watermark -->
-                    <PasswordBox x:Name="password" Height="23" Width="145" Margin="2,2" VerticalContentAlignment="Center"/>
+                    <!--<PasswordBox x:Name="password" Height="23" Width="145" Margin="2,2" VerticalContentAlignment="Center"/>-->
+
+                    <TextBox x:Name="login" Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" Height="23" Width="145" Margin="2,2"/>
+                    <PasswordBox x:Name="password" VerticalContentAlignment="Center" Height="23" Width="145" Margin="2,2"/>
                 </StackPanel>
             </Grid>
             <Grid HorizontalAlignment="Center" Margin="0,5">
@@ -40,8 +47,10 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
-                <iconButton:IconButton x:Name="signInBtn" Grid.Column="0" Text="Zaloguj" Icon="/DSManager;component/Resources/Icons/keys.png" IsDefault="True" Width="80" Margin="5,2"/>
-                <iconButton:IconButton x:Name="cancelBtn" Grid.Column="1" Text="Anuluj" Icon="/DSManager;component/Resources/Icons/cancel.png" IsCancel="True" Width="80" Margin="5,2"/>
+                <!--<iconButton:IconButton x:Name="signInBtn" Grid.Column="0" Text="Zaloguj" Icon="/DSManager;component/Resources/Icons/keys.png" IsDefault="True" Width="80" Margin="5,2"/>-->
+                <!--<iconButton:IconButton x:Name="cancelBtn" Grid.Column="1" Text="Anuluj" Icon="/DSManager;component/Resources/Icons/cancel.png" IsCancel="True" Width="80" Margin="5,2"/>-->
+                <Button x:Name="signInBtn" Grid.Column="0" Content="Zaloguj" IsDefault="True" Width="80" Margin="5,2" Command="{Binding SignInCommand}" CommandParameter="{Binding ElementName=signInWindow}"/>
+                <Button x:Name="cancelBtn" Grid.Column="1" Content="Anuluj" IsCancel="True" Width="80" Margin="5,2" Command="{Binding CancelCommand}"/>
             </Grid>
         </StackPanel>
     </Grid>

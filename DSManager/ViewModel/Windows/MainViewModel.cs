@@ -1,8 +1,6 @@
 using GalaSoft.MvvmLight;
 
-using DSManager.Model;
-
-namespace DSManager.ViewModel
+namespace DSManager.ViewModel.Windows
 {
     /// <summary>
     /// This class contains properties that the main View can data bind to.
@@ -31,7 +29,6 @@ namespace DSManager.ViewModel
             ////{
             ////    // Code runs "for real"
             ////}
-            NHibernateConfiguration NHibernateConfiguration = new NHibernateConfiguration();
         }
     }
 }

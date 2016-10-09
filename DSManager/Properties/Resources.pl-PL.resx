@@ -121,15 +121,15 @@
     <value>DSManager</value>
   </data>
   <data name="EnterCredentials" xml:space="preserve">
-    <value>Enter your credentials</value>
+    <value>Wprowadź swoje dane logowania</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Hasło</value>
   </data>
   <data name="SignInWindow" xml:space="preserve">
-    <value>Sign In</value>
+    <value>Logowanie</value>
   </data>
 </root>
