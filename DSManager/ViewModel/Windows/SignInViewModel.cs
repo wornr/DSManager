@@ -29,17 +29,24 @@ namespace DSManager.ViewModel.Windows {
         public RelayCommand<object> SignInCommand {
             get {
                 return this._signInCommand ?? (_signInCommand = new RelayCommand<object>((param) => {
-                    if(param != null && param is SignInWindow) {
+                    if((bool)Properties.Settings.Default["DeveloperMode"]) {
                         var windowInstance = param as SignInWindow;
-                        string _password = MD5Encrypter.Encrypt(windowInstance.password.Password);
+                        var MainWindow = new MainWindow();
+                        MainWindow.Show();
+                        windowInstance.Close();
+                    } else {
+                        if(param != null && param is SignInWindow) {
+                            var windowInstance = param as SignInWindow;
+                            string _password = MD5Encrypter.Encrypt(windowInstance.password.Password);
 
-                        if(UserRepository.getUser(_login, _password) != null) {
-                            var MainWindow = new MainWindow();
-                            MainWindow.Show();
-                            windowInstance.Close();
-                        } else {
-                            // TODO wyrzucić ładniejszy komunikat o błędnych danych logowania + i18n
-                            MessageBox.Show("Podano błędne dane logowania");
+                            if(UserRepository.getUser(_login, _password) != null) {
+                                var MainWindow = new MainWindow();
+                                MainWindow.Show();
+                                windowInstance.Close();
+                            } else {
+                                // TODO wyrzucić ładniejszy komunikat o błędnych danych logowania + i18n
+                                MessageBox.Show("Podano błędne dane logowania");
+                            }
                         }
                     }
                 }));

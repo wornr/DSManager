@@ -61,6 +61,15 @@ namespace DSManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DSManager.
         /// </summary>
         public static string AppName {
@@ -70,11 +79,29 @@ namespace DSManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cars.
+        /// </summary>
+        public static string Cars {
+            get {
+                return ResourceManager.GetString("Cars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter your credentials.
         /// </summary>
         public static string EnterCredentials {
             get {
                 return ResourceManager.GetString("EnterCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instructors.
+        /// </summary>
+        public static string Instructors {
+            get {
+                return ResourceManager.GetString("Instructors", resourceCulture);
             }
         }
         
@@ -97,11 +124,38 @@ namespace DSManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sign In.
         /// </summary>
         public static string SignInWindow {
             get {
                 return ResourceManager.GetString("SignInWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Students.
+        /// </summary>
+        public static string Students {
+            get {
+                return ResourceManager.GetString("Students", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Users.
+        /// </summary>
+        public static string Users {
+            get {
+                return ResourceManager.GetString("Users", resourceCulture);
             }
         }
     }
