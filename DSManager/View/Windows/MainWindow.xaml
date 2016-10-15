@@ -26,6 +26,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="7"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
@@ -47,8 +48,12 @@
             </StackPanel>
         </StackPanel>
 
-        <Grid Grid.Column="1">
-            <Image Source="/DSManager;component/Resources/Images/splash_screen.png" Stretch="None"/>
+        <GridSplitter Grid.Column="1" Background="Gray" Width="2" HorizontalAlignment="Left"/>
+
+        <!-- content -->
+        <Grid Grid.Column="2">
+            <!-- TODO show/hide image during navigation -->
+            <!-- <Image Source="/DSManager;component/Resources/Images/splash_screen.png" Stretch="None"/> -->
             <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding CurrentViewModel}"/>
         </Grid>
     </Grid>
