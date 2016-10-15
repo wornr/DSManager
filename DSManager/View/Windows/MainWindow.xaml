@@ -1,14 +1,55 @@
-﻿<Window x:Class="DSManager.View.Windows.MainWindow"
+﻿<mahApps:MetroWindow x:Class="DSManager.View.Windows.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mahApps="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DSManager.View.Windows"
+        xmlns:res="clr-namespace:DSManager.Properties"
+        xmlns:pages="clr-namespace:DSManager.ViewModel.Pages"
+        xmlns:views="clr-namespace:DSManager.View.Pages"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
-        Title="DS Manager" Icon="/DSManager;component/Resources/Icons/app.ico" Width="1000" Height="650" WindowStartupLocation="CenterScreen">
-    <Grid>
-        <Image x:Name="image" HorizontalAlignment="Left" VerticalAlignment="Center" Source="/DSManager;component/Resources/Images/splash_screen.png"/>
+        Title="DS Manager" Icon="/DSManager;component/Resources/Icons/app.ico" MinWidth="1000" MinHeight="650" WindowStartupLocation="CenterScreen">
 
+    <Window.Resources>
+        <!-- Students -->
+        <DataTemplate DataType="{x:Type pages:StudentsViewModel}">
+            <views:StudentsPage/>
+        </DataTemplate>
+        <!-- Instructors -->
+        <DataTemplate DataType="{x:Type pages:InstructorsViewModel}">
+            <views:InstructorsPage/>
+        </DataTemplate>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel>
+            <Image x:Name="avatar" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Margin="0,40,0,0" Source="/DSManager;component/Resources/Images/user.png"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock x:Name="userFirstName" Text="[imię]" Margin="0,0,2,0"/>
+                <TextBlock x:Name="userLastName" Text="[nazwisko]" Margin="2,0,0,0"/>
+            </StackPanel>
+
+            <!-- menu -->
+            <StackPanel Width="175">
+                <Button x:Name="students" Content="{x:Static res:Resources.Students}" Margin="2" Command="{Binding OpenStudentsPage}"/>
+                <Button x:Name="instructors" Content="{x:Static res:Resources.Instructors}" Margin="2"  Command="{Binding OpenInstructorsPage}"/>
+                <Button x:Name="cars" Content="{x:Static res:Resources.Cars}" Margin="2"/>
+                <Button x:Name="courses" Content="{x:Static res:Resources.Courses}" Margin="2"/>
+                <Button x:Name="payments" Content="{x:Static res:Resources.Payments}" Margin="2"/>
+                <Button x:Name="users" Content="{x:Static res:Resources.Users}" Margin="2"/>
+            </StackPanel>
+        </StackPanel>
+
+        <Grid Grid.Column="1">
+            <Image Source="/DSManager;component/Resources/Images/splash_screen.png" Stretch="None"/>
+            <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding CurrentViewModel}"/>
+        </Grid>
     </Grid>
-</Window>
+</mahApps:MetroWindow>

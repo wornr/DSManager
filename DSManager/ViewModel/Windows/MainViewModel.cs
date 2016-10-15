@@ -1,34 +1,73 @@
-using GalaSoft.MvvmLight;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace DSManager.ViewModel.Windows
-{
-    /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel.
-    /// </para>
-    /// <para>
-    /// You can also use Blend to data bind with the tool's support.
-    /// </para>
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
-    /// </summary>
-    public class MainViewModel : ViewModelBase
-    {
-        /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
-        /// </summary>
-        public MainViewModel()
-        {
-            ////if (IsInDesignMode)
-            ////{
-            ////    // Code runs in Blend --> create design time data.
-            ////}
-            ////else
-            ////{
-            ////    // Code runs "for real"
-            ////}
+using GalaSoft.MvvmLight.Command;
+
+using DSManager.Model.Entities;
+using DSManager.Model.Services;
+
+namespace DSManager.ViewModel.Windows {
+    public class MainViewModel : BaseViewModel {
+        private RelayCommand _openStudentsPageCommand;
+        private RelayCommand _openInstructorsPageCommand;
+
+        public MainViewModel() {
+            
+        }
+
+        public RelayCommand OpenStudentsPage {
+            get {
+                return _openStudentsPageCommand ?? (_openStudentsPageCommand = new RelayCommand(() => {
+                    this.NavigateTo(ViewModelLocator.Instance.Students);
+                }));
+            }
+        }
+
+        public RelayCommand OpenInstructorsPage {
+            get {
+                return _openInstructorsPageCommand ?? (_openInstructorsPageCommand = new RelayCommand(() => {
+                    this.NavigateTo(ViewModelLocator.Instance.Instructors);
+                }));
+            }
+        }
+
+        public List<Course> Courses {
+            get {
+                using(BaseRepository repository = new BaseRepository()) {
+                    try {
+                        return repository.ToList<Course>().ToList();
+                    } catch {
+                        return null;
+                    }
+                }
+            }
+        }
+
+        public List<ClassesDates> ClassesDates {
+            get {
+                using(BaseRepository repository = new BaseRepository()) {
+                    try {
+                        return repository.ToList<ClassesDates>().ToList();
+                    } catch {
+                        return null;
+                    }
+                }
+            }
+        }
+
+        public List<Payment> Payments {
+            get {
+                using(BaseRepository repository = new BaseRepository()) {
+                    try {
+                        return repository.ToList<Payment>().ToList();
+                    } catch {
+                        return null;
+                    }
+                }
+            }
         }
     }
 }

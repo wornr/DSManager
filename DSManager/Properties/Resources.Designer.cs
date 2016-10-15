@@ -79,11 +79,38 @@ namespace DSManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cars.
         /// </summary>
         public static string Cars {
             get {
                 return ResourceManager.GetString("Cars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Courses.
+        /// </summary>
+        public static string Courses {
+            get {
+                return ResourceManager.GetString("Courses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your credentials.
+        /// </summary>
+        public static string EnterAuthenticationData {
+            get {
+                return ResourceManager.GetString("EnterAuthenticationData", resourceCulture);
             }
         }
         
@@ -124,11 +151,29 @@ namespace DSManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Payments.
+        /// </summary>
+        public static string Payments {
+            get {
+                return ResourceManager.GetString("Payments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign in.
+        /// </summary>
+        public static string SignIn {
+            get {
+                return ResourceManager.GetString("SignIn", resourceCulture);
             }
         }
         

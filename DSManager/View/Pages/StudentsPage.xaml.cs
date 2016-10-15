@@ -10,16 +10,15 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using MahApps.Metro.Controls;
-
-namespace DSManager.View.Windows {
+namespace DSManager.View.Pages {
     /// <summary>
-    /// Interaction logic for SignInWindow.xaml
+    /// Interaction logic for StudentsPage.xaml
     /// </summary>
-    public partial class SignInWindow : MetroWindow {
-        public SignInWindow() {
+    public partial class StudentsPage : UserControl {
+        public StudentsPage() {
             InitializeComponent();
         }
     }

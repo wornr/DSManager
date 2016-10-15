@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="DSManager.View.Pages.StudentsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DSManager.View.Pages"
+      xmlns:res="clr-namespace:DSManager.Properties"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+            <Button x:Name="addStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_user_add}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+            <Button x:Name="searchStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.7*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid>
+                        <!-- TODO dane kursanta -->
+
+                        <!-- TODO dwa checkbox'y (czy szkolony, czy zalega z wpłatami) -->
+                    </Grid>
+
+                    <Grid Grid.Column="1">
+                        <!-- TODO dane kontaktowe kursanta (telefon, mail) -->
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <!-- TODO lista szkoleń (działa jako filtr wpłat i terminów) -->
+                    <DataGrid x:Name="coursesList" ItemsSource="{Binding Courses}" SelectionUnit="FullRow"/>
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- TODO lista terminów (filtrowana na podstawie wybranego szkolenia) -->
+                    <DataGrid x:Name="datesList" ItemsSource="{Binding ClassesDates}" SelectionUnit="FullRow"/>
+                    <!-- TODO lista wpłat (filtrowana na podstawie wybranego szkolenia) -->
+                    <DataGrid x:Name="paymentsList" Grid.Column="1" ItemsSource="{Binding Payments}" SelectionUnit="FullRow"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

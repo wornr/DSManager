@@ -18,6 +18,7 @@ using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 
 using DSManager.ViewModel.Windows;
+using DSManager.ViewModel.Pages;
 
 namespace DSManager.ViewModel {
     /// <summary>
@@ -25,6 +26,16 @@ namespace DSManager.ViewModel {
     /// application and provides an entry point for the bindings.
     /// </summary>
     public class ViewModelLocator {
+        private static ViewModelLocator _instance;
+
+        public static ViewModelLocator Instance {
+            get {
+                if(_instance == null)
+                    _instance = new ViewModelLocator();
+                return _instance;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the ViewModelLocator class.
         /// </summary>
@@ -42,8 +53,16 @@ namespace DSManager.ViewModel {
             ////    SimpleIoc.Default.Register<IDataService, DataService>();
             ////}
 
+            // Windows
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<SignInViewModel>();
+
+            // Pages
+            SimpleIoc.Default.Register<StudentsViewModel>();
+            SimpleIoc.Default.Register<InstructorsViewModel>();
+            //SimpleIoc.Default.Register<CarsViewModel>();
+            //SimpleIoc.Default.Register<UsersViewModel>();
+
         }
 
         public MainViewModel Main {
@@ -52,6 +71,18 @@ namespace DSManager.ViewModel {
         public SignInViewModel SignIn {
             get { return ServiceLocator.Current.GetInstance<SignInViewModel>(); }
         }
+        public StudentsViewModel Students {
+            get { return ServiceLocator.Current.GetInstance<StudentsViewModel>(); }
+        }
+        public InstructorsViewModel Instructors {
+            get { return ServiceLocator.Current.GetInstance<InstructorsViewModel>(); }
+        }
+        /*public StudentsViewModel Cars {
+            get { return ServiceLocator.Current.GetInstance<CarsViewModel>(); }
+        }
+        public StudentsViewModel Users {
+            get { return ServiceLocator.Current.GetInstance<UsersViewModel>(); }
+        }*/
 
         public static void Cleanup() {
             // TODO Clear the ViewModels
