@@ -22,6 +22,20 @@
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
+            <Button x:Name="editStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_user}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+            <Button x:Name="deleteStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_user_delete}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
             <Button x:Name="searchStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
@@ -32,45 +46,153 @@
         </StackPanel>
 
         <Grid Grid.Row="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
+            <Grid>
+                <DataGrid x:Name="studentsList" ItemsSource="{Binding Students}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Student}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="93"/>
+                        
+                        <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="92"/>
+
+                        <DataGridTextColumn Header="Drugie imię" Binding="{Binding SecondName}" Width="92"/>
+
+                        <DataGridTextColumn Header="Data ur." Binding="{Binding BirthDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="73"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+            
+            <Grid Grid.Column="1">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1.7*"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
                     <Grid>
-                        <!-- TODO dane kursanta -->
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
 
-                        <!-- TODO dwa checkbox'y (czy szkolony, czy zalega z wpłatami) -->
+                        <Grid>
+                            <StackPanel Orientation="Vertical">
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Student.FirstName, StringFormat='\{0\} '}"/>
+                                    <TextBlock Text="{Binding Student.SecondName, StringFormat='\{0\} '}"/>
+                                    <TextBlock Text="{Binding Student.LastName}" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Data urodzenia" />
+                                    <TextBlock Text="{Binding Student.BirthDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="PESEL " />
+                                    <TextBlock Text="{Binding Student.PESEL}" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="ul. " />
+                                    <TextBlock Text="{Binding Student.Street, StringFormat='\{0\} '}" />
+                                    <TextBlock Text="{Binding Student.HouseNr}" />
+                                    <TextBlock Text="/" />
+                                    <TextBlock Text="{Binding Student.ApartmentNr}" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="KOD POCZTOWY " />
+                                    <TextBlock Text="{Binding Student.City}" />
+                                </StackPanel>
+                            </StackPanel>
+                            <!-- TODO dane kursanta -->
+
+                            <!-- TODO dwa checkbox'y (czy szkolony, czy zalega z wpłatami) -->
+                        </Grid>
+
+                        <Grid Grid.Column="1">
+                            <!-- TODO dane kontaktowe kursanta (telefon, mail) -->
+                        </Grid>
                     </Grid>
 
-                    <Grid Grid.Column="1">
-                        <!-- TODO dane kontaktowe kursanta (telefon, mail) -->
+                    <Grid Grid.Row="1">
+                        <!-- TODO lista szkoleń (działa jako filtr wpłat i terminów) -->
+                        <!-- na razie jest tutaj lista kursów, ale bez danych o uczestnictwie (tabela Participant), należy więc dodać informacje z drugiej tabeli (dodatkowy DataGrid?) -->
+                        <DataGrid x:Name="coursesList" ItemsSource="{Binding Participants}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Participant}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Data rozp." Binding="{Binding Course.StartDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="93"/>
+
+                                <DataGridTextColumn Header="Data zak." Binding="{Binding EndDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="93"/>
+
+                                <DataGridTextColumn Header="Kat." Binding="{Binding Course.Category}" Width="92"/>
+
+                                <DataGridTextColumn Header="Typ" Binding="{Binding Course.CourseType}" Width="92"/>
+
+                                <DataGridTextColumn Header="KEOS" Binding="{Binding KEOSNr}" Width="92"/>
+
+                                <DataGridTextColumn Header="PKKNr" Binding="{Binding PKKNr}" Width="92"/>
+
+                                <DataGridTextColumn Header="Cena" Binding="{Binding CoursePrice, ConverterCulture='pl-PL', StringFormat=\{0:C\}}" Width="92"/>
+
+                                <DataGridTextColumn Header="Nr certyfikatu" Binding="{Binding CertificateNr}" Width="92"/>
+
+                                <DataGridCheckBoxColumn Header="Teoria" Binding="{Binding IsTheory}" Width="92" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+
+                                <!--<DataGridTemplateColumn Header="Birthday" Width="30">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <DatePicker SelectedDate="{Binding BirthDate}" BorderThickness="0" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>-->
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </Grid>
-                </Grid>
 
-                <Grid Grid.Row="1">
-                    <!-- TODO lista szkoleń (działa jako filtr wpłat i terminów) -->
-                    <DataGrid x:Name="coursesList" ItemsSource="{Binding Courses}" SelectionUnit="FullRow"/>
-                </Grid>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
 
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+                        <!-- TODO lista terminów (filtrowana na podstawie wybranego szkolenia) -->
+                        <DataGrid x:Name="datesList" ItemsSource="{Binding ClassesDates}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Rodzaj" Binding="{Binding CourseKind}" Width="110"/>
 
-                    <!-- TODO lista terminów (filtrowana na podstawie wybranego szkolenia) -->
-                    <DataGrid x:Name="datesList" ItemsSource="{Binding ClassesDates}" SelectionUnit="FullRow"/>
-                    <!-- TODO lista wpłat (filtrowana na podstawie wybranego szkolenia) -->
-                    <DataGrid x:Name="paymentsList" Grid.Column="1" ItemsSource="{Binding Payments}" SelectionUnit="FullRow"/>
+                                <DataGridTextColumn Header="Data rozp." Binding="{Binding StartDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="110"/>
+
+                                <DataGridTextColumn Header="Data zak." Binding="{Binding EndDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="110"/>
+
+                                <DataGridTextColumn Header="Pojazd" Width="83">
+                                    <DataGridTextColumn.Binding>
+                                        <MultiBinding  StringFormat="{}{0} {1}">
+                                            <Binding Path="Car.Brand"/>
+                                            <Binding Path="Car.Model"/>
+                                        </MultiBinding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Dystans" Binding="{Binding Distance, StringFormat='\{0:##0,00\} km'}" Width="101"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <!-- TODO lista wpłat (filtrowana na podstawie wybranego szkolenia) -->
+                        <DataGrid x:Name="paymentsList" Grid.Column="1" ItemsSource="{Binding Payments}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Nr" Binding="{Binding PaymentNr}" Width="83"/>
+
+                                <DataGridTextColumn Header="Data wpłaty" Binding="{Binding Date, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="101"/>
+
+                                <DataGridTextColumn Header="Kwota" Binding="{Binding Amount, ConverterCulture='pl-PL', StringFormat=\{0:C\}}" Width="110"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>

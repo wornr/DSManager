@@ -41,14 +41,14 @@
             <StackPanel Width="175">
                 <Button x:Name="students" Content="{x:Static res:Resources.Students}" Margin="2" Command="{Binding OpenStudentsPage}"/>
                 <Button x:Name="instructors" Content="{x:Static res:Resources.Instructors}" Margin="2"  Command="{Binding OpenInstructorsPage}"/>
-                <Button x:Name="cars" Content="{x:Static res:Resources.Cars}" Margin="2"/>
-                <Button x:Name="courses" Content="{x:Static res:Resources.Courses}" Margin="2"/>
-                <Button x:Name="payments" Content="{x:Static res:Resources.Payments}" Margin="2"/>
-                <Button x:Name="users" Content="{x:Static res:Resources.Users}" Margin="2"/>
+                <Button x:Name="cars" Content="{x:Static res:Resources.Cars}" Margin="2" Command="{Binding OpenCarsPage}"/>
+                <Button x:Name="courses" Content="{x:Static res:Resources.Courses}" Margin="2" Command="{Binding OpenCoursesPage}"/>
+                <Button x:Name="payments" Content="{x:Static res:Resources.Payments}" Margin="2" Command="{Binding OpenPaymentsPage}"/>
+                <Button x:Name="users" Content="{x:Static res:Resources.Users}" Margin="2" Command="{Binding OpenUsersPage}"/>
             </StackPanel>
         </StackPanel>
 
-        <GridSplitter Grid.Column="1" Background="Gray" Width="2" HorizontalAlignment="Left"/>
+        <GridSplitter Grid.Column="1" Background="Gray" Width="2" HorizontalAlignment="Left" IsEnabled="False"/>
 
         <!-- content -->
         <Grid Grid.Column="2">

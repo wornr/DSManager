@@ -13,6 +13,10 @@ namespace DSManager.ViewModel.Windows {
     public class MainViewModel : BaseViewModel {
         private RelayCommand _openStudentsPageCommand;
         private RelayCommand _openInstructorsPageCommand;
+        private RelayCommand _openCarsPageCommand;
+        private RelayCommand _openCoursesPageCommand;
+        private RelayCommand _openPaymentsPageCommand;
+        private RelayCommand _openUsersPageCommand;
 
         public MainViewModel() {
             
@@ -30,6 +34,38 @@ namespace DSManager.ViewModel.Windows {
             get {
                 return _openInstructorsPageCommand ?? (_openInstructorsPageCommand = new RelayCommand(() => {
                     this.NavigateTo(ViewModelLocator.Instance.Instructors);
+                }));
+            }
+        }
+
+        public RelayCommand OpenCarsPage {
+            get {
+                return _openCarsPageCommand ?? (_openCarsPageCommand = new RelayCommand(() => {
+                    this.NavigateTo(ViewModelLocator.Instance.Cars);
+                }));
+            }
+        }
+
+        public RelayCommand OpenCoursesPage {
+            get {
+                return _openCoursesPageCommand ?? (_openCoursesPageCommand = new RelayCommand(() => {
+                    this.NavigateTo(ViewModelLocator.Instance.Courses);
+                }));
+            }
+        }
+
+        public RelayCommand OpenPaymentsPage {
+            get {
+                return _openPaymentsPageCommand ?? (_openPaymentsPageCommand = new RelayCommand(() => {
+                    this.NavigateTo(ViewModelLocator.Instance.Payments);
+                }));
+            }
+        }
+
+        public RelayCommand OpenUsersPage {
+            get {
+                return _openUsersPageCommand ?? (_openUsersPageCommand = new RelayCommand(() => {
+                    this.NavigateTo(ViewModelLocator.Instance.Users);
                 }));
             }
         }

@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DSManager.ViewModel.Pages {
-    public class InstructorsViewModel : BaseViewModel {
-        public InstructorsViewModel() {
+    public class CoursesViewModel : BaseViewModel {
+        public CoursesViewModel() {
 
         }
     }

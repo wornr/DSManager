@@ -14,6 +14,7 @@ using FluentNHibernate.Cfg.Db;
 
 using DSManager.Model.Entities;
 using DSManager.Model.Enums;
+using FluentNHibernate.Conventions.Helpers;
 
 namespace DSManager.Model {
     public static class NHibernateConfiguration {
@@ -44,11 +45,13 @@ namespace DSManager.Model {
         }
 
         private static ISessionFactory CreateSessionFactory(string _dbPath) {
-            Assembly assembly = Assembly.GetExecutingAssembly();
 
             return Fluently.Configure()
                 .Database(SQLiteConfiguration.Standard.UsingFile(_dbPath))
-                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<BaseEntity>())
+                .Mappings(m => m.FluentMappings
+                            .AddFromAssemblyOf<BaseEntity>()
+                            .Conventions.Add(DefaultLazy.Never())
+                         )
                 .ExposeConfiguration(BuildSchema)
                 .BuildSessionFactory();
         }

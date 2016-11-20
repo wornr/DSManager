@@ -60,8 +60,10 @@ namespace DSManager.ViewModel {
             // Pages
             SimpleIoc.Default.Register<StudentsViewModel>();
             SimpleIoc.Default.Register<InstructorsViewModel>();
-            //SimpleIoc.Default.Register<CarsViewModel>();
-            //SimpleIoc.Default.Register<UsersViewModel>();
+            SimpleIoc.Default.Register<CarsViewModel>();
+            SimpleIoc.Default.Register<CoursesViewModel>();
+            SimpleIoc.Default.Register<PaymentsViewModel>();
+            SimpleIoc.Default.Register<UsersViewModel>();
 
         }
 
@@ -77,12 +79,18 @@ namespace DSManager.ViewModel {
         public InstructorsViewModel Instructors {
             get { return ServiceLocator.Current.GetInstance<InstructorsViewModel>(); }
         }
-        /*public StudentsViewModel Cars {
+        public CarsViewModel Cars {
             get { return ServiceLocator.Current.GetInstance<CarsViewModel>(); }
         }
-        public StudentsViewModel Users {
+        public CoursesViewModel Courses {
+            get { return ServiceLocator.Current.GetInstance<CoursesViewModel>(); }
+        }
+        public PaymentsViewModel Payments {
+            get { return ServiceLocator.Current.GetInstance<PaymentsViewModel>(); }
+        }
+        public UsersViewModel Users {
             get { return ServiceLocator.Current.GetInstance<UsersViewModel>(); }
-        }*/
+        }
 
         public static void Cleanup() {
             // TODO Clear the ViewModels
