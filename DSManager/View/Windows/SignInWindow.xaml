@@ -5,14 +5,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:res="clr-namespace:DSManager.Properties"
-        xmlns:local="clr-namespace:DSManager.View.Windows"
         mc:Ignorable="d"
-        x:Name="signInWindow"
+        x:Name="SignInWindowInstance"
         Title="{x:Static res:Resources.SignInWindow}"
         Icon="/DSManager;component/Resources/Icons/app.ico" ShowIconOnTitleBar="False"
-        Height="300" Width="500" ResizeMode="NoResize"
+        Width="500" Height="300" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen" WindowStyle="None"
-        FocusManager.FocusedElement="{Binding ElementName=login}"
+        FocusManager.FocusedElement="{Binding ElementName=Login}"
         DataContext="{Binding Source={StaticResource Locator}, Path=SignIn}">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -20,13 +19,13 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
-        <Image x:Name="personImage" Source="/DSManager;component/Resources/Images/user.png" Height="110" HorizontalAlignment="Right"/>
-        <Image x:Name="lockImage" Source="/DSManager;component/Resources/Images/lock.png" Margin="120,40,10,-40"/>
+        <Image x:Name="PersonImage" Source="/DSManager;component/Resources/Images/user.png" Height="110" HorizontalAlignment="Right"/>
+        <Image x:Name="LockImage" Source="/DSManager;component/Resources/Images/lock.png" Margin="120,40,10,-40"/>
         <StackPanel Grid.Column="1" VerticalAlignment="Center">
             <TextBlock x:Name="loginInfoBlock" Text="{x:Static res:Resources.EnterAuthenticationData}" HorizontalAlignment="Center" Margin="0,5"/>
             <StackPanel>
-                <TextBox x:Name="login" Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" mahApps:TextBoxHelper.Watermark="{x:Static res:Resources.Login}" VerticalContentAlignment="Center" Height="23" Width="145" Margin="2,2"/>
-                <PasswordBox x:Name="password" mahApps:TextBoxHelper.Watermark="{x:Static res:Resources.Password}" VerticalContentAlignment="Center" Height="23" Width="145" Margin="2,2"/>
+                <TextBox x:Name="Login" Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" mahApps:TextBoxHelper.Watermark="{x:Static res:Resources.Login}" VerticalContentAlignment="Center" Height="23" Width="145" Margin="2,2"/>
+                <PasswordBox x:Name="Password" mahApps:TextBoxHelper.Watermark="{x:Static res:Resources.Password}" VerticalContentAlignment="Center" Height="23" Width="145" Margin="2,2"/>
             </StackPanel>
             
             <Grid HorizontalAlignment="Center" Margin="0,5">
@@ -35,8 +34,8 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="signInBtn" Grid.Column="0" Content="{x:Static res:Resources.SignIn}" IsDefault="True" Width="80" Margin="5,2" Command="{Binding SignInCommand}" CommandParameter="{Binding ElementName=signInWindow}"/>
-                <Button x:Name="cancelBtn" Grid.Column="1" Content="{x:Static res:Resources.Cancel}" IsCancel="True" Width="80" Margin="5,2" Command="{Binding CancelCommand}"/>
+                <Button x:Name="SignIn" Grid.Column="0" Content="{x:Static res:Resources.SignIn}" IsDefault="True" Width="80" Margin="5,2" Command="{Binding SignInCommand}" CommandParameter="{Binding ElementName=SignInWindowInstance}"/>
+                <Button x:Name="Cancel" Grid.Column="1" Content="{x:Static res:Resources.Cancel}" IsCancel="True" Width="80" Margin="5,2" Command="{Binding CancelCommand}"/>
             </Grid>
         </StackPanel>
     </Grid>

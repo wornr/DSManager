@@ -1,46 +1,44 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using System.Globalization;
 using DSManager.Model.Enums;
 
 namespace DSManager.Utilities {
     public static class ValueToText {
-        private static string[] unities = { "jeden", "dwa", "trzy", "cztery", "pięć", "sześć", "siedem", "osiem", "dziewięć" };
-        private static string[] dozensUnities = { "jedenaście", "dwanaście", "trzynaście", "czternaście", "piętnaście", "szesnaście", "siedemnaście", "osiemnaście", "dziewiętnaście" };
-        private static string[] dozens = { "dziesięć", "dwadzieścia", "trzydzieści", "czterdzieści", "pięćdziesiąt", "szesćdziesiąt", "siedemdziesiąt", "osiemdziesiąt", "dziewięćdziesiąt" };
-        private static string[] hundreds = { "sto", "dwieście", "trzysta", "czterysta", "pięćset", "szesćset", "siedemset", "osiemset", "dziewięćset" };
-        private static string[,] groups = {{"tysiąc", "tysiące", "tysięcy"},
+        private static readonly string[] Unities = { "jeden", "dwa", "trzy", "cztery", "pięć", "sześć", "siedem", "osiem", "dziewięć" };
+        private static readonly string[] DozensUnities = { "jedenaście", "dwanaście", "trzynaście", "czternaście", "piętnaście", "szesnaście", "siedemnaście", "osiemnaście", "dziewiętnaście" };
+        private static readonly string[] Dozens = { "dziesięć", "dwadzieścia", "trzydzieści", "czterdzieści", "pięćdziesiąt", "szesćdziesiąt", "siedemdziesiąt", "osiemdziesiąt", "dziewięćdziesiąt" };
+        private static readonly string[] Hundreds = { "sto", "dwieście", "trzysta", "czterysta", "pięćset", "szesćset", "siedemset", "osiemset", "dziewięćset" };
+        private static readonly string[,] Groups = {{"tysiąc", "tysiące", "tysięcy"},
                 {"milion", "miliony", "milionów"},
                 {"miliard", "miliardy", "miliardów"},
                 {"bilion", "biliony", "bilionów"},
                 {"biliard", "biliardy", "biliardów"},
                 {"trylion", "tryliardy", "tryliardów"}
             };
-        private static string[,] totalCurrencies = {{"złoty", "złote", "złotych"},
+        private static readonly string[,] TotalCurrencies = {{"złoty", "złote", "złotych"},
                 {"euro", "euro", "euro"},
                 {"dolar", "dolary", "dolarów"},
                 {"funt", "funty", "funtów"}
             };
-        private static string[,] decimalCurrencies = {{"grosz", "grosze", "groszy"},
+        private static readonly string[,] DecimalCurrencies = {{"grosz", "grosze", "groszy"},
                 {"cent", "centy", "centów"},
                 {"cent", "centy", "centów"},
                 {"pens", "pensy", "pensów"}
             };
-        private static string sign = "minus";
 
-        private static string parse(long value, bool groupsOnly = true) {
-            string result = ""; // result
+        private const string Sign = "minus";
 
-            int h, d, dU, u, g = 0, e, shift;
+        private static string Parse(long value, bool groupsOnly = true) {
+            var result = ""; // result
+
+            var g = 0;
 
             while(value != 0) {
-                h = (int)value % 1000 / 100;
-                d = (int)value % 100 / 10;
-                u = (int)value % 10;
+                var h = (int)value % 1000 / 100;
+                var d = (int)value % 100 / 10;
+                var u = (int)value % 10;
 
+                int shift;
                 if(h == 0 && d == 0 && u == 0) {
                     shift = g;
                     g = 0;
@@ -48,6 +46,7 @@ namespace DSManager.Utilities {
                     shift = 0;
                 }
 
+                int dU;
                 if(d == 1 && u != 0) {
                     dU = u;
                     d = 0;
@@ -56,6 +55,7 @@ namespace DSManager.Utilities {
                     dU = 0;
                 }
 
+                int e;
                 if(u == 1 && h == 0 && d == 0 && g > 0) {
                     e = 0;
                     if(groupsOnly)
@@ -66,11 +66,11 @@ namespace DSManager.Utilities {
                     e = 2;
                 }
 
-                result = (h == 0 ? "" : hundreds[h - 1] + " ") +
-                    (d == 0 ? "" : dozens[d - 1] + " ") +
-                    (dU == 0 ? "" : dozensUnities[dU - 1] + " ") +
-                    (u == 0 ? "" : unities[u - 1] + " ") +
-                    (g == 0 ? "" : groups[g - 1, e] + " ") +
+                result = (h == 0 ? "" : Hundreds[h - 1] + " ") +
+                    (d == 0 ? "" : Dozens[d - 1] + " ") +
+                    (dU == 0 ? "" : DozensUnities[dU - 1] + " ") +
+                    (u == 0 ? "" : Unities[u - 1] + " ") +
+                    (g == 0 ? "" : Groups[g - 1, e] + " ") +
                     result;
 
                 g += 1 + shift;
@@ -87,14 +87,14 @@ namespace DSManager.Utilities {
         /// <param name="currency">Currency type which has to be displayed.</param>
         /// <param name="groupsOnly">If true 1000 => thousand otherwise 1000 => one thousand.</param>
         /// <returns>Text representation of given value with/without currency depending of currency param</returns>
-        public static string translate(decimal value, Currency currency = Currency.None, bool groupsOnly = true) {
+        public static string Translate(decimal value, Currency currency = Currency.None, bool groupsOnly = true) {
             string totalCurrency = "", decimalCurrency = "";
-            bool showSign = false;
+            var showSign = false;
 
-            string[] values = value.ToString().Split('.');
+            var values = value.ToString(CultureInfo.InvariantCulture).Split('.');
 
-            long totalPart = long.Parse(values[0]);     // total part of number
-            long decimalPart = 0L;                      // decimal part of number
+            var totalPart = long.Parse(values[0]);     // total part of number
+            var decimalPart = 0L;                      // decimal part of number
             if(values.Length == 2) {
                 if(values[1].Length == 1)
                     values[1] = values[1] + "0";
@@ -111,26 +111,26 @@ namespace DSManager.Utilities {
 
             if(currency != Currency.None) {
                 if(totalPart == 1) {
-                    totalCurrency = totalCurrencies[(int)currency - 1, 0];
+                    totalCurrency = TotalCurrencies[(int)currency - 1, 0];
                 } else if(totalPart > 1 && totalPart < 5) {
-                    totalCurrency = totalCurrencies[(int)currency - 1, 1];
+                    totalCurrency = TotalCurrencies[(int)currency - 1, 1];
                 } else {
-                    totalCurrency = totalCurrencies[(int)currency - 1, 2];
+                    totalCurrency = TotalCurrencies[(int)currency - 1, 2];
                 }
 
                 if(decimalPart == 1) {
-                    decimalCurrency = decimalCurrencies[(int)currency - 1, 0];
+                    decimalCurrency = DecimalCurrencies[(int)currency - 1, 0];
                 } else if(decimalPart > 1 && decimalPart < 5) {
-                    decimalCurrency = decimalCurrencies[(int)currency - 1, 1];
+                    decimalCurrency = DecimalCurrencies[(int)currency - 1, 1];
                 } else {
-                    decimalCurrency = decimalCurrencies[(int)currency - 1, 2];
+                    decimalCurrency = DecimalCurrencies[(int)currency - 1, 2];
                 }
             }
 
             if(values.Length == 2)
-                return (showSign ? sign + " " : "") + parse(totalPart, groupsOnly) + totalCurrency + " " + parse(decimalPart, groupsOnly) + decimalCurrency;
+                return (showSign ? Sign + " " : "") + Parse(totalPart, groupsOnly) + totalCurrency + " " + Parse(decimalPart, groupsOnly) + decimalCurrency;
             else
-                return (showSign ? sign + " " : "") + parse(totalPart, groupsOnly) + totalCurrency;
+                return (showSign ? Sign + " " : "") + Parse(totalPart, groupsOnly) + totalCurrency;
         }
     }
 }

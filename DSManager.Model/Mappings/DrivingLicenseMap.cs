@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using FluentNHibernate.Mapping;
+﻿using FluentNHibernate.Mapping;
 
 using DSManager.Model.Entities;
 
@@ -15,8 +9,8 @@ namespace DSManager.Model.Mappings {
             Map(x => x.IssueDate).Not.Nullable();
             Map(x => x.DrivingLicenseNr).Not.Nullable();
 
-            HasMany(x => x.DrivingLicensePermissions);
-            References(x => x.Student);
+            HasMany(x => x.DrivingLicensePermissions).Cascade.All();
+            References(x => x.Student).Not.Nullable();
         }
     }
 }

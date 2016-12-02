@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace DSManager.Model.Entities {
     public class Instructor : Person {
         #region Relations
+        public virtual User User { get; set; }
         public virtual IList<Participant> Participants { get; set; }
         public virtual IList<InstructorPermissions> Permissions { get; set; }
         public virtual IList<ClassesDates> ClassesDates { get; set; }

@@ -12,7 +12,6 @@
   See http://www.galasoft.ch/mvvm
 */
 
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 
 using Microsoft.Practices.ServiceLocation;
@@ -28,13 +27,7 @@ namespace DSManager.ViewModel {
     public class ViewModelLocator {
         private static ViewModelLocator _instance;
 
-        public static ViewModelLocator Instance {
-            get {
-                if(_instance == null)
-                    _instance = new ViewModelLocator();
-                return _instance;
-            }
-        }
+        public static ViewModelLocator Instance => _instance ?? (_instance = new ViewModelLocator());
 
         /// <summary>
         /// Initializes a new instance of the ViewModelLocator class.
@@ -62,35 +55,21 @@ namespace DSManager.ViewModel {
             SimpleIoc.Default.Register<InstructorsViewModel>();
             SimpleIoc.Default.Register<CarsViewModel>();
             SimpleIoc.Default.Register<CoursesViewModel>();
-            SimpleIoc.Default.Register<PaymentsViewModel>();
+
             SimpleIoc.Default.Register<UsersViewModel>();
+            SimpleIoc.Default.Register<SettingsViewModel>();
 
         }
 
-        public MainViewModel Main {
-            get { return ServiceLocator.Current.GetInstance<MainViewModel>(); }
-        }
-        public SignInViewModel SignIn {
-            get { return ServiceLocator.Current.GetInstance<SignInViewModel>(); }
-        }
-        public StudentsViewModel Students {
-            get { return ServiceLocator.Current.GetInstance<StudentsViewModel>(); }
-        }
-        public InstructorsViewModel Instructors {
-            get { return ServiceLocator.Current.GetInstance<InstructorsViewModel>(); }
-        }
-        public CarsViewModel Cars {
-            get { return ServiceLocator.Current.GetInstance<CarsViewModel>(); }
-        }
-        public CoursesViewModel Courses {
-            get { return ServiceLocator.Current.GetInstance<CoursesViewModel>(); }
-        }
-        public PaymentsViewModel Payments {
-            get { return ServiceLocator.Current.GetInstance<PaymentsViewModel>(); }
-        }
-        public UsersViewModel Users {
-            get { return ServiceLocator.Current.GetInstance<UsersViewModel>(); }
-        }
+        public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
+        public SignInViewModel SignIn => ServiceLocator.Current.GetInstance<SignInViewModel>();
+        public StudentsViewModel Students => ServiceLocator.Current.GetInstance<StudentsViewModel>();
+        public InstructorsViewModel Instructors => ServiceLocator.Current.GetInstance<InstructorsViewModel>();
+        public CarsViewModel Cars => ServiceLocator.Current.GetInstance<CarsViewModel>();
+        public CoursesViewModel Courses => ServiceLocator.Current.GetInstance<CoursesViewModel>();
+
+        public UsersViewModel Users => ServiceLocator.Current.GetInstance<UsersViewModel>();
+        public SettingsViewModel Settings => ServiceLocator.Current.GetInstance<SettingsViewModel>();
 
         public static void Cleanup() {
             // TODO Clear the ViewModels

@@ -153,6 +153,9 @@
   <data name="Search" xml:space="preserve">
     <value>Szukaj</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Ustawienia</value>
+  </data>
   <data name="SignIn" xml:space="preserve">
     <value>Zaloguj</value>
   </data>

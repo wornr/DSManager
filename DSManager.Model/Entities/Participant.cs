@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DSManager.Model.Entities {
     public class Participant : BaseEntity {
@@ -18,7 +15,7 @@ namespace DSManager.Model.Entities {
         public virtual string KEOSNr { get; set; }
         public virtual string PKKNr { get; set; }
         public virtual decimal CoursePrice { get; set; }
-        public virtual DateTime EndDate { get; set; }
+        public virtual DateTime? EndDate { get; set; }
         public virtual string CertificateNr { get; set; }
         public virtual bool IsTheory { get; set; }
     }

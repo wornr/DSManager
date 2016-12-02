@@ -3,11 +3,10 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:DSManager.View.Pages"
-      xmlns:res="clr-namespace:DSManager.Properties"
+      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300">
-
+      d:DesignWidth="1235" d:DesignHeight="650">
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -15,28 +14,41 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-            <Button x:Name="addStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+            <!-- TODO dodać obsługę dodawania studenta (nowe okienko? => generyczne dla wszystkich typów dodawnia i edytowania?) -->
+            <Button x:Name="AddStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddStudent}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_user_add}"/>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <Button x:Name="editStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+            <!-- TODO dodać obsługę edytowania studenta (nowe okienko? => generyczne dla wszystkich typów dodawnia i edytowania?) -->
+            <Button x:Name="EditStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditStudent}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_user}"/>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <Button x:Name="deleteStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+            <!-- TODO dodać dialog proszący o potwierdzenie -->
+            <Button x:Name="DeleteStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteStudent}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_user_delete}"/>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <Button x:Name="searchStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+            <Button x:Name="RefreshStudents" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding RefreshStudents}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_refresh}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+
+            <TextBox controls:TextBoxHelper.Watermark="Filtruj" controls:TextBoxHelper.ClearTextButton="True" Width="155" Height="12" Text="{Binding Filter}"/>
+
+            <Button x:Name="SearchStudents" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FilterStudents}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}"/>
@@ -47,104 +59,209 @@
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="350"/>
+                <ColumnDefinition Width="363"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Grid>
-                <DataGrid x:Name="studentsList" ItemsSource="{Binding Students}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Student}">
+            <Border BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                <DataGrid x:Name="StudentsList" ItemsSource="{Binding Students}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Student}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="93"/>
-                        
-                        <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="92"/>
+                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="87"/>
+
+                        <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="83"/>
 
                         <DataGridTextColumn Header="Drugie imię" Binding="{Binding SecondName}" Width="92"/>
 
-                        <DataGridTextColumn Header="Data ur." Binding="{Binding BirthDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="73"/>
+                        <DataGridTextColumn Header="Data ur." Binding="{Binding BirthDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="73">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-            </Grid>
-            
+            </Border>
+
             <Grid Grid.Column="1">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="120"/>
+                        <RowDefinition Height="16"/>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="1.7*"/>
+                            <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <Grid>
+                        <Border BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="140"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Student.FirstName, StringFormat='{}{0} '}" FontSize="19"/>
+                                        <TextBlock Text="{Binding Student.SecondName, StringFormat='{}{0} ', TargetNullValue={}}" FontSize="19"/>
+                                        <TextBlock Text="{Binding Student.LastName}" FontSize="19"/>
+                                    </StackPanel>
+
+                                    <TextBlock Text="{Binding Student.BirthDate, ConverterCulture='pl-PL', StringFormat='{}Data urodzenia {0:d}', TargetNullValue={}}" />
+
+                                    <TextBlock Text="{Binding Student.PESEL, StringFormat='{}PESEL {0}', TargetNullValue={}}" />
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Student.Street}" />
+                                        <TextBlock Text="{Binding Student.HouseNr, StringFormat='{} {0}', TargetNullValue={}}" />
+                                        <TextBlock Text="{Binding Student.ApartmentNr, StringFormat='{}/{0}', TargetNullValue={}}" />
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Student.PostalCode, StringFormat='{}{0} ', TargetNullValue={}}" />
+                                        <TextBlock Text="{Binding Student.City}" />
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="{x:Type Grid}">
+                                            <Setter Property="Margin" Value="0,5"/>
+                                        </Style>
+                                    </StackPanel.Resources>
+
+                                    <Grid MinWidth="140" MaxWidth="150">
+                                        <TextBlock Text="W trakcie szkolenia"/>
+                                        <CheckBox HorizontalAlignment="Right" IsEnabled="False" IsChecked="{Binding DuringCourse, Mode=OneWay}"/>
+                                    </Grid>
+
+                                    <Grid MinWidth="140" MaxWidth="150">
+                                        <TextBlock Text="Zaległe opłaty"/>
+                                        <CheckBox HorizontalAlignment="Right" IsEnabled="False" IsChecked="{Binding OverduePayment, Mode=OneWay}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Column="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="8">
                             <StackPanel Orientation="Vertical">
 
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Student.FirstName, StringFormat='\{0\} '}"/>
-                                    <TextBlock Text="{Binding Student.SecondName, StringFormat='\{0\} '}"/>
-                                    <TextBlock Text="{Binding Student.LastName}" />
+                                    <TextBlock Text="Dane kontaktowe" FontSize="19"/>
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Data urodzenia" />
-                                    <TextBlock Text="{Binding Student.BirthDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" />
+                                <StackPanel Orientation="Horizontal" Margin="0,8">
+                                    <Rectangle Width="16" Height="16" Fill="{DynamicResource BlackBrush}">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Stretch="Uniform" Visual="{DynamicResource appbar_phone}"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                    <TextBlock Margin="5,0" Text="{Binding Student.PhoneNr}"/>
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="PESEL " />
-                                    <TextBlock Text="{Binding Student.PESEL}" />
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="ul. " />
-                                    <TextBlock Text="{Binding Student.Street, StringFormat='\{0\} '}" />
-                                    <TextBlock Text="{Binding Student.HouseNr}" />
-                                    <TextBlock Text="/" />
-                                    <TextBlock Text="{Binding Student.ApartmentNr}" />
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="KOD POCZTOWY " />
-                                    <TextBlock Text="{Binding Student.City}" />
+                                <StackPanel Orientation="Horizontal" Margin="0,8">
+                                    <Rectangle Width="16" Height="16" Fill="{DynamicResource BlackBrush}">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Stretch="Uniform" Visual="{DynamicResource appbar_email_hardedge}"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                    <TextBlock Margin="5,0" Text="{Binding Student.Email}"/>
                                 </StackPanel>
                             </StackPanel>
-                            <!-- TODO dane kursanta -->
+                        </Border>
 
-                            <!-- TODO dwa checkbox'y (czy szkolony, czy zalega z wpłatami) -->
-                        </Grid>
+                        <Border Grid.Column="2" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="8">
+                            <StackPanel Orientation="Vertical">
 
-                        <Grid Grid.Column="1">
-                            <!-- TODO dane kontaktowe kursanta (telefon, mail) -->
-                        </Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Prawo jazdy" FontSize="19"/>
+                                </StackPanel>
+                                
+                                <TextBlock Margin="5,0" Text="{Binding Student.DrivingLicense.DrivingLicenseNr, StringFormat='{}Nr prawa jazdy {0}', TargetNullValue={}}" FontSize="16" />
+
+                                <TextBlock Margin="5,0" Text="{Binding Student.DrivingLicense.IssueDate, StringFormat='{}Data wydania {0}', TargetNullValue={}}" FontSize="16" />
+                            </StackPanel>
+                        </Border>
                     </Grid>
 
-                    <Grid Grid.Row="1">
-                        <!-- TODO lista szkoleń (działa jako filtr wpłat i terminów) -->
-                        <!-- na razie jest tutaj lista kursów, ale bez danych o uczestnictwie (tabela Participant), należy więc dodać informacje z drugiej tabeli (dodatkowy DataGrid?) -->
-                        <DataGrid x:Name="coursesList" ItemsSource="{Binding Participants}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Participant}">
+                    <TextBlock Grid.Row="1" Text="Szkolenia" HorizontalAlignment="Center"/>
+                    
+                    <Border Grid.Row="2" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                        <DataGrid x:Name="CoursesList" ItemsSource="{Binding Participants}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Participant}">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Data rozp." Binding="{Binding Course.StartDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="93"/>
+                                <DataGridTextColumn Header="Data rozp." Binding="{Binding Course.StartDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
 
-                                <DataGridTextColumn Header="Data zak." Binding="{Binding EndDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="93"/>
+                                <DataGridTextColumn Header="Data zak." Binding="{Binding EndDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
 
-                                <DataGridTextColumn Header="Kat." Binding="{Binding Course.Category}" Width="92"/>
+                                <DataGridTextColumn Header="Kategoria" Binding="{Binding Course.Category}" Width="86">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
 
-                                <DataGridTextColumn Header="Typ" Binding="{Binding Course.CourseType}" Width="92"/>
+                                <DataGridTextColumn Header="Typ" Binding="{Binding Course.CourseType}" Width="94">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
 
-                                <DataGridTextColumn Header="KEOS" Binding="{Binding KEOSNr}" Width="92"/>
+                                <DataGridTextColumn Header="KEOS" Binding="{Binding KEOSNr}" Width="110">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
 
-                                <DataGridTextColumn Header="PKKNr" Binding="{Binding PKKNr}" Width="92"/>
+                                <DataGridTextColumn Header="PKK" Binding="{Binding PKKNr}" Width="110">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
 
-                                <DataGridTextColumn Header="Cena" Binding="{Binding CoursePrice, ConverterCulture='pl-PL', StringFormat=\{0:C\}}" Width="92"/>
+                                <DataGridTextColumn Header="Cena" Binding="{Binding CoursePrice, ConverterCulture='pl-PL', StringFormat={}{0:C}}" Width="82">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Right" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
 
-                                <DataGridTextColumn Header="Nr certyfikatu" Binding="{Binding CertificateNr}" Width="92"/>
+                                <DataGridTextColumn Header="Nr certyfikatu" Binding="{Binding CertificateNr}" Width="115">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
 
-                                <DataGridCheckBoxColumn Header="Teoria" Binding="{Binding IsTheory}" Width="92" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+                                <DataGridCheckBoxColumn Header="Teoria" Binding="{Binding IsTheory}" Width="63" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
 
-                                <!--<DataGridTemplateColumn Header="Birthday" Width="30">
+                                    <!--<DataGridTemplateColumn Header="Birthday" Width="30">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <DatePicker SelectedDate="{Binding BirthDate}" BorderThickness="0" />
@@ -153,45 +270,147 @@
                         </DataGridTemplateColumn>-->
                             </DataGrid.Columns>
                         </DataGrid>
-                    </Grid>
+                    </Border>
 
-                    <Grid Grid.Row="2">
+                    <Grid Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="16"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1.75*"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- TODO lista terminów (filtrowana na podstawie wybranego szkolenia) -->
-                        <DataGrid x:Name="datesList" ItemsSource="{Binding ClassesDates}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Rodzaj" Binding="{Binding CourseKind}" Width="110"/>
+                        <TextBlock Text="Terminy zajęć" HorizontalAlignment="Center"/>
+                        
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="Wpłaty" HorizontalAlignment="Center"/>
+                        
+                        <Border Grid.Row="1" Grid.Column="0" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                            <DataGrid x:Name="DatesList" ItemsSource="{Binding ClassesDates}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Rodzaj" Binding="{Binding CourseKind}" Width="70">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
 
-                                <DataGridTextColumn Header="Data rozp." Binding="{Binding StartDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="110"/>
+                                    <DataGridTextColumn Header="Data rozp." Binding="{Binding StartDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
 
-                                <DataGridTextColumn Header="Data zak." Binding="{Binding EndDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="110"/>
+                                    <DataGridTextColumn Header="Data zak." Binding="{Binding EndDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
 
-                                <DataGridTextColumn Header="Pojazd" Width="83">
-                                    <DataGridTextColumn.Binding>
-                                        <MultiBinding  StringFormat="{}{0} {1}">
-                                            <Binding Path="Car.Brand"/>
-                                            <Binding Path="Car.Model"/>
-                                        </MultiBinding>
-                                    </DataGridTextColumn.Binding>
-                                </DataGridTextColumn>
+                                    <DataGridTextColumn Header="Pojazd" Width="188">
+                                        <DataGridTextColumn.Binding>
+                                            <MultiBinding  StringFormat="{}{0} {1}">
+                                                <Binding Path="Car.Brand"/>
+                                                <Binding Path="Car.Model"/>
+                                            </MultiBinding>
+                                        </DataGridTextColumn.Binding>
 
-                                <DataGridTextColumn Header="Dystans" Binding="{Binding Distance, StringFormat='\{0:##0,00\} km'}" Width="101"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <!-- TODO lista wpłat (filtrowana na podstawie wybranego szkolenia) -->
-                        <DataGrid x:Name="paymentsList" Grid.Column="1" ItemsSource="{Binding Payments}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Nr" Binding="{Binding PaymentNr}" Width="83"/>
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
 
-                                <DataGridTextColumn Header="Data wpłaty" Binding="{Binding Date, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="101"/>
+                                    <DataGridTextColumn Header="Dystans" Binding="{Binding Distance, ConverterCulture='pl-PL', StringFormat='{}{0:#.##} km', TargetNullValue={}}" Width="85">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
 
-                                <DataGridTextColumn Header="Kwota" Binding="{Binding Amount, ConverterCulture='pl-PL', StringFormat=\{0:C\}}" Width="110"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <Grid Grid.Row="1" Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
+                                <!-- TODO dodać obsługę dodawania wpłaty (nowe okienko? => generyczne dla wszystkich typów dodawnia i edytowania?) -->
+                                <Button x:Name="AddPayment" Width="25" Height="25" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddPayment}">
+                                    <Rectangle Width="9" Height="9" Fill="{DynamicResource BlackBrush}">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                </Button>
+                                <!-- TODO dodać obsługę edytowania wpłaty (nowe okienko? => generyczne dla wszystkich typów dodawnia i edytowania?) -->
+                                <Button x:Name="EditPayment" Width="25" Height="25" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditPayment}">
+                                    <Rectangle Width="9" Height="9" Fill="{DynamicResource BlackBrush}">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                </Button>
+                                <!-- TODO dodać dialog proszący o potwierdzenie -->
+                                <Button x:Name="DeletePayment" Width="25" Height="25" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeletePayment}">
+                                    <Rectangle Width="9" Height="9" Fill="{DynamicResource BlackBrush}">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                </Button>
+                            </StackPanel>
+
+                            <Border Grid.Row="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                                <DataGrid x:Name="PaymentsList" ItemsSource="{Binding Payments}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Payment}">
+                                    <DataGrid.Columns>
+                                        <DataGridTemplateColumn>
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button x:Name="PrintPayment" Width="25" Height="22" MinHeight="22" Padding="0" BorderThickness="1" Background="Transparent" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.PrintPayment}">
+                                                        <Rectangle HorizontalAlignment="Center" Width="15" Height="15" Fill="{DynamicResource BlackBrush}">
+                                                            <Rectangle.OpacityMask>
+                                                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_printer_text}"/>
+                                                            </Rectangle.OpacityMask>
+                                                        </Rectangle>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+
+                                        <DataGridTextColumn Header="Nr" Binding="{Binding PaymentNr}" Width="81"/>
+
+                                        <DataGridTextColumn Header="Data wpłaty" Binding="{Binding Date, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="100">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Kwota" Binding="{Binding Amount, ConverterCulture='pl-PL', StringFormat={}{0:C}}" Width="80">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Right" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Border>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>

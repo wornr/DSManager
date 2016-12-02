@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using GalaSoft.MvvmLight;
-
-using DSManager.Model.Entities;
+﻿using GalaSoft.MvvmLight;
 
 namespace DSManager.ViewModel {
     public abstract class BaseViewModel : ViewModelBase {
         private bool _isLoading;
         private ViewModelBase _currentViewModel;
-
-        protected BaseViewModel() {
-        }
 
         public ViewModelBase CurrentViewModel {
             get {
@@ -43,11 +32,9 @@ namespace DSManager.ViewModel {
         }
 
         public virtual void NavigateTo(ViewModelBase viewModel) {
-            this.CurrentViewModel = viewModel;
-            var DSManagerViewModel = viewModel as BaseViewModel;
-            if(DSManagerViewModel != null) {
-                DSManagerViewModel.OnLoad();
-            }
+            CurrentViewModel = viewModel;
+            var dsManagerViewModel = viewModel as BaseViewModel;
+            dsManagerViewModel?.OnLoad();
         }
 
         //public void RunAsyncOperation(Action toExecute, Action<bool> executeUponFinish) {
@@ -64,10 +51,5 @@ namespace DSManager.ViewModel {
         //        }
         //    });
         //}
-
-        public User GetUser(int id) {
-            User user = new User();
-            return user;
-        }
     }
 }

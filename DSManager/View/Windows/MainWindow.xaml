@@ -4,7 +4,6 @@
         xmlns:mahApps="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DSManager.View.Windows"
         xmlns:res="clr-namespace:DSManager.Properties"
         xmlns:pages="clr-namespace:DSManager.ViewModel.Pages"
         xmlns:views="clr-namespace:DSManager.View.Pages"
@@ -21,6 +20,23 @@
         <DataTemplate DataType="{x:Type pages:InstructorsViewModel}">
             <views:InstructorsPage/>
         </DataTemplate>
+        <!-- Cars -->
+        <DataTemplate DataType="{x:Type pages:CarsViewModel}">
+            <views:CarsPage/>
+        </DataTemplate>
+        <!-- Courses -->
+        <DataTemplate DataType="{x:Type pages:CoursesViewModel}">
+            <views:CoursesPage/>
+        </DataTemplate>
+
+        <!-- Users -->
+        <DataTemplate DataType="{x:Type pages:UsersViewModel}">
+            <views:UsersPage/>
+        </DataTemplate>
+        <!-- Settings -->
+        <DataTemplate DataType="{x:Type pages:SettingsViewModel}">
+            <views:SettingsPage/>
+        </DataTemplate>
     </Window.Resources>
     
     <Grid>
@@ -31,20 +47,25 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel>
-            <Image x:Name="avatar" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Margin="0,40,0,0" Source="/DSManager;component/Resources/Images/user.png"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock x:Name="userFirstName" Text="[imię]" Margin="0,0,2,0"/>
-                <TextBlock x:Name="userLastName" Text="[nazwisko]" Margin="2,0,0,0"/>
-            </StackPanel>
+            <Image x:Name="Avatar" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Margin="0,40,0,0" Source="/DSManager;component/Resources/Images/user.png"/>
+            <Grid Margin="10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock x:Name="UserFirstName" Text="{Binding User.FirstName}" Margin="0,0,2,0" FontSize="14"/>
+                    <TextBlock x:Name="UserLastName" Text="{Binding User.LastName}" Margin="2,0,0,0" FontSize="14"/>
+                </StackPanel>
+            </Grid>
 
             <!-- menu -->
             <StackPanel Width="175">
-                <Button x:Name="students" Content="{x:Static res:Resources.Students}" Margin="2" Command="{Binding OpenStudentsPage}"/>
-                <Button x:Name="instructors" Content="{x:Static res:Resources.Instructors}" Margin="2"  Command="{Binding OpenInstructorsPage}"/>
-                <Button x:Name="cars" Content="{x:Static res:Resources.Cars}" Margin="2" Command="{Binding OpenCarsPage}"/>
-                <Button x:Name="courses" Content="{x:Static res:Resources.Courses}" Margin="2" Command="{Binding OpenCoursesPage}"/>
-                <Button x:Name="payments" Content="{x:Static res:Resources.Payments}" Margin="2" Command="{Binding OpenPaymentsPage}"/>
-                <Button x:Name="users" Content="{x:Static res:Resources.Users}" Margin="2" Command="{Binding OpenUsersPage}"/>
+                <Button x:Name="Students" Content="{x:Static res:Resources.Students}" Margin="2" Command="{Binding OpenStudentsPage}"/>
+                <Button x:Name="Instructors" Content="{x:Static res:Resources.Instructors}" Margin="2"  Command="{Binding OpenInstructorsPage}"/>
+                <Button x:Name="Cars" Content="{x:Static res:Resources.Cars}" Margin="2" Command="{Binding OpenCarsPage}"/>
+                <Button x:Name="Courses" Content="{x:Static res:Resources.Courses}" Margin="2" Command="{Binding OpenCoursesPage}"/>
+
+                <GridSplitter/>
+                
+                <Button x:Name="Users" Content="{x:Static res:Resources.Users}" Margin="2" Command="{Binding OpenUsersPage}"/>
+                <Button x:Name="Settings" Content="{x:Static res:Resources.Settings}" Margin="2" Command="{Binding OpenSettingsPage}"/>
             </StackPanel>
         </StackPanel>
 

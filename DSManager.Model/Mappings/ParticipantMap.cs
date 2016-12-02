@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using FluentNHibernate.Mapping;
+﻿using FluentNHibernate.Mapping;
 
 using DSManager.Model.Entities;
 
@@ -19,12 +13,12 @@ namespace DSManager.Model.Mappings {
             Map(x => x.CertificateNr).Nullable();
             Map(x => x.IsTheory).Not.Nullable();
 
-            References(x => x.Student);
-            References(x => x.Instructor);
-            References(x => x.Course);
-            HasMany(x => x.Payments);
-            HasMany(x => x.ClassesDates);
-            HasMany(x => x.ExamsDates);
+            References(x => x.Student).Not.Nullable();
+            References(x => x.Instructor).Not.Nullable();
+            References(x => x.Course).Not.Nullable();
+            HasMany(x => x.Payments).Cascade.All();
+            HasMany(x => x.ClassesDates).Cascade.All();
+            HasMany(x => x.ExamsDates).Cascade.All();
         }
     }
 }

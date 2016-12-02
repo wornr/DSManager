@@ -3,11 +3,114 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:DSManager.View.Pages"
+      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:converters="clr-namespace:DSManager.Converters"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300">
+      d:DesignWidth="1235" d:DesignHeight="650">
+
+    <UserControl.Resources>
+        <converters:ObjectToBoolConverter x:Key="ObjectToBoolConverter"/>
+    </UserControl.Resources>
 
     <Grid>
-        <Image x:Name="userIcon" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100" Source="/DSManager;component/Resources/Images/user.png"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+            <!-- TODO dodać obsługę dodawania -->
+            <Button x:Name="AddUser" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+            <!-- TODO dodać obsługę edycji -->
+            <Button x:Name="EditUser" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+            <Button x:Name="DeleteUser" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteUser}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+            <Button x:Name="RefreshUsers" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding RefreshUsers}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_refresh}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+
+            <TextBox controls:TextBoxHelper.Watermark="Filtruj" controls:TextBoxHelper.ClearTextButton="True" Width="155" Height="12" Text="{Binding Filter}"/>
+
+            <Button x:Name="SearchUsers" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FilterUsers}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+        </StackPanel>
+
+        <Border Grid.Row="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+            <DataGrid x:Name="DatesList" ItemsSource="{Binding Users}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding User}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="150">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="150">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Login" Binding="{Binding Login}" Width="150">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="E-Mail" Binding="{Binding Email}" Width="250">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Typ konta" Binding="{Binding AccountType}" Width="100">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridCheckBoxColumn Header="Instruktor" Binding="{Binding Instructor, Converter={StaticResource ObjectToBoolConverter}}" Width="94" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+
+                    <DataGridCheckBoxColumn Header="Kursant" Binding="{Binding Student, Converter={StaticResource ObjectToBoolConverter}}" Width="76" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+
+                    <DataGridCheckBoxColumn Header="Aktywne" Binding="{Binding Active}" Width="78" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
     </Grid>
 </UserControl>

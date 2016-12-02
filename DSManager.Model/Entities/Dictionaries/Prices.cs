@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using DSManager.Model.Enums;
+// ReSharper disable RedundantOverriddenMember
+// ReSharper disable BaseObjectEqualsIsObjectEquals
+// ReSharper disable BaseObjectGetHashCodeCallInGetHashCode
 
 namespace DSManager.Model.Entities.Dictionaries {
     public class Prices {
@@ -14,7 +13,7 @@ namespace DSManager.Model.Entities.Dictionaries {
         public virtual DateTime StartDate { get; set; }
         #endregion
 
-        public virtual DateTime EndDate { get; set; }
+        public virtual DateTime? EndDate { get; set; }
         public virtual decimal Price { get; set; }
 
         public override bool Equals(object obj) {

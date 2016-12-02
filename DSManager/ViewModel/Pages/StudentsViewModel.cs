@@ -1,55 +1,173 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+
+using GalaSoft.MvvmLight.Command;
 
 using DSManager.Model.Entities;
 using DSManager.Model.Services;
+using DSManager.View.Windows;
 
 namespace DSManager.ViewModel.Pages {
     public class StudentsViewModel : BaseViewModel {
         private Student _student;
         private Participant _participant;
-        private ObservableCollection<Participant> _participants = null;
-        private ObservableCollection<ClassesDates> _classesDates = null;
-        private ObservableCollection<Payment> _payments = null;
+        private Payment _payment;
+        private ObservableCollection<Student> _students;
+        private ObservableCollection<Participant> _participants;
+        private ObservableCollection<ClassesDates> _classesDates;
+        private ObservableCollection<Payment> _payments;
+        private RelayCommand _filterStudents;
+        private RelayCommand _deleteStudent;
+        private RelayCommand _refreshStudents;
+        private RelayCommand _addStudent;
+        private RelayCommand _editStudent;
+        private RelayCommand _printPayment;
+        private string _filter;
+        private string _prevFilter;
+        private bool _duringCourse;
+        private bool _overduePayment;
 
         public StudentsViewModel() {
+            FillStudents(_filter);
+        }
 
+        public string Filter {
+            get { return _filter; }
+            set {
+                if(_filter == value)
+                    return;
+                _filter = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public RelayCommand FilterStudents {
+            get {
+                return _filterStudents ?? (_filterStudents = new RelayCommand(() => {
+                    FillStudents(_filter);
+                    _prevFilter = _filter;
+                }));
+            }
+        }
+
+        public RelayCommand DeleteStudent {
+            get {
+                return _deleteStudent ?? (_deleteStudent = new RelayCommand(() => {
+                    if (_student == null) {
+                        // TODO wyrzucić komunikat "Nie wybrano żadnego kursanta"
+                    } else {
+                        // TODO wyrzucić dialog z zapytaniem "Czy jesteś pewien, że chcesz usunąć danego kursanta?"
+                        using (var repository = new BaseRepository()) {
+                            repository.Delete(_student);
+                        }
+                    }
+                    FillStudents(_filter);
+                }));
+            }
+        }
+
+        public RelayCommand RefreshStudents {
+            get {
+                return _refreshStudents ?? (_refreshStudents = new RelayCommand(() => {
+                    FillStudents(_prevFilter);
+                }));
+            }
+        }
+
+        public RelayCommand AddStudent {
+            get {
+                return _addStudent ?? (_addStudent = new RelayCommand(() => {
+                    var addWindow = new AddEditWindow {Title = "Dodaj studenta"};
+                    addWindow.Show();
+                }));
+            }
+        }
+
+        public RelayCommand EditStudent {
+            get {
+                return _editStudent ?? (_editStudent = new RelayCommand(() => {
+                    if (Student == null)
+                        // TODO wyrzucić komunikat "Nie wybrano żadnego kursanta"
+                        return;
+                    var editWindow = new AddEditWindow { Title = "Edytuj studenta" };
+                    editWindow.Show();
+                }));
+            }
+        }
+
+        public RelayCommand PrintPayment {
+            get {
+                return _printPayment ?? (_printPayment = new RelayCommand(() => {
+                    // TODO dodać obsługę generowania wydruków potwierdzenia wpłat
+                    Console.WriteLine(_payment.Date); // DELETE ME
+                }));
+            }
         }
 
         public Student Student {
             get { return _student; }
             set {
-                if(_student == value)
-                    return;
                 _student = value;
                 FillParticipant(value);
+                ResolveCheckboxes();
                 RaisePropertyChanged();
             }
         }
         public Participant Participant {
             get { return _participant; }
             set {
-                if(_participant == value)
-                    return;
                 _participant = value;
                 FillClassesDates(value);
                 FillPayment(value);
             }
         }
 
+        public Payment Payment {
+            get { return _payment; }
+            set { _payment = value; }
+        }
+
+        public bool DuringCourse {
+            get { return _duringCourse; }
+            set {
+                _duringCourse = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool OverduePayment {
+            get { return _overduePayment; }
+            set {
+                _overduePayment = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private void ResolveCheckboxes() {
+            using (var repository = new BaseRepository()) {
+                // DuringCourse checkbox
+                DuringCourse = repository.ToList<Participant>().Where(x => x.Student == _student && x.EndDate == null).ToList().Count != 0;
+
+                // OverduePayment checkbox
+                decimal coursesPrice = 0;
+                decimal paidCourses = 0;
+                repository.ToList<Participant>().Where(x => x.Student == _student).ToList().ForEach(e => {
+                    coursesPrice += e.CoursePrice;
+                    repository.ToList<Payment>().Where(y => y.Participant == e).ToList().ForEach(f => paidCourses += f.Amount);
+                });
+
+                OverduePayment = coursesPrice > paidCourses;
+            }
+        }
+
         public ObservableCollection<Student> Students {
             get {
-                using(BaseRepository repository = new BaseRepository()) {
-                    try {
-                        return new ObservableCollection<Student>(repository.ToList<Student>().OrderBy(student => student.LastName).ToList());
-                    } catch {
-                        return null;
-                    }
-                }
+                return _students;
+            }
+            set {
+                _students = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -81,10 +199,53 @@ namespace DSManager.ViewModel.Pages {
             }
         }
 
+        private void FillStudents(string filter) {
+            if (string.IsNullOrEmpty(filter)) {
+                using (var repository = new BaseRepository()) {
+                    Students =
+                        new ObservableCollection<Student>(
+                            repository.ToList<Student>().OrderBy(student => student.LastName).ToList());
+                }
+            } else {
+                if (filter.Contains(" ")) {
+                    var filters = filter.Split(' ');
+
+                    if (!string.IsNullOrEmpty(filters[0]) && !string.IsNullOrEmpty(filters[1])) {
+                        using (var repository = new BaseRepository()) {
+                            Students =
+                                new ObservableCollection<Student>(
+                                    repository.ToList<Student>()
+                                        .Where(x => x.FirstName.Contains(filters[0]) && x.LastName.Contains(filters[1]) || x.FirstName.Contains(filters[1]) && x.LastName.Contains(filters[0]))
+                                        .OrderBy(student => student.LastName)
+                                        .ToList());
+                        }
+                    } else {
+                        using (var repository = new BaseRepository()) {
+                            Students =
+                                new ObservableCollection<Student>(
+                                    repository.ToList<Student>()
+                                        .Where(x => x.FirstName.Contains(filter) || x.LastName.Contains(filter))
+                                        .OrderBy(student => student.LastName)
+                                        .ToList());
+                        }
+                    }
+                } else {
+                    using(var repository = new BaseRepository()) {
+                        Students =
+                            new ObservableCollection<Student>(
+                                repository.ToList<Student>()
+                                    .Where(x => x.FirstName.Contains(filter) || x.LastName.Contains(filter))
+                                    .OrderBy(student => student.LastName)
+                                    .ToList());
+                    }
+                }
+            }
+        }
+
         private void FillParticipant(Student student) {
-            using(BaseRepository repository = new BaseRepository()) {
-                Participants = new ObservableCollection<Participant>(repository.ToList<Participant>().Where(x => x.Student == student).ToList());
-            };
+            using(var repository = new BaseRepository()) {
+                Participants = new ObservableCollection<Participant>(repository.ToList<Participant>().Where(x => x.Student == student && x.Student != null).ToList());
+            }
 
             // This is working LazyLoading?!
             /*using(var session = NHibernateConfiguration.SessionFactory.OpenSession()) {
@@ -100,14 +261,14 @@ namespace DSManager.ViewModel.Pages {
 
         private void FillClassesDates(Participant participant) {
             using(BaseRepository repository = new BaseRepository()) {
-                ClassesDates = new ObservableCollection<ClassesDates>(repository.ToList<ClassesDates>().Where(x => x.Participant == participant).ToList());
+                ClassesDates = new ObservableCollection<ClassesDates>(repository.ToList<ClassesDates>().Where(x => x.Participant == participant && x.Participant != null).ToList());
             }
         }
 
         private void FillPayment(Participant participant) {
             using(BaseRepository repository = new BaseRepository()) {
-                Payments = new ObservableCollection<Payment>(repository.ToList<Payment>().Where(x => x.Participant == participant).ToList());
-            };
-        }        
+                Payments = new ObservableCollection<Payment>(repository.ToList<Payment>().Where(x => x.Participant == participant && x.Participant != null).ToList());
+            }
+        }
     }
 }

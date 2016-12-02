@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using DSManager.Model.Enums;
+﻿using DSManager.Model.Enums;
+// ReSharper disable RedundantOverriddenMember
+// ReSharper disable BaseObjectEqualsIsObjectEquals
+// ReSharper disable BaseObjectGetHashCodeCallInGetHashCode
 
 namespace DSManager.Model.Entities.Dictionaries {
     public class AccountPermissions {

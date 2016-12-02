@@ -2,12 +2,338 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:DSManager.View.Pages"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300">
+      d:DesignWidth="1235" d:DesignHeight="650">
 
     <Grid>
-        <Image x:Name="instructorIcon" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100" Source="/DSManager;component/Resources/Images/instructor.png"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+            <!-- TODO dodać obsługę dodawania instruktora (nowe okienko? => generyczne dla wszystkich typów dodawania i edytowania?) --><!-- TODO dodać obsługę dodawania instruktora (nowe okienko? => generyczne dla wszystkich typów dodawnia i edytowania?) -->
+            <Button x:Name="AddInstructor" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+            <!-- TODO dodać obsługę edycji instruktora (nowe okienko? => generyczne dla wszystkich typów dodawania i edytowania?) -->
+            <Button x:Name="EditInstructor" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+            <!-- TODO dodać dialog proszący o potwierdzenie -->
+            <Button x:Name="DeleteInstructor" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteInstructor}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+            <Button x:Name="RefreshInstructors" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding RefreshInstructors}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_refresh}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+
+            <TextBox controls:TextBoxHelper.Watermark="Filtruj" controls:TextBoxHelper.ClearTextButton="True" Width="155" Height="12" Text="{Binding Filter}"/>
+
+            <Button x:Name="SearchInstructors" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FilterInstructors}">
+                <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}"/>
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="363"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Border BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                <DataGrid x:Name="InstructorsList" ItemsSource="{Binding Instructors}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Instructor}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="87"/>
+
+                        <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="83"/>
+
+                        <DataGridTextColumn Header="Drugie imię" Binding="{Binding SecondName}" Width="92"/>
+
+                        <DataGridTextColumn Header="Data ur." Binding="{Binding BirthDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="73">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <Grid Grid.Column="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="120"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="8">
+                            <Grid>
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Instructor.FirstName, StringFormat='{}{0} '}" FontSize="19"/>
+                                        <TextBlock Text="{Binding Instructor.SecondName, StringFormat='{}{0} ', TargetNullValue={}}" FontSize="19"/>
+                                        <TextBlock Text="{Binding Instructor.LastName}" FontSize="19"/>
+                                    </StackPanel>
+
+                                    <TextBlock Text="{Binding Instructor.BirthDate, ConverterCulture='pl-PL', StringFormat='{}Data urodzenia {0:d}', TargetNullValue={}}" />
+
+                                    <TextBlock Text="{Binding Instructor.PESEL, StringFormat='{}PESEL {0}', TargetNullValue={}}" />
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Instructor.Street}" />
+                                        <TextBlock Text="{Binding Instructor.HouseNr, StringFormat='{} {0}', TargetNullValue={}}" />
+                                        <TextBlock Text="{Binding Instructor.ApartmentNr, StringFormat='{}/{0}', TargetNullValue={}}" />
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Instructor.PostalCode, StringFormat='{}{0} ', TargetNullValue={}}" />
+                                        <TextBlock Text="{Binding Instructor.City}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Column="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="8">
+                            <StackPanel Orientation="Vertical">
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Dane kontaktowe" FontSize="19"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,8">
+                                    <Rectangle Width="16" Height="16" Fill="{DynamicResource BlackBrush}">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Stretch="Uniform" Visual="{DynamicResource appbar_phone}"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                    <TextBlock Margin="5,0" Text="{Binding Instructor.PhoneNr}"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,8">
+                                    <Rectangle Width="16" Height="16" Fill="{DynamicResource BlackBrush}">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Stretch="Uniform" Visual="{DynamicResource appbar_email_hardedge}"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                    <TextBlock Margin="5,0" Text="{Binding Instructor.Email}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="2" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="8">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Uprawnienia" FontSize="19"/>
+
+                                <TextBlock Text="{Binding Instructor.PermissionsNr, StringFormat='{}Nr uprawnień {0}'}"/>
+                                <!-- TODO dodać kategorie, na które insturktor posiada uprawnienia szkoleniowe -->
+                                <!--<TextBlock Text="{Binding Instructor.PermissionsNr.Categories, StringFormat='{}Kategorie {0}'}"/>-->
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                    
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="1.5*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="16"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Text="Szkolenia" HorizontalAlignment="Center"/>
+                            
+                            <Border Grid.Row="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                                <DataGrid x:Name="CoursesList" ItemsSource="{Binding Participants}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Participant}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Data rozp." Binding="{Binding Course.StartDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Data zak." Binding="{Binding EndDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Kat." Binding="{Binding Course.Category}" Width="45">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Typ" Binding="{Binding Course.CourseType}" Width="93">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <!-- ten chceckbox raczej nie ma prawa bytu dla instruktorów,
+                                        ponieważ zależy od wyboru kursanta czy będzie brał udział w szkoleniu teoretycznym lub też nie-->
+                                        <!--<DataGridCheckBoxColumn Header="Teoria" Binding="{Binding IsTheory}" Width="63" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>-->
+
+                                        <!--<DataGridTemplateColumn Header="Birthday" Width="30">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <DatePicker SelectedDate="{Binding BirthDate}" BorderThickness="0" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>-->
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Border>
+                        </Grid>
+
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="16"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="16"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Terminy zajęć" HorizontalAlignment="Center"/>
+                            
+                            <Border Grid.Row="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                                <DataGrid x:Name="DatesList" ItemsSource="{Binding ClassesDates}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Rodzaj" Binding="{Binding CourseKind}" Width="67">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Data rozp." Binding="{Binding StartDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Data zak." Binding="{Binding EndDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Pojazd" Width="160">
+                                            <DataGridTextColumn.Binding>
+                                                <MultiBinding  StringFormat="{}{0} {1}">
+                                                    <Binding Path="Car.Brand"/>
+                                                    <Binding Path="Car.Model"/>
+                                                </MultiBinding>
+                                            </DataGridTextColumn.Binding>
+
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Dystans" Binding="{Binding Distance, ConverterCulture='pl-PL', StringFormat='{}{0:#.##} km', TargetNullValue={}}" Width="85">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Right" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Border>
+                            
+                            <TextBlock Grid.Row="2" Text="Terminy egzaminów" HorizontalAlignment="Center"/>
+
+                            <Border Grid.Row="3" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                                <DataGrid x:Name="ExamsList" ItemsSource="{Binding ExamsDates}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Rodzaj" Binding="{Binding CourseKind}" Width="67">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Data rozp." Binding="{Binding StartDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Pojazd" Width="250">
+                                            <DataGridTextColumn.Binding>
+                                                <MultiBinding  StringFormat="{}{0} {1}">
+                                                    <Binding Path="Car.Brand"/>
+                                                    <Binding Path="Car.Model"/>
+                                                </MultiBinding>
+                                            </DataGridTextColumn.Binding>
+
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridCheckBoxColumn Header="Zaliczony" Binding="{Binding IsPassed}" Width="86" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

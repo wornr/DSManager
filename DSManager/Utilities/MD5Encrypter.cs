@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 using System.Security.Cryptography;
 
 namespace DSManager.Utilities {
+    // ReSharper disable once InconsistentNaming
     public static class MD5Encrypter {
         public static string Encrypt(string text) {
             MD5 md5 = new MD5CryptoServiceProvider();
 
-            md5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(text));
+            md5.ComputeHash(Encoding.ASCII.GetBytes(text));
 
-            byte[] result = md5.Hash;
+            var result = md5.Hash;
 
-            StringBuilder strBuilder = new StringBuilder();
-            for(int i = 0; i < result.Length; i++) {
-                strBuilder.Append(result[i].ToString("x2"));
+            var strBuilder = new StringBuilder();
+            foreach (var t in result) {
+                strBuilder.Append(t.ToString("x2"));
             }
 
             return strBuilder.ToString();

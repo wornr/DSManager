@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using DSManager.Utilities;
 
@@ -14,14 +10,8 @@ namespace DSManager.Validators {
         /// <param name="birthDate">birth date</param>
         /// <param name="pesel">PESEL number</param>
         /// <returns>true if birthDate is equal to birth date coded in PESEL, false otherwise</returns>
-        public static bool validate(DateTime birthDate, string pesel) {
-            if(birthDate == null || !PESELValidator.validate(pesel))
-                return false;
-
-            if(birthDate.Equals(PESELToDate.translate(pesel)))
-                return true;
-
-            return false;
+        public static bool Validate(DateTime birthDate, string pesel) {
+            return PESELValidator.Validate(pesel) && birthDate.Equals(PESELToDate.Translate(pesel));
         }
     }
 }

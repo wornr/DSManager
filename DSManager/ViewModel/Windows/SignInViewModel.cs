@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using System.Windows;
-using System.Windows.Controls;
 
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
 using DSManager.Model;
+using DSManager.Model.Entities;
 using DSManager.Model.Services;
 using DSManager.Utilities;
 using DSManager.View.Windows;
@@ -28,20 +23,27 @@ namespace DSManager.ViewModel.Windows {
         #region Commands
         public RelayCommand<object> SignInCommand {
             get {
-                return this._signInCommand ?? (_signInCommand = new RelayCommand<object>((param) => {
+                return _signInCommand ?? (_signInCommand = new RelayCommand<object>((param) => {
                     if((bool)Properties.Settings.Default["DeveloperMode"]) {
-                        var windowInstance = param as SignInWindow;
-                        var MainWindow = new MainWindow();
-                        MainWindow.Show();
-                        windowInstance.Close();
-                    } else {
-                        if(param != null && param is SignInWindow) {
-                            var windowInstance = param as SignInWindow;
-                            string _password = MD5Encrypter.Encrypt(windowInstance.password.Password);
+                        UserSignedIn.User = new User {
+                            FirstName = "Developer",
+                            LastName = "Mode"
+                        };
 
-                            if(UserRepository.getUser(_login, _password) != null) {
-                                var MainWindow = new MainWindow();
-                                MainWindow.Show();
+                        var windowInstance = param as SignInWindow;
+                        var mainWindow = new MainWindow();
+                        mainWindow.Show();
+                        windowInstance?.Close();
+                    } else {
+                        if(param is SignInWindow) {
+                            var windowInstance = param as SignInWindow;
+                            string password = MD5Encrypter.Encrypt(windowInstance.Password.Password);
+                            User user = UserRepository.GetUser(_login, password);
+
+                            if(user != null) {
+                                UserSignedIn.User = user;
+                                var mainWindow = new MainWindow();
+                                mainWindow.Show();
                                 windowInstance.Close();
                             } else {
                                 // TODO wyrzucić ładniejszy komunikat o błędnych danych logowania + i18n

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using DSManager.Model.Enums;
+﻿using DSManager.Model.Enums;
 
 namespace DSManager.Model.Entities {
     public class User : BaseEntity {
+        #region Relations
+        public virtual Instructor Instructor { get; set; }
+        public virtual Student Student { get; set; }
+        #endregion
+
         public virtual string Login { get; set; }
         public virtual string Password { get; set; }
         public virtual string Email { get; set; }
