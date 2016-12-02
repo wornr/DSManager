@@ -6,11 +6,9 @@ namespace DSManager.ViewModel {
         private ViewModelBase _currentViewModel;
 
         public ViewModelBase CurrentViewModel {
-            get {
-                return _currentViewModel;
-            }
+            get { return _currentViewModel; }
             set {
-                if(_currentViewModel == value)
+                if (_currentViewModel == value)
                     return;
                 _currentViewModel = value;
                 RaisePropertyChanged();
@@ -20,7 +18,7 @@ namespace DSManager.ViewModel {
         public bool IsLoading {
             get { return _isLoading; }
             set {
-                if(_isLoading == value)
+                if (_isLoading == value)
                     return;
                 _isLoading = value;
                 RaisePropertyChanged();

@@ -14,16 +14,14 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-            <!-- TODO dodać obsługę dodawania -->
-            <Button x:Name="AddCourse" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+            <Button x:Name="AddCourse" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddCourse}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <!-- TODO dodać obsługę edycji -->
-            <Button x:Name="EditCourse" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+            <Button x:Name="EditCourse" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditCourse}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
@@ -101,9 +99,8 @@
 
                     <TextBlock Grid.Row="0" Text="Lista uczestników" HorizontalAlignment="Center"/>
 
-                    <!-- TODO kursanci do wyboru -->
                     <Border Grid.Row="1" Grid.Column="0" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
-                        <DataGrid Name="AvailableStudents" ItemsSource="{Binding Participants}" SelectedItem="{Binding Participant}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid Name="Participants" ItemsSource="{Binding Participants}" SelectedItem="{Binding Participant}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding Student.LastName}" Width="110">
                                     <DataGridTextColumn.ElementStyle>

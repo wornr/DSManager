@@ -20,9 +20,9 @@
         </Grid.ColumnDefinitions>
 
         <Image x:Name="PersonImage" Source="/DSManager;component/Resources/Images/user.png" Height="110" HorizontalAlignment="Right"/>
-        <Image x:Name="LockImage" Source="/DSManager;component/Resources/Images/lock.png" Margin="120,40,10,-40"/>
+        <Image Grid.Column="0" x:Name="LockImage" Source="/DSManager;component/Resources/Images/lock.png" Margin="120,40,10,-40"/>
         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-            <TextBlock x:Name="loginInfoBlock" Text="{x:Static res:Resources.EnterAuthenticationData}" HorizontalAlignment="Center" Margin="0,5"/>
+            <TextBlock x:Name="LoginInfoBlock" Text="{x:Static res:Resources.EnterAuthenticationData}" HorizontalAlignment="Center" Margin="0,5"/>
             <StackPanel>
                 <TextBox x:Name="Login" Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" mahApps:TextBoxHelper.Watermark="{x:Static res:Resources.Login}" VerticalContentAlignment="Center" Height="23" Width="145" Margin="2,2"/>
                 <PasswordBox x:Name="Password" mahApps:TextBoxHelper.Watermark="{x:Static res:Resources.Password}" VerticalContentAlignment="Center" Height="23" Width="145" Margin="2,2"/>

@@ -1,9 +1,9 @@
 ﻿namespace DSManager.View.Pages.AddEdit {
     /// <summary>
-    /// Interaction logic for CoursesPage.xaml
+    /// Interaction logic for CarsPage.xaml
     /// </summary>
-    public partial class CoursesPage {
-        public CoursesPage() {
+    public partial class UserPage {
+        public UserPage() {
             InitializeComponent();
         }
     }

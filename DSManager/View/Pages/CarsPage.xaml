@@ -14,16 +14,14 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-            <!-- TODO dodać obsługę dodawania pojazdu (nowe okienko? => generyczne dla wszystkich typów dodawania i edytowania?) -->
-            <Button x:Name="AddCar" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+            <Button x:Name="AddCar" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddCar}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <!-- TODO dodać obsługę edycji pojazdu (nowe okienko? => generyczne dla wszystkich typów dodawania i edytowania?) -->
-            <Button x:Name="EditCar" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+            <Button x:Name="EditCar" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditCar}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
@@ -152,7 +150,6 @@
                     
                         <TextBlock Text="Terminy zajęć" HorizontalAlignment="Center"/>
                         
-                        <!-- TODO lista terminów zajęć (filtrowana na podstawie wybranego szkolenia) -->
                         <Border Grid.Row="1" Grid.Column="0" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
                             <DataGrid x:Name="DatesList" ItemsSource="{Binding ClassesDates}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True">
                                 <DataGrid.Columns>
@@ -217,7 +214,6 @@
                         
                         <TextBlock Grid.Row="0" Grid.Column="1" Text="Terminy egzaminów" HorizontalAlignment="Center"/>
 
-                        <!-- TODO lista terminów egzaminów (filtrowana na podstawie wybranego szkolenia) -->
                         <Border Grid.Row="1" Grid.Column="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
                             <DataGrid x:Name="ExamsList" ItemsSource="{Binding ExamsDates}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True">
                                 <DataGrid.Columns>

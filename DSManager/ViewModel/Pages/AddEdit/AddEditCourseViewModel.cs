@@ -7,7 +7,7 @@ using DSManager.Model.Entities;
 using DSManager.Model.Services;
 
 namespace DSManager.ViewModel.Pages.AddEdit {
-    public class CoursesViewModel : BaseViewModel {
+    public class AddEditCourseViewModel : BaseViewModel {
         private Student _availableStudent;
         private Student _chosenStudent;
         private ObservableCollection<Student> _availableStudents;
@@ -15,7 +15,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         private RelayCommand _moveStudentToRight;
         private RelayCommand _moveStudentToLeft;
 
-        public CoursesViewModel() {
+        public AddEditCourseViewModel() {
             using (var repository = new BaseRepository()) {
                 AvailableStudents = new ObservableCollection<Student>(repository.ToList<Student>().ToList());
                 ChosenStudents = new ObservableCollection<Student>();
@@ -75,6 +75,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                     ChosenStudents.Remove(ChosenStudent);
                 }));
             }
+        }
+
+        private bool Validate(BaseEntity entity) {
+            throw new System.NotImplementedException();
         }
     }
 }

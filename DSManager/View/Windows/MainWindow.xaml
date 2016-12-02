@@ -73,9 +73,7 @@
 
         <!-- content -->
         <Grid Grid.Column="2">
-            <!-- TODO show/hide image during navigation -->
-            <!-- <Image Source="/DSManager;component/Resources/Images/splash_screen.png" Stretch="None"/> -->
-            <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding CurrentViewModel}"/>
+            <mahApps:TransitioningContentControl Content="{Binding CurrentViewModel}" Transition="Left"/>
         </Grid>
     </Grid>
 </mahApps:MetroWindow>

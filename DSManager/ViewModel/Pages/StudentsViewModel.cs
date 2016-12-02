@@ -3,108 +3,61 @@ using System.Linq;
 using System.Collections.ObjectModel;
 
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 
+using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Services;
 using DSManager.View.Windows;
 
 namespace DSManager.ViewModel.Pages {
     public class StudentsViewModel : BaseViewModel {
+        #region Variables
+
+        #region Selections
         private Student _student;
         private Participant _participant;
-        private Payment _payment;
+
+        #endregion
+
+        #region Lists
         private ObservableCollection<Student> _students;
         private ObservableCollection<Participant> _participants;
         private ObservableCollection<ClassesDates> _classesDates;
         private ObservableCollection<Payment> _payments;
-        private RelayCommand _filterStudents;
-        private RelayCommand _deleteStudent;
-        private RelayCommand _refreshStudents;
+        #endregion
+
+        #region Commands
         private RelayCommand _addStudent;
         private RelayCommand _editStudent;
+        private RelayCommand _deleteStudent;
+        private RelayCommand _refreshStudents;
+        private RelayCommand _filterStudents;
+        private RelayCommand _addPayment;
+        private RelayCommand _editPayment;
+        private RelayCommand _deletePayment;
         private RelayCommand _printPayment;
+        #endregion
+
+        #region View Elements
         private string _filter;
-        private string _prevFilter;
         private bool _duringCourse;
         private bool _overduePayment;
+        #endregion
 
+        #region Helpers
+        private string _prevFilter;
+        #endregion
+
+        #endregion
+        
         public StudentsViewModel() {
             FillStudents(_filter);
         }
 
-        public string Filter {
-            get { return _filter; }
-            set {
-                if(_filter == value)
-                    return;
-                _filter = value;
-                RaisePropertyChanged();
-            }
-        }
+        #region Methods
 
-        public RelayCommand FilterStudents {
-            get {
-                return _filterStudents ?? (_filterStudents = new RelayCommand(() => {
-                    FillStudents(_filter);
-                    _prevFilter = _filter;
-                }));
-            }
-        }
-
-        public RelayCommand DeleteStudent {
-            get {
-                return _deleteStudent ?? (_deleteStudent = new RelayCommand(() => {
-                    if (_student == null) {
-                        // TODO wyrzucić komunikat "Nie wybrano żadnego kursanta"
-                    } else {
-                        // TODO wyrzucić dialog z zapytaniem "Czy jesteś pewien, że chcesz usunąć danego kursanta?"
-                        using (var repository = new BaseRepository()) {
-                            repository.Delete(_student);
-                        }
-                    }
-                    FillStudents(_filter);
-                }));
-            }
-        }
-
-        public RelayCommand RefreshStudents {
-            get {
-                return _refreshStudents ?? (_refreshStudents = new RelayCommand(() => {
-                    FillStudents(_prevFilter);
-                }));
-            }
-        }
-
-        public RelayCommand AddStudent {
-            get {
-                return _addStudent ?? (_addStudent = new RelayCommand(() => {
-                    var addWindow = new AddEditWindow {Title = "Dodaj studenta"};
-                    addWindow.Show();
-                }));
-            }
-        }
-
-        public RelayCommand EditStudent {
-            get {
-                return _editStudent ?? (_editStudent = new RelayCommand(() => {
-                    if (Student == null)
-                        // TODO wyrzucić komunikat "Nie wybrano żadnego kursanta"
-                        return;
-                    var editWindow = new AddEditWindow { Title = "Edytuj studenta" };
-                    editWindow.Show();
-                }));
-            }
-        }
-
-        public RelayCommand PrintPayment {
-            get {
-                return _printPayment ?? (_printPayment = new RelayCommand(() => {
-                    // TODO dodać obsługę generowania wydruków potwierdzenia wpłat
-                    Console.WriteLine(_payment.Date); // DELETE ME
-                }));
-            }
-        }
-
+        #region Selections
         public Student Student {
             get { return _student; }
             set {
@@ -114,6 +67,7 @@ namespace DSManager.ViewModel.Pages {
                 RaisePropertyChanged();
             }
         }
+
         public Participant Participant {
             get { return _participant; }
             set {
@@ -123,44 +77,10 @@ namespace DSManager.ViewModel.Pages {
             }
         }
 
-        public Payment Payment {
-            get { return _payment; }
-            set { _payment = value; }
-        }
+        public Payment Payment { get; set; }
+        #endregion
 
-        public bool DuringCourse {
-            get { return _duringCourse; }
-            set {
-                _duringCourse = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool OverduePayment {
-            get { return _overduePayment; }
-            set {
-                _overduePayment = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private void ResolveCheckboxes() {
-            using (var repository = new BaseRepository()) {
-                // DuringCourse checkbox
-                DuringCourse = repository.ToList<Participant>().Where(x => x.Student == _student && x.EndDate == null).ToList().Count != 0;
-
-                // OverduePayment checkbox
-                decimal coursesPrice = 0;
-                decimal paidCourses = 0;
-                repository.ToList<Participant>().Where(x => x.Student == _student).ToList().ForEach(e => {
-                    coursesPrice += e.CoursePrice;
-                    repository.ToList<Payment>().Where(y => y.Participant == e).ToList().ForEach(f => paidCourses += f.Amount);
-                });
-
-                OverduePayment = coursesPrice > paidCourses;
-            }
-        }
-
+        #region Lists
         public ObservableCollection<Student> Students {
             get {
                 return _students;
@@ -173,7 +93,7 @@ namespace DSManager.ViewModel.Pages {
 
         public ObservableCollection<Participant> Participants {
             get {
-                    return _participants;
+                return _participants;
             }
             set {
                 _participants = value;
@@ -198,20 +118,170 @@ namespace DSManager.ViewModel.Pages {
                 RaisePropertyChanged();
             }
         }
+        #endregion
 
+        #region Commands
+        public RelayCommand AddStudent {
+            get {
+                return _addStudent ?? (_addStudent = new RelayCommand(() => {
+                    var addWindow = new AddEditWindow { Title = "Dodaj kursanta" };
+                    Messenger.Default.Send(new AddEditMessage {
+                        Page = ViewModelLocator.Instance.AddEditStudent,
+                        Entity = null
+                    });
+                    addWindow.Show();
+                }));
+            }
+        }
+
+        public RelayCommand EditStudent {
+            get {
+                return _editStudent ?? (_editStudent = new RelayCommand(() => {
+                    if(Student == null)
+                        // TODO wyrzucić komunikat "Nie wybrano żadnego kursanta"
+                        return;
+                    var editWindow = new AddEditWindow { Title = "Edytuj kursanta" };
+                    Messenger.Default.Send(new AddEditMessage {
+                        Page = ViewModelLocator.Instance.AddEditStudent,
+                        Entity = _student
+                    });
+                    editWindow.Show();
+                }));
+            }
+        }
+
+        public RelayCommand DeleteStudent {
+            get {
+                return _deleteStudent ?? (_deleteStudent = new RelayCommand(() => {
+                    if(_student == null) {
+                        // TODO wyrzucić komunikat "Nie wybrano żadnego kursanta"
+                    } else {
+                        // TODO wyrzucić dialog z zapytaniem "Czy jesteś pewien, że chcesz usunąć danego kursanta?"
+                        using(var repository = new BaseRepository()) {
+                            repository.Delete(_student);
+                        }
+                    }
+                    FillStudents(_filter);
+                }));
+            }
+        }
+
+        public RelayCommand RefreshStudents {
+            get {
+                return _refreshStudents ?? (_refreshStudents = new RelayCommand(() => {
+                    FillStudents(_prevFilter);
+                }));
+            }
+        }
+
+        public RelayCommand FilterStudents {
+            get {
+                return _filterStudents ?? (_filterStudents = new RelayCommand(() => {
+                    FillStudents(_filter);
+                    _prevFilter = _filter;
+                }));
+            }
+        }
+
+        public RelayCommand AddPayment {
+            get {
+                return _addPayment ?? (_addPayment = new RelayCommand(() => {
+                    var addWindow = new AddEditWindow { Title = "Dodaj wpłatę" };
+                    Messenger.Default.Send(new AddEditMessage {
+                        // TODO zmienić stronę na formularz dodawania wpłat
+                        Page = ViewModelLocator.Instance.AddEditPayment,
+                        Entity = null
+                    });
+                    addWindow.Show();
+                }));
+            }
+        }
+
+        public RelayCommand EditPayment {
+            get {
+                return _editPayment ?? (_editPayment = new RelayCommand(() => {
+                    if(Payment == null)
+                        // TODO wyrzucić komunikat "Nie wybrano żadnej wpłaty"
+                        return;
+                    var editWindow = new AddEditWindow { Title = "Edytuj wpłatę" };
+                    Messenger.Default.Send(new AddEditMessage {
+                        // TODO zmienić stronę na formularz dodawania wpłat
+                        Page = ViewModelLocator.Instance.AddEditPayment,
+                        Entity = Payment
+                    });
+                    editWindow.Show();
+                }));
+            }
+        }
+
+        public RelayCommand DeletePayment {
+            get {
+                return _deletePayment ?? (_deletePayment = new RelayCommand(() => {
+                    if(Payment == null) {
+                        // TODO wyrzucić komunikat "Nie wybrano żadnej wpłaty"
+                    } else {
+                        // TODO wyrzucić dialog z zapytaniem "Czy jesteś pewien, że chcesz usunąć daną wpłatę?"
+                        using(var repository = new BaseRepository()) {
+                            repository.Delete(Payment);
+                        }
+                    }
+                    FillPayment(_participant);
+                }));
+            }
+        }
+
+        public RelayCommand PrintPayment {
+            get {
+                return _printPayment ?? (_printPayment = new RelayCommand(() => {
+                    // TODO dodać obsługę generowania wydruków potwierdzenia wpłat
+                    Console.WriteLine(Payment.Date); // TODO DELETE ME
+                }));
+            }
+        }
+        #endregion
+
+        #region View Elements
+        public string Filter {
+            get { return _filter; }
+            set {
+                if(_filter == value)
+                    return;
+                _filter = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool DuringCourse {
+            get { return _duringCourse; }
+            set {
+                _duringCourse = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool OverduePayment {
+            get { return _overduePayment; }
+            set {
+                _overduePayment = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Helpers
         private void FillStudents(string filter) {
-            if (string.IsNullOrEmpty(filter)) {
-                using (var repository = new BaseRepository()) {
+            if(string.IsNullOrEmpty(filter)) {
+                using(var repository = new BaseRepository()) {
                     Students =
                         new ObservableCollection<Student>(
                             repository.ToList<Student>().OrderBy(student => student.LastName).ToList());
                 }
             } else {
-                if (filter.Contains(" ")) {
+                if(filter.Contains(" ")) {
                     var filters = filter.Split(' ');
 
-                    if (!string.IsNullOrEmpty(filters[0]) && !string.IsNullOrEmpty(filters[1])) {
-                        using (var repository = new BaseRepository()) {
+                    if(!string.IsNullOrEmpty(filters[0]) && !string.IsNullOrEmpty(filters[1])) {
+                        using(var repository = new BaseRepository()) {
                             Students =
                                 new ObservableCollection<Student>(
                                     repository.ToList<Student>()
@@ -220,7 +290,7 @@ namespace DSManager.ViewModel.Pages {
                                         .ToList());
                         }
                     } else {
-                        using (var repository = new BaseRepository()) {
+                        using(var repository = new BaseRepository()) {
                             Students =
                                 new ObservableCollection<Student>(
                                     repository.ToList<Student>()
@@ -270,5 +340,25 @@ namespace DSManager.ViewModel.Pages {
                 Payments = new ObservableCollection<Payment>(repository.ToList<Payment>().Where(x => x.Participant == participant && x.Participant != null).ToList());
             }
         }
+
+        private void ResolveCheckboxes() {
+            using(var repository = new BaseRepository()) {
+                // DuringCourse checkbox
+                DuringCourse = repository.ToList<Participant>().Where(x => x.Student == _student && x.EndDate == null).ToList().Count != 0;
+
+                // OverduePayment checkbox
+                decimal coursesPrice = 0;
+                decimal paidCourses = 0;
+                repository.ToList<Participant>().Where(x => x.Student == _student).ToList().ForEach(e => {
+                    coursesPrice += e.CoursePrice;
+                    repository.ToList<Payment>().Where(y => y.Participant == e).ToList().ForEach(f => paidCourses += f.Amount);
+                });
+
+                OverduePayment = coursesPrice > paidCourses;
+            }
+        }
+        #endregion
+
+        #endregion
     }
 }

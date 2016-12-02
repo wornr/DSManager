@@ -2,43 +2,144 @@
 using System.Linq;
 
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 
+using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Services;
+using DSManager.View.Windows;
 
 namespace DSManager.ViewModel.Pages {
     public class InstructorsViewModel : BaseViewModel {
-        public InstructorsViewModel() {
-            FillInstructors(_filter);
-        }
+        #region Variables
 
+        #region Selections
         private Instructor _instructor;
         private Participant _participant;
+        #endregion
+
+        #region Lists
         private ObservableCollection<Instructor> _instructors;
         private ObservableCollection<Participant> _participants;
         private ObservableCollection<ClassesDates> _classesDates;
         private ObservableCollection<ExamsDates> _examsDates;
-        private RelayCommand _filterInstructors;
+        #endregion
+
+        #region Commands
+        private RelayCommand _addInstructor;
+        private RelayCommand _editInstructor;
         private RelayCommand _deleteInstructor;
         private RelayCommand _refreshInstructors;
-        private string _filter;
-        private string _prevFilter;
+        private RelayCommand _filterInstructors;
+        #endregion
 
-        public string Filter {
-            get { return _filter; }
+        #region View Elements
+        private string _filter;
+        #endregion
+
+        #region Helpers
+        private string _prevFilter;
+        #endregion
+
+        #endregion
+        public InstructorsViewModel() {
+            FillInstructors(_filter);
+        }
+
+        #region Methods
+
+        #region Selections
+        public Instructor Instructor {
+            get { return _instructor; }
             set {
-                if(_filter == value)
+                if(_instructor == value)
                     return;
-                _filter = value;
+                _instructor = value;
+                FillParticipant(value);
                 RaisePropertyChanged();
             }
         }
 
-        public RelayCommand FilterInstructors {
+        public Participant Participant {
+            get { return _participant; }
+            set {
+                if(_participant == value)
+                    return;
+                _participant = value;
+                FillClassesDates(value);
+                FillExamsDates(value);
+            }
+        }
+        #endregion
+
+        #region Lists
+        public ObservableCollection<Instructor> Instructors {
             get {
-                return _filterInstructors ?? (_filterInstructors = new RelayCommand(() => {
-                    FillInstructors(_filter);
-                    _prevFilter = _filter;
+                return _instructors;
+            }
+            set {
+                _instructors = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<Participant> Participants {
+            get {
+                return _participants;
+            }
+            set {
+                _participants = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<ClassesDates> ClassesDates {
+            get {
+                return _classesDates;
+            }
+            set {
+                _classesDates = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<ExamsDates> ExamsDates {
+            get {
+                return _examsDates;
+            }
+            set {
+                _examsDates = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Commands
+        public RelayCommand AddInstructor {
+            get {
+                return _addInstructor ?? (_addInstructor = new RelayCommand(() => {
+                    var addWindow = new AddEditWindow { Title = "Dodaj instruktora" };
+                    Messenger.Default.Send(new AddEditMessage {
+                        Page = ViewModelLocator.Instance.AddEditInstructor,
+                        Entity = null
+                    });
+                    addWindow.Show();
+                }));
+            }
+        }
+
+        public RelayCommand EditInstructor {
+            get {
+                return _editInstructor ?? (_editInstructor = new RelayCommand(() => {
+                    if(Instructor == null)
+                        // TODO wyrzucić komunikat "Nie wybrano żadnego kursanta"
+                        return;
+                    var editWindow = new AddEditWindow { Title = "Edytuj instruktora" };
+                    Messenger.Default.Send(new AddEditMessage {
+                        Page = ViewModelLocator.Instance.AddEditInstructor,
+                        Entity = _instructor
+                    });
+                    editWindow.Show();
                 }));
             }
         }
@@ -67,65 +168,29 @@ namespace DSManager.ViewModel.Pages {
             }
         }
 
-        public Instructor Instructor {
-            get { return _instructor; }
+        public RelayCommand FilterInstructors {
+            get {
+                return _filterInstructors ?? (_filterInstructors = new RelayCommand(() => {
+                    FillInstructors(_filter);
+                    _prevFilter = _filter;
+                }));
+            }
+        }
+        #endregion
+
+        #region View Elements
+        public string Filter {
+            get { return _filter; }
             set {
-                if(_instructor == value)
+                if(_filter == value)
                     return;
-                _instructor = value;
-                FillParticipant(value);
+                _filter = value;
                 RaisePropertyChanged();
             }
         }
-        public Participant Participant {
-            get { return _participant; }
-            set {
-                if(_participant == value)
-                    return;
-                _participant = value;
-                FillClassesDates(value);
-                FillExamsDates(value);
-            }
-        }
+        #endregion
 
-        public ObservableCollection<Instructor> Instructors {
-            get {
-                return _instructors;
-            }
-            set {
-                _instructors = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public ObservableCollection<Participant> Participants {
-            get {
-                return _participants;
-            }
-            set {
-                _participants = value;
-                RaisePropertyChanged();
-            }
-        }
-        public ObservableCollection<ClassesDates> ClassesDates {
-            get {
-                return _classesDates;
-            }
-            set {
-                _classesDates = value;
-                RaisePropertyChanged();
-            }
-        }
-        public ObservableCollection<ExamsDates> ExamsDates {
-            get {
-                return _examsDates;
-            }
-            set {
-                _examsDates = value;
-                RaisePropertyChanged();
-            }
-        }
-
+        #region Helpers
         private void FillInstructors(string filter) {
             if(string.IsNullOrEmpty(filter)) {
                 using(var repository = new BaseRepository()) {
@@ -187,21 +252,26 @@ namespace DSManager.ViewModel.Pages {
         }
 
         private void FillClassesDates(Participant participant) {
-            using(BaseRepository repository = new BaseRepository()) {
-                if(participant != null)
-                    ClassesDates = new ObservableCollection<ClassesDates>(repository.ToList<ClassesDates>().Where(x => x.Participant == participant && x.Participant != null && x.Instructor == participant.Instructor && x.Instructor != null).ToList());
-                else
-                    ClassesDates = new ObservableCollection<ClassesDates>();
+            using(var repository = new BaseRepository()) {
+                ClassesDates = participant != null
+                    ?
+                    new ObservableCollection<ClassesDates>(repository.ToList<ClassesDates>().Where(x => x.Participant == participant && x.Participant != null && x.Instructor == participant.Instructor && x.Instructor != null).ToList())
+                    :
+                    new ObservableCollection<ClassesDates>();
             }
         }
 
         private void FillExamsDates(Participant participant) {
-            using(BaseRepository repository = new BaseRepository()) {
-                if(participant != null)
-                    ExamsDates = new ObservableCollection<ExamsDates>(repository.ToList<ExamsDates>().Where(x => x.Participant == participant && x.Participant != null && x.Instructor == participant.Instructor && x.Instructor != null).ToList());
-                else
-                    ExamsDates = new ObservableCollection<ExamsDates>();
+            using(var repository = new BaseRepository()) {
+                ExamsDates = participant != null
+                    ?
+                    new ObservableCollection<ExamsDates>(repository.ToList<ExamsDates>().Where(x => x.Participant == participant && x.Participant != null && x.Instructor == participant.Instructor && x.Instructor != null).ToList())
+                    :
+                    new ObservableCollection<ExamsDates>();
             }
         }
+        #endregion
+
+        #endregion
     }
 }

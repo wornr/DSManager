@@ -14,7 +14,6 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-            <!-- TODO dodać obsługę dodawania studenta (nowe okienko? => generyczne dla wszystkich typów dodawnia i edytowania?) -->
             <Button x:Name="AddStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddStudent}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
@@ -22,7 +21,6 @@
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <!-- TODO dodać obsługę edytowania studenta (nowe okienko? => generyczne dla wszystkich typów dodawnia i edytowania?) -->
             <Button x:Name="EditStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditStudent}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
@@ -347,7 +345,6 @@
                             </Grid.RowDefinitions>
 
                             <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
-                                <!-- TODO dodać obsługę dodawania wpłaty (nowe okienko? => generyczne dla wszystkich typów dodawnia i edytowania?) -->
                                 <Button x:Name="AddPayment" Width="25" Height="25" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddPayment}">
                                     <Rectangle Width="9" Height="9" Fill="{DynamicResource BlackBrush}">
                                         <Rectangle.OpacityMask>
@@ -355,7 +352,6 @@
                                         </Rectangle.OpacityMask>
                                     </Rectangle>
                                 </Button>
-                                <!-- TODO dodać obsługę edytowania wpłaty (nowe okienko? => generyczne dla wszystkich typów dodawnia i edytowania?) -->
                                 <Button x:Name="EditPayment" Width="25" Height="25" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditPayment}">
                                     <Rectangle Width="9" Height="9" Fill="{DynamicResource BlackBrush}">
                                         <Rectangle.OpacityMask>

@@ -19,22 +19,21 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-            <!-- TODO dodać obsługę dodawania -->
-            <Button x:Name="AddUser" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+            <Button x:Name="AddUser" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddUser}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <!-- TODO dodać obsługę edycji -->
-            <Button x:Name="EditUser" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+            <Button x:Name="EditUser" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditUser}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
+            
             <Button x:Name="DeleteUser" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteUser}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>

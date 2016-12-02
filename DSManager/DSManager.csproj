@@ -112,6 +112,8 @@
     <Compile Include="Converters\CourseTypeConverter.cs" />
     <Compile Include="Converters\ObjectToBoolConverter.cs" />
     <Compile Include="Converters\ValueToVisibilityConverter.cs" />
+    <Compile Include="Interfaces\IClosable.cs" />
+    <Compile Include="Messengers\AddEditMessage.cs" />
     <Compile Include="Properties\Resources.pl-PL.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -124,21 +126,42 @@
     <Compile Include="Validators\PESELValidator.cs" />
     <Compile Include="Utilities\ValueToText.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
-    <Compile Include="ViewModel\Pages\AddEdit\CoursesViewModel.cs" />
+    <Compile Include="ViewModel\Pages\AddEdit\AddEditPaymentViewModel.cs" />
+    <Compile Include="ViewModel\Pages\AddEdit\AddEditUserViewModel.cs" />
+    <Compile Include="ViewModel\Pages\AddEdit\AddEditCarViewModel.cs" />
+    <Compile Include="ViewModel\Pages\AddEdit\AddEditCourseViewModel.cs" />
+    <Compile Include="ViewModel\Pages\AddEdit\AddEditInstructorViewModel.cs" />
+    <Compile Include="ViewModel\Pages\AddEdit\AddEditStudentViewModel.cs" />
     <Compile Include="ViewModel\Pages\CarsViewModel.cs" />
     <Compile Include="ViewModel\Pages\CoursesViewModel.cs" />
     <Compile Include="ViewModel\Pages\InstructorsViewModel.cs" />
     <Compile Include="ViewModel\Pages\SettingsViewModel.cs" />
     <Compile Include="ViewModel\Pages\StudentsViewModel.cs" />
     <Compile Include="ViewModel\Pages\UsersViewModel.cs" />
+    <Compile Include="ViewModel\Windows\AddEditViewModel.cs" />
     <Compile Include="ViewModel\Windows\MainViewModel.cs" />
     <Compile Include="ViewModel\Windows\SignInViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\Pages\AddEdit\PaymentPage.xaml.cs">
+      <DependentUpon>PaymentPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pages\AddEdit\UserPage.xaml.cs">
+      <DependentUpon>UserPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pages\AddEdit\CarPage.xaml.cs">
+      <DependentUpon>CarPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pages\AddEdit\InstructorPage.xaml.cs">
+      <DependentUpon>InstructorPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pages\AddEdit\StudentPage.xaml.cs">
+      <DependentUpon>StudentPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Pages\CarsPage.xaml.cs">
       <DependentUpon>CarsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Pages\AddEdit\CoursesPage.xaml.cs">
-      <DependentUpon>CoursesPage.xaml</DependentUpon>
+    <Compile Include="View\Pages\AddEdit\CoursePage.xaml.cs">
+      <DependentUpon>CoursePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Pages\CoursesPage.xaml.cs">
       <DependentUpon>CoursesPage.xaml</DependentUpon>
@@ -169,11 +192,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\Pages\AddEdit\PaymentPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Pages\AddEdit\UserPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Pages\AddEdit\CarPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Pages\AddEdit\InstructorPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Pages\AddEdit\StudentPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\Pages\CarsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Pages\AddEdit\CoursesPage.xaml">
+    <Page Include="View\Pages\AddEdit\CoursePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

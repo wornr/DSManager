@@ -14,16 +14,14 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-            <!-- TODO dodać obsługę dodawania instruktora (nowe okienko? => generyczne dla wszystkich typów dodawania i edytowania?) --><!-- TODO dodać obsługę dodawania instruktora (nowe okienko? => generyczne dla wszystkich typów dodawnia i edytowania?) -->
-            <Button x:Name="AddInstructor" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+            <Button x:Name="AddInstructor" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddInstructor}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <!-- TODO dodać obsługę edycji instruktora (nowe okienko? => generyczne dla wszystkich typów dodawania i edytowania?) -->
-            <Button x:Name="EditInstructor" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}">
+            <Button x:Name="EditInstructor" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditInstructor}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>

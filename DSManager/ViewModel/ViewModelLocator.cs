@@ -18,6 +18,7 @@ using Microsoft.Practices.ServiceLocation;
 
 using DSManager.ViewModel.Windows;
 using DSManager.ViewModel.Pages;
+using DSManager.ViewModel.Pages.AddEdit;
 
 namespace DSManager.ViewModel {
     /// <summary>
@@ -46,11 +47,13 @@ namespace DSManager.ViewModel {
             ////    SimpleIoc.Default.Register<IDataService, DataService>();
             ////}
 
-            // Windows
+            #region Windows
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<SignInViewModel>();
+            SimpleIoc.Default.Register<AddEditViewModel>();
+            #endregion
 
-            // Pages
+            #region Pages
             SimpleIoc.Default.Register<StudentsViewModel>();
             SimpleIoc.Default.Register<InstructorsViewModel>();
             SimpleIoc.Default.Register<CarsViewModel>();
@@ -59,10 +62,26 @@ namespace DSManager.ViewModel {
             SimpleIoc.Default.Register<UsersViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
 
+            #region AddEdit
+            SimpleIoc.Default.Register<AddEditStudentViewModel>();
+            SimpleIoc.Default.Register<AddEditInstructorViewModel>();
+            SimpleIoc.Default.Register<AddEditCarViewModel>();
+            SimpleIoc.Default.Register<AddEditCourseViewModel>();
+            SimpleIoc.Default.Register<AddEditPaymentViewModel>();
+
+            SimpleIoc.Default.Register<AddEditUserViewModel>();
+            #endregion
+
+            #endregion
         }
 
+        #region Windows
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
         public SignInViewModel SignIn => ServiceLocator.Current.GetInstance<SignInViewModel>();
+        public AddEditViewModel AddEdit => ServiceLocator.Current.GetInstance<AddEditViewModel>();
+        #endregion
+        
+        #region Pages
         public StudentsViewModel Students => ServiceLocator.Current.GetInstance<StudentsViewModel>();
         public InstructorsViewModel Instructors => ServiceLocator.Current.GetInstance<InstructorsViewModel>();
         public CarsViewModel Cars => ServiceLocator.Current.GetInstance<CarsViewModel>();
@@ -70,6 +89,18 @@ namespace DSManager.ViewModel {
 
         public UsersViewModel Users => ServiceLocator.Current.GetInstance<UsersViewModel>();
         public SettingsViewModel Settings => ServiceLocator.Current.GetInstance<SettingsViewModel>();
+
+        #region AddEdit
+        public AddEditStudentViewModel AddEditStudent => ServiceLocator.Current.GetInstance<AddEditStudentViewModel>();
+        public AddEditInstructorViewModel AddEditInstructor => ServiceLocator.Current.GetInstance<AddEditInstructorViewModel>();
+        public AddEditCarViewModel AddEditCar => ServiceLocator.Current.GetInstance<AddEditCarViewModel>();
+        public AddEditCourseViewModel AddEditCourse => ServiceLocator.Current.GetInstance<AddEditCourseViewModel>();
+        public AddEditPaymentViewModel AddEditPayment => ServiceLocator.Current.GetInstance<AddEditPaymentViewModel>();
+
+        public AddEditUserViewModel AddEditUser => ServiceLocator.Current.GetInstance<AddEditUserViewModel>();
+        #endregion
+
+        #endregion
 
         public static void Cleanup() {
             // TODO Clear the ViewModels
