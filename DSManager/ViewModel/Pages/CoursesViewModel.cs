@@ -80,8 +80,10 @@ namespace DSManager.ViewModel.Pages {
             get {
                 return _addCourse ?? (_addCourse = new RelayCommand(() => {
                     var addWindow = new AddEditWindow { Title = "Dodaj szkolenie" };
-                    Messenger.Default.Send(new AddEditMessage {
+                    Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditCourse,
+                    });
+                    Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = null
                     });
                     addWindow.Show();
@@ -96,8 +98,10 @@ namespace DSManager.ViewModel.Pages {
                         // TODO wyrzucić komunikat "Nie wybrano żadnego szkolenia"
                         return;
                     var editWindow = new AddEditWindow { Title = "Edytuj szkolenie" };
-                    Messenger.Default.Send(new AddEditMessage {
+                    Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditCourse,
+                    });
+                    Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = _course
                     });
                     editWindow.Show();

@@ -125,8 +125,10 @@ namespace DSManager.ViewModel.Pages {
             get {
                 return _addStudent ?? (_addStudent = new RelayCommand(() => {
                     var addWindow = new AddEditWindow { Title = "Dodaj kursanta" };
-                    Messenger.Default.Send(new AddEditMessage {
+                    Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditStudent,
+                    });
+                    Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = null
                     });
                     addWindow.Show();
@@ -141,8 +143,10 @@ namespace DSManager.ViewModel.Pages {
                         // TODO wyrzucić komunikat "Nie wybrano żadnego kursanta"
                         return;
                     var editWindow = new AddEditWindow { Title = "Edytuj kursanta" };
-                    Messenger.Default.Send(new AddEditMessage {
+                    Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditStudent,
+                    });
+                    Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = _student
                     });
                     editWindow.Show();
@@ -187,9 +191,11 @@ namespace DSManager.ViewModel.Pages {
             get {
                 return _addPayment ?? (_addPayment = new RelayCommand(() => {
                     var addWindow = new AddEditWindow { Title = "Dodaj wpłatę" };
-                    Messenger.Default.Send(new AddEditMessage {
+                    Messenger.Default.Send(new AddEditPageMessage {
                         // TODO zmienić stronę na formularz dodawania wpłat
                         Page = ViewModelLocator.Instance.AddEditPayment,
+                    });
+                    Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = null
                     });
                     addWindow.Show();
@@ -204,9 +210,11 @@ namespace DSManager.ViewModel.Pages {
                         // TODO wyrzucić komunikat "Nie wybrano żadnej wpłaty"
                         return;
                     var editWindow = new AddEditWindow { Title = "Edytuj wpłatę" };
-                    Messenger.Default.Send(new AddEditMessage {
+                    Messenger.Default.Send(new AddEditPageMessage {
                         // TODO zmienić stronę na formularz dodawania wpłat
                         Page = ViewModelLocator.Instance.AddEditPayment,
+                    });
+                    Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = Payment
                     });
                     editWindow.Show();

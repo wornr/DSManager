@@ -10,7 +10,7 @@ namespace DSManager.Validators {
         /// <param name="birthDate">birth date</param>
         /// <param name="pesel">PESEL number</param>
         /// <returns>true if birthDate is equal to birth date coded in PESEL, false otherwise</returns>
-        public static bool Validate(DateTime birthDate, string pesel) {
+        public static bool Validate(DateTime? birthDate, string pesel) {
             return PESELValidator.Validate(pesel) && birthDate.Equals(PESELToDate.Translate(pesel));
         }
     }

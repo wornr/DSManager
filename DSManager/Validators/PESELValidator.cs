@@ -7,16 +7,37 @@
         /// <param name="pesel">PESEL number</param>
         /// <returns>true if PESEL is valid, false otherwise</returns>
         public static bool Validate(string pesel) {
-            if(pesel == null || pesel.Length != 11)
+           if(pesel == null || pesel.Length != 11)
                 return false;
 
-            var monthPart = int.Parse(pesel.Substring(2, 2));
-            if((monthPart > 12 && monthPart < 21) ||
-               (monthPart > 32 && monthPart < 41) ||
-               (monthPart > 52 && monthPart < 61) ||
-               (monthPart > 72 && monthPart < 81) ||
-               int.Parse(pesel.Substring(2, 2)) > 92)
+            var monthPart = int.Parse(pesel.Substring(2, 2)) % 20;
+            if(monthPart < 1 || monthPart > 12)
                 return false;
+
+            var dayPart = int.Parse(pesel.Substring(4, 2));
+            switch (monthPart) {
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 10:
+                case 12:
+                    if (dayPart > 31)
+                        return false;
+                    break;
+                case 4:
+                case 6:
+                case 9:
+                case 11:
+                    if(dayPart > 30)
+                        return false;
+                    break;
+                case 2:
+                    if (dayPart > 29)
+                        return false;
+                    break;
+            }
 
             int processedNumber, controlNumber = 0, multiplier = 1;
 

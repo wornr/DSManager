@@ -101,8 +101,10 @@ namespace DSManager.ViewModel.Pages {
             get {
                 return _addCar ?? (_addCar = new RelayCommand(() => {
                     var addWindow = new AddEditWindow { Title = "Dodaj pojazd" };
-                    Messenger.Default.Send(new AddEditMessage {
+                    Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditCar,
+                    });
+                    Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = null
                     });
                     addWindow.Show();
@@ -117,8 +119,10 @@ namespace DSManager.ViewModel.Pages {
                         // TODO wyrzucić komunikat "Nie wybrano żadnego pojazdu"
                         return;
                     var editWindow = new AddEditWindow { Title = "Edytuj pojazd" };
-                    Messenger.Default.Send(new AddEditMessage {
+                    Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditCar,
+                    });
+                    Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = _car
                     });
                     editWindow.Show();

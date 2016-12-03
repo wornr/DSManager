@@ -9,17 +9,16 @@ using DSManager.Model.Entities;
 namespace DSManager.ViewModel.Windows {
     public sealed class AddEditViewModel : BaseViewModel {
         public ViewModelBase Page { get; set; }
-        public BaseEntity Entity { get; set; }
 
         private RelayCommand<IClosable> _closeWindow;
+        private RelayCommand<IClosable> _saveCommand;
 
         public AddEditViewModel() {
-            Messenger.Default.Register<AddEditMessage>(this, HandleMessage);
+            Messenger.Default.Register<AddEditPageMessage>(this, HandleMessage);
         }
 
-        private void HandleMessage(AddEditMessage message) {
+        private void HandleMessage(AddEditPageMessage message) {
             Page = message.Page;
-            Entity = message.Entity;
 
             if(Page != null)
                 NavigateTo(Page);
@@ -27,7 +26,16 @@ namespace DSManager.ViewModel.Windows {
 
         public RelayCommand<IClosable> CloseWindowCommand => _closeWindow ?? (_closeWindow = new RelayCommand<IClosable>(CloseWindow));
 
+        public RelayCommand<IClosable> SaveCommand => _saveCommand ?? (_saveCommand = new RelayCommand<IClosable>(Save));
+
         private void CloseWindow(IClosable window) {
+            window?.Close();
+        }
+
+        private void Save(IClosable window) {
+            if (!((AddEditBaseViewModel) Page).Save())
+                return;
+
             window?.Close();
         }
     }
