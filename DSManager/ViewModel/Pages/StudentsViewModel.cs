@@ -282,7 +282,12 @@ namespace DSManager.ViewModel.Pages {
                 using(var repository = new BaseRepository()) {
                     Students =
                         new ObservableCollection<Student>(
-                            repository.ToList<Student>().OrderBy(student => student.LastName).ToList());
+                            repository.ToList<Student>()
+                            .OrderBy(student => student.LastName)
+                            .ThenBy(student => student.FirstName)
+                            .ThenBy(student => student.SecondName)
+                            .ThenBy(student => student.BirthDate)
+                            .ToList());
                 }
             } else {
                 if(filter.Contains(" ")) {
@@ -295,6 +300,9 @@ namespace DSManager.ViewModel.Pages {
                                     repository.ToList<Student>()
                                         .Where(x => x.FirstName.Contains(filters[0]) && x.LastName.Contains(filters[1]) || x.FirstName.Contains(filters[1]) && x.LastName.Contains(filters[0]))
                                         .OrderBy(student => student.LastName)
+                                        .ThenBy(student => student.FirstName)
+                                        .ThenBy(student => student.SecondName)
+                                        .ThenBy(student => student.BirthDate)
                                         .ToList());
                         }
                     } else {
@@ -304,6 +312,9 @@ namespace DSManager.ViewModel.Pages {
                                     repository.ToList<Student>()
                                         .Where(x => x.FirstName.Contains(filter) || x.LastName.Contains(filter))
                                         .OrderBy(student => student.LastName)
+                                        .ThenBy(student => student.FirstName)
+                                        .ThenBy(student => student.SecondName)
+                                        .ThenBy(student => student.BirthDate)
                                         .ToList());
                         }
                     }
@@ -314,6 +325,9 @@ namespace DSManager.ViewModel.Pages {
                                 repository.ToList<Student>()
                                     .Where(x => x.FirstName.Contains(filter) || x.LastName.Contains(filter))
                                     .OrderBy(student => student.LastName)
+                                    .ThenBy(student => student.FirstName)
+                                    .ThenBy(student => student.SecondName)
+                                    .ThenBy(student => student.BirthDate)
                                     .ToList());
                     }
                 }

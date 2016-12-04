@@ -18,7 +18,7 @@ namespace DSManager.Model.Mappings {
             Map(x => x.ApartmentNr).Nullable().Length(10);
             Map(x => x.PhoneNr).Nullable().Length(20);
             Map(x => x.Email).Nullable().Length(100);
-            Map(x => x.PermissionsNr).Not.Nullable();
+            Map(x => x.PermissionsNr).Not.Nullable().Length(20);
 
             References(x => x.User).Nullable();
             HasMany(x => x.Participants);

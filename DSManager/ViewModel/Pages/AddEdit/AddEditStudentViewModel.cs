@@ -2,13 +2,13 @@
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
 using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Services;
 using DSManager.Validators;
-using GalaSoft.MvvmLight.Command;
 
 namespace DSManager.ViewModel.Pages.AddEdit {
     public class AddEditStudentViewModel : AddEditBaseViewModel, IDataErrorInfo {

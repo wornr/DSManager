@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mahApps="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        xmlns:HamburgerMenu="clr-namespace:HamburgerMenu;assembly=HamburgerMenu"
+        xmlns:hamburgerMenu="clr-namespace:HamburgerMenu;assembly=HamburgerMenu"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:res="clr-namespace:DSManager.Properties"
@@ -39,20 +39,20 @@
             <views:SettingsPage/>
         </DataTemplate>
     </Window.Resources>
-    
+
     <Grid>
         <mahApps:TransitioningContentControl Margin="50,0,0,0" Content="{Binding CurrentViewModel}" Transition="Left"/>
 
-        <HamburgerMenu:HamburgerMenu MaxWidth="200" Background="#252525" MenuIconColor="White" SelectionIndicatorColor="White" MenuItemForeground="White" HorizontalAlignment="Left">
-            <HamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Students}" MaxHeight="34" SelectionCommand="{Binding OpenStudentsPage}" Icon="/DSManager;component/Resources/Icons/Menu/student.png"/>
-            <HamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Instructors}" MaxHeight="34" SelectionCommand="{Binding OpenInstructorsPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png"/>
-            <HamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Cars}" MaxHeight="34" SelectionCommand="{Binding OpenCarsPage}" Icon="/DSManager;component/Resources/Icons/Menu/car.png"/>
-            <HamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Courses}" MaxHeight="34" SelectionCommand="{Binding OpenCoursesPage}" Icon="/DSManager;component/Resources/Icons/Menu/book.png"/>
+        <hamburgerMenu:HamburgerMenu MaxWidth="200" Background="#252525" MenuIconColor="White" SelectionIndicatorColor="White" MenuItemForeground="White" HorizontalAlignment="Left">
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Students}" MaxHeight="34" SelectionCommand="{Binding OpenStudentsPage}" Icon="/DSManager;component/Resources/Icons/Menu/student.png"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Instructors}" MaxHeight="34" SelectionCommand="{Binding OpenInstructorsPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Cars}" MaxHeight="34" SelectionCommand="{Binding OpenCarsPage}" Icon="/DSManager;component/Resources/Icons/Menu/car.png"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Courses}" MaxHeight="34" SelectionCommand="{Binding OpenCoursesPage}" Icon="/DSManager;component/Resources/Icons/Menu/book.png"/>
 
-            <HamburgerMenu:HamburgerMenuItem IsEnabled="False"/>
+            <hamburgerMenu:HamburgerMenuItem IsEnabled="False"/>
 
-            <HamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Users}" MaxHeight="34" SelectionCommand="{Binding OpenUsersPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png"/>
-            <HamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Settings}" MaxHeight="34" SelectionCommand="{Binding OpenSettingsPage}" Icon="/DSManager;component/Resources/Icons/Menu/cog-wheel.png"/>
-        </HamburgerMenu:HamburgerMenu>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Users}" MaxHeight="34" SelectionCommand="{Binding OpenUsersPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Settings}" MaxHeight="34" SelectionCommand="{Binding OpenSettingsPage}" Icon="/DSManager;component/Resources/Icons/Menu/cog-wheel.png"/>
+        </hamburgerMenu:HamburgerMenu>
     </Grid>
 </mahApps:MetroWindow>

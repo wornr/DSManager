@@ -7,7 +7,7 @@
       xmlns:converters="clr-namespace:DSManager.Converters"
       mc:Ignorable="d" 
       d:DesignWidth="800" d:DesignHeight="600">
-    
+
     <UserControl.Resources>
         <converters:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter"/>
     </UserControl.Resources>
@@ -157,9 +157,8 @@
                 <TextBlock Text="Numer prawa jazdy" Visibility="{Binding DrivingLicenseNr, Converter={StaticResource ValueToVisibilityConverter}}"/>
                 <TextBox controls:TextBoxHelper.Watermark="Numer prawa jazdy" Width="150" MaxLength="20" Text="{Binding DrivingLicenseNr, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
             </StackPanel>
+
+            <!-- TODO dodać wybór kategorii prawa jazdy -->
         </StackPanel>
     </StackPanel>
 </UserControl>
-
-
-
