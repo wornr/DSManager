@@ -13,6 +13,11 @@
         Title="DS Manager" Icon="/DSManager;component/Resources/Icons/app.ico" MinWidth="1250" MinHeight="650" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
+        <!-- Home -->
+        <DataTemplate DataType="{x:Type pages:HomeViewModel}">
+            <views:HomePage/>
+        </DataTemplate>
+        
         <!-- Students -->
         <DataTemplate DataType="{x:Type pages:StudentsViewModel}">
             <views:StudentsPage/>
@@ -43,7 +48,11 @@
     <Grid>
         <mahApps:TransitioningContentControl Margin="50,0,0,0" Content="{Binding CurrentViewModel}" Transition="Left"/>
 
-        <hamburgerMenu:HamburgerMenu MaxWidth="200" Background="#252525" MenuIconColor="White" SelectionIndicatorColor="White" MenuItemForeground="White" HorizontalAlignment="Left">
+        <hamburgerMenu:HamburgerMenu MaxWidth="200" Background="#151515" MenuIconColor="White" SelectionIndicatorColor="White" MenuItemForeground="White" IsOpen="True" HorizontalAlignment="Left">
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Homepage}" MaxHeight="34" SelectionCommand="{Binding OpenHomePage}" Icon="/DSManager;component/Resources/Icons/Menu/home.png"/>
+
+            <hamburgerMenu:HamburgerMenuItem IsEnabled="False"/>
+            
             <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Students}" MaxHeight="34" SelectionCommand="{Binding OpenStudentsPage}" Icon="/DSManager;component/Resources/Icons/Menu/student.png"/>
             <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Instructors}" MaxHeight="34" SelectionCommand="{Binding OpenInstructorsPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png"/>
             <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Cars}" MaxHeight="34" SelectionCommand="{Binding OpenCarsPage}" Icon="/DSManager;component/Resources/Icons/Menu/car.png"/>

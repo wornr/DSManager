@@ -138,6 +138,9 @@
   <data name="EnterCredentials" xml:space="preserve">
     <value>Enter your credentials</value>
   </data>
+  <data name="Homepage" xml:space="preserve">
+    <value>Homepage</value>
+  </data>
   <data name="Instructors" xml:space="preserve">
     <value>Instructors</value>
   </data>

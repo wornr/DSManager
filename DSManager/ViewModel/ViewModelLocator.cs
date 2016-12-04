@@ -54,6 +54,8 @@ namespace DSManager.ViewModel {
             #endregion
 
             #region Pages
+            SimpleIoc.Default.Register<HomeViewModel>();
+
             SimpleIoc.Default.Register<StudentsViewModel>();
             SimpleIoc.Default.Register<InstructorsViewModel>();
             SimpleIoc.Default.Register<CarsViewModel>();
@@ -80,8 +82,10 @@ namespace DSManager.ViewModel {
         public SignInViewModel SignIn => ServiceLocator.Current.GetInstance<SignInViewModel>();
         public AddEditViewModel AddEdit => ServiceLocator.Current.GetInstance<AddEditViewModel>();
         #endregion
-        
+
         #region Pages
+        public HomeViewModel Home => ServiceLocator.Current.GetInstance<HomeViewModel>();
+
         public StudentsViewModel Students => ServiceLocator.Current.GetInstance<StudentsViewModel>();
         public InstructorsViewModel Instructors => ServiceLocator.Current.GetInstance<InstructorsViewModel>();
         public CarsViewModel Cars => ServiceLocator.Current.GetInstance<CarsViewModel>();

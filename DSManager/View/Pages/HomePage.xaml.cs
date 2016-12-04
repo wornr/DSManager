@@ -1,6 +1,6 @@
 ﻿namespace DSManager.View.Pages {
-    public partial class CoursesPage {
-        public CoursesPage() {
+    public partial class HomePage {
+        public HomePage() {
             InitializeComponent();
         }
     }

@@ -143,6 +143,7 @@
     <Compile Include="ViewModel\Pages\InstructorsViewModel.cs" />
     <Compile Include="ViewModel\Pages\SettingsViewModel.cs" />
     <Compile Include="ViewModel\Pages\StudentsViewModel.cs" />
+    <Compile Include="ViewModel\Pages\HomeViewModel.cs" />
     <Compile Include="ViewModel\Pages\UsersViewModel.cs" />
     <Compile Include="ViewModel\Windows\AddEditViewModel.cs" />
     <Compile Include="ViewModel\Windows\MainViewModel.cs" />
@@ -180,6 +181,9 @@
     </Compile>
     <Compile Include="View\Pages\StudentsPage.xaml.cs">
       <DependentUpon>StudentsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pages\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Pages\UsersPage.xaml.cs">
       <DependentUpon>UsersPage.xaml</DependentUpon>
@@ -239,6 +243,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Pages\StudentsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Pages\HomePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -349,6 +357,9 @@
     <Resource Include="Resources\Icons\Menu\cog-wheel.png" />
     <Resource Include="Resources\Icons\Menu\student.png" />
     <Resource Include="Resources\Icons\Menu\user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Menu\home.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets')" />
