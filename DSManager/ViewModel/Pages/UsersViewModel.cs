@@ -76,7 +76,6 @@ namespace DSManager.ViewModel.Pages {
                 return _addUser ?? (_addUser = new RelayCommand(() => {
                     var addWindow = new AddEditWindow { Title = "Dodaj użytkownika" };
                     Messenger.Default.Send(new AddEditPageMessage {
-                        // TODO zmienić stronę na formularz dodawania użytkowników
                         Page = ViewModelLocator.Instance.AddEditUser,
                     });
                     Messenger.Default.Send(new AddEditEntityMessage {
@@ -95,7 +94,6 @@ namespace DSManager.ViewModel.Pages {
                         return;
                     var editWindow = new AddEditWindow { Title = "Edytuj użytkownika" };
                     Messenger.Default.Send(new AddEditPageMessage {
-                        // TODO zmienić stronę na formularz dodawania użytkowników
                         Page = ViewModelLocator.Instance.AddEditUser,
                     });
                     Messenger.Default.Send(new AddEditEntityMessage {

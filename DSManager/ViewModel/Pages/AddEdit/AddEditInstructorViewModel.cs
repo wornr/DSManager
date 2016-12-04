@@ -188,10 +188,6 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _instructor.PhoneNr = null;
             else if(!Regex.IsMatch(_instructor.PhoneNr, @"^(\+?[0-9]+)?(\([0-9]+\))?[0-9]+$"))
                 valid = false;
-
-            // TODO walidacja daty wydania prawa jazdy (pole nieobowiązkowe)
-
-            // TODO walidacja numeru prawa jazdy (pole nieobowiązkowe)
             #endregion
 
             return valid;

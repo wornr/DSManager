@@ -192,7 +192,6 @@ namespace DSManager.ViewModel.Pages {
                 return _addPayment ?? (_addPayment = new RelayCommand(() => {
                     var addWindow = new AddEditWindow { Title = "Dodaj wpłatę" };
                     Messenger.Default.Send(new AddEditPageMessage {
-                        // TODO zmienić stronę na formularz dodawania wpłat
                         Page = ViewModelLocator.Instance.AddEditPayment,
                     });
                     Messenger.Default.Send(new AddEditEntityMessage {
@@ -211,7 +210,6 @@ namespace DSManager.ViewModel.Pages {
                         return;
                     var editWindow = new AddEditWindow { Title = "Edytuj wpłatę" };
                     Messenger.Default.Send(new AddEditPageMessage {
-                        // TODO zmienić stronę na formularz dodawania wpłat
                         Page = ViewModelLocator.Instance.AddEditPayment,
                     });
                     Messenger.Default.Send(new AddEditEntityMessage {

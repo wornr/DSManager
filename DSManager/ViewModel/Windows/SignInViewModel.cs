@@ -3,6 +3,8 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
+using MahApps.Metro.Controls.Dialogs;
+
 using DSManager.Model;
 using DSManager.Model.Entities;
 using DSManager.Model.Services;
@@ -45,8 +47,7 @@ namespace DSManager.ViewModel.Windows {
                                 mainWindow.Show();
                                 windowInstance.Close();
                             } else {
-                                // TODO wyrzucić ładniejszy komunikat o błędnych danych logowania + i18n
-                                MessageBox.Show("Podano błędne dane logowania");
+                                windowInstance.ShowMessageAsync("Błąd", "Podano błędne dane logowania!");
                             }
                         }
                     }
