@@ -8,11 +8,15 @@ using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Services;
 using DSManager.Validators;
+using GalaSoft.MvvmLight.Command;
 
 namespace DSManager.ViewModel.Pages.AddEdit {
     public class AddEditStudentViewModel : AddEditBaseViewModel, IDataErrorInfo {
         private Student _student;
         private DateTime? _birthDate;
+        private bool _PESELValid;
+
+        private RelayCommand _PESELToDate;
 
         public AddEditStudentViewModel() {
             Messenger.Default.Register<AddEditEntityMessage>(this, HandleMessage);
@@ -22,9 +26,11 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             if (message.Entity != null) {
                 _student = (Student) message.Entity;
                 _birthDate = _student.BirthDate;
+                _PESELValid = PESELValidator.Validate(_student.PESEL);
             } else {
                 _student = new Student();
                 _birthDate = null;
+                _PESELValid = false;
             }
         }
 
@@ -229,6 +235,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             get { return _student.PESEL; }
             set {
                 _student.PESEL = value;
+                PESELValid = PESELValidator.Validate(_student.PESEL);
                 RaisePropertyChanged();
             }
         }
@@ -296,6 +303,20 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 RaisePropertyChanged();
             }
         }
+
+        public bool PESELValid {
+            get { return _PESELValid; }
+            set {
+                _PESELValid = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Commands
+        public RelayCommand PESELToDate => _PESELToDate ?? (_PESELToDate = new RelayCommand(() => {
+            BirthDate = Utilities.PESELToDate.Translate(_student.PESEL);
+        }));
         #endregion
     }
 }
