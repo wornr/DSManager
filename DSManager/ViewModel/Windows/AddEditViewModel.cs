@@ -4,7 +4,6 @@ using GalaSoft.MvvmLight.Messaging;
 
 using DSManager.Interfaces;
 using DSManager.Messengers;
-using DSManager.Model.Entities;
 
 namespace DSManager.ViewModel.Windows {
     public sealed class AddEditViewModel : BaseViewModel {
@@ -33,8 +32,10 @@ namespace DSManager.ViewModel.Windows {
         }
 
         private void Save(IClosable window) {
-            if (!((AddEditBaseViewModel) Page).Save())
+            if (!((AddEditBaseViewModel) Page).Save()) {
+                window?.ShowDialog("Błąd", "Nie można zapisać zmian, ponieważ wystąpiły błędy walidacji!");
                 return;
+            }
 
             window?.Close();
         }

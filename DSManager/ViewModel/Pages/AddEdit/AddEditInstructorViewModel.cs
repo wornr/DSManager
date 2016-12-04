@@ -129,7 +129,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         }
         #endregion
 
-        #region IDataSave Methods
+        #region Save Methods
         public override bool Validate() {
             var valid = true;
 
@@ -198,10 +198,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         }
 
         public override bool Save() {
-            if(!Validate()) {
-                // TODO wyrzucić dialog o błędach walidacji
+            if(!Validate())
                 return false;
-            }
 
             using(var repository = new BaseRepository()) {
                 repository.Save(_instructor);
