@@ -10,7 +10,7 @@
         xmlns:views="clr-namespace:DSManager.View.Pages"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
-        Title="DS Manager" Icon="/DSManager;component/Resources/Icons/app.ico" MinWidth="1250" MinHeight="650" WindowStartupLocation="CenterScreen">
+        Title="DS Manager" Icon="/DSManager;component/Resources/Icons/app.ico" MinWidth="1250" MinHeight="650" WindowStartupLocation="CenterScreen" GlowBrush="Black">
 
     <Window.Resources>
         <!-- Home -->

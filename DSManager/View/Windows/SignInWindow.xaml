@@ -10,7 +10,7 @@
         Title="{x:Static res:Resources.SignInWindow}"
         Icon="/DSManager;component/Resources/Icons/app.ico" ShowIconOnTitleBar="False"
         Width="500" Height="300" ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen" WindowStyle="None"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" GlowBrush="Black"
         FocusManager.FocusedElement="{Binding ElementName=Login}"
         DataContext="{Binding Source={StaticResource Locator}, Path=SignIn}">
     <Grid>
