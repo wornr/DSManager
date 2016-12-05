@@ -112,6 +112,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\AccountTypeConverter.cs" />
+    <Compile Include="Converters\BoolNegationConverter.cs" />
     <Compile Include="Converters\CourseKindConverter.cs" />
     <Compile Include="Converters\CourseTypeConverter.cs" />
     <Compile Include="Converters\ObjectToBoolConverter.cs" />

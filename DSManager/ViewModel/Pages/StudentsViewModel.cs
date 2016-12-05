@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -43,6 +44,10 @@ namespace DSManager.ViewModel.Pages {
         private string _filter;
         private bool _duringCourse;
         private bool _overduePayment;
+        private bool _isStudentsLoading;
+        private bool _isParticipantsLoading;
+        private bool _isClassesDatesLoading;
+        private bool _isPaymentsLoading;
         #endregion
 
         #region Helpers
@@ -74,6 +79,7 @@ namespace DSManager.ViewModel.Pages {
                 _participant = value;
                 FillClassesDates(value);
                 FillPayment(value);
+                RaisePropertyChanged();
             }
         }
 
@@ -274,39 +280,91 @@ namespace DSManager.ViewModel.Pages {
                 RaisePropertyChanged();
             }
         }
+
+        public bool IsStudentsLoading {
+            get { return _isStudentsLoading; }
+            set {
+                _isStudentsLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsParticipantsLoading {
+            get { return _isParticipantsLoading; }
+            set {
+                _isParticipantsLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsClassesDatesLoading {
+            get { return _isClassesDatesLoading; }
+            set {
+                _isClassesDatesLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsPaymentsLoading {
+            get { return _isPaymentsLoading; }
+            set {
+                _isPaymentsLoading = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
         #region Helpers
-        private void FillStudents(string filter) {
-            if(string.IsNullOrEmpty(filter)) {
-                using(var repository = new BaseRepository()) {
-                    Students =
-                        new ObservableCollection<Student>(
-                            repository.ToList<Student>()
-                            .OrderBy(student => student.LastName)
-                            .ThenBy(student => student.FirstName)
-                            .ThenBy(student => student.SecondName)
-                            .ThenBy(student => student.BirthDate)
-                            .ToList());
-                }
-            } else {
-                if(filter.Contains(" ")) {
-                    var filters = filter.Split(' ');
+        private async void FillStudents(string filter) {
+            IsStudentsLoading = true;
 
-                    if(!string.IsNullOrEmpty(filters[0]) && !string.IsNullOrEmpty(filters[1])) {
-                        using(var repository = new BaseRepository()) {
-                            Students =
-                                new ObservableCollection<Student>(
-                                    repository.ToList<Student>()
-                                        .Where(x => x.FirstName.Contains(filters[0]) && x.LastName.Contains(filters[1]) || x.FirstName.Contains(filters[1]) && x.LastName.Contains(filters[0]))
-                                        .OrderBy(student => student.LastName)
-                                        .ThenBy(student => student.FirstName)
-                                        .ThenBy(student => student.SecondName)
-                                        .ThenBy(student => student.BirthDate)
-                                        .ToList());
+            await Task.Run(() => {
+                if (string.IsNullOrEmpty(filter)) {
+                    using (var repository = new BaseRepository()) {
+                        Students =
+                            new ObservableCollection<Student>(
+                                repository.ToList<Student>()
+                                    .OrderBy(student => student.LastName)
+                                    .ThenBy(student => student.FirstName)
+                                    .ThenBy(student => student.SecondName)
+                                    .ThenBy(student => student.BirthDate)
+                                    .ToList());
+                    }
+                } else {
+                    if (filter.Contains(" ")) {
+                        var filters = filter.Split(' ');
+
+                        if (!string.IsNullOrEmpty(filters[0]) && !string.IsNullOrEmpty(filters[1])) {
+                            using (var repository = new BaseRepository()) {
+                                Students =
+                                    new ObservableCollection<Student>(
+                                        repository.ToList<Student>()
+                                            .Where(
+                                                x =>
+                                                    x.FirstName.Contains(filters[0]) &&
+                                                    x.LastName.Contains(filters[1]) ||
+                                                    x.FirstName.Contains(filters[1]) && x.LastName.Contains(filters[0]))
+                                            .OrderBy(student => student.LastName)
+                                            .ThenBy(student => student.FirstName)
+                                            .ThenBy(student => student.SecondName)
+                                            .ThenBy(student => student.BirthDate)
+                                            .ToList());
+                            }
+                        } else {
+                            using (var repository = new BaseRepository()) {
+                                Students =
+                                    new ObservableCollection<Student>(
+                                        repository.ToList<Student>()
+                                            .Where(x => x.FirstName.Contains(filter) || x.LastName.Contains(filter))
+                                            .OrderBy(student => student.LastName)
+                                            .ThenBy(student => student.FirstName)
+                                            .ThenBy(student => student.SecondName)
+                                            .ThenBy(student => student.BirthDate)
+                                            .ToList());
+                            }
                         }
                     } else {
-                        using(var repository = new BaseRepository()) {
+                        using (var repository = new BaseRepository()) {
                             Students =
                                 new ObservableCollection<Student>(
                                     repository.ToList<Student>()
@@ -318,27 +376,26 @@ namespace DSManager.ViewModel.Pages {
                                         .ToList());
                         }
                     }
-                } else {
-                    using(var repository = new BaseRepository()) {
-                        Students =
-                            new ObservableCollection<Student>(
-                                repository.ToList<Student>()
-                                    .Where(x => x.FirstName.Contains(filter) || x.LastName.Contains(filter))
-                                    .OrderBy(student => student.LastName)
-                                    .ThenBy(student => student.FirstName)
-                                    .ThenBy(student => student.SecondName)
-                                    .ThenBy(student => student.BirthDate)
-                                    .ToList());
-                    }
                 }
-            }
+            });
+
+            IsStudentsLoading = false;
         }
 
-        private void FillParticipant(Student student) {
-            using(var repository = new BaseRepository()) {
-                Participants = new ObservableCollection<Participant>(repository.ToList<Participant>().Where(x => x.Student == student && x.Student != null).ToList());
-            }
+        private async void FillParticipant(Student student) {
+            IsParticipantsLoading = true;
 
+            await Task.Run(() => {
+                using (var repository = new BaseRepository()) {
+                    Participants =
+                        new ObservableCollection<Participant>(
+                            repository.ToList<Participant>()
+                                .Where(x => x.Student == student && x.Student != null)
+                                .ToList());
+                }
+            });
+            
+            IsParticipantsLoading = false;
             // This is working LazyLoading?!
             /*using(var session = NHibernateConfiguration.SessionFactory.OpenSession()) {
                 if(this.Participants != null && this.Participants.Any())
@@ -351,33 +408,62 @@ namespace DSManager.ViewModel.Pages {
             }*/
         }
 
-        private void FillClassesDates(Participant participant) {
-            using(BaseRepository repository = new BaseRepository()) {
-                ClassesDates = new ObservableCollection<ClassesDates>(repository.ToList<ClassesDates>().Where(x => x.Participant == participant && x.Participant != null).ToList());
-            }
+        private async void FillClassesDates(Participant participant) {
+            IsClassesDatesLoading = true;
+
+            await Task.Run(() => {
+                using (var repository = new BaseRepository()) {
+                    ClassesDates =
+                        new ObservableCollection<ClassesDates>(
+                            repository.ToList<ClassesDates>()
+                                .Where(x => x.Participant == participant && x.Participant != null)
+                                .ToList());
+                }
+            });
+
+            IsClassesDatesLoading = false;
         }
 
-        private void FillPayment(Participant participant) {
-            using(BaseRepository repository = new BaseRepository()) {
-                Payments = new ObservableCollection<Payment>(repository.ToList<Payment>().Where(x => x.Participant == participant && x.Participant != null).ToList());
-            }
+        private async void FillPayment(Participant participant) {
+            IsPaymentsLoading = true;
+
+            await Task.Run(() => {
+                using (var repository = new BaseRepository()) {
+                    Payments =
+                        new ObservableCollection<Payment>(
+                            repository.ToList<Payment>()
+                                .Where(x => x.Participant == participant && x.Participant != null)
+                                .ToList());
+                }
+            });
+
+            IsPaymentsLoading = false;
         }
 
-        private void ResolveCheckboxes() {
-            using(var repository = new BaseRepository()) {
-                // DuringCourse checkbox
-                DuringCourse = repository.ToList<Participant>().Where(x => x.Student == _student && x.EndDate == null).ToList().Count != 0;
+        private async void ResolveCheckboxes() {
+            await Task.Run(() => {
+                using (var repository = new BaseRepository()) {
+                    // DuringCourse checkbox
+                    DuringCourse =
+                        repository.ToList<Participant>()
+                            .Where(x => x.Student == _student && x.EndDate == null)
+                            .ToList()
+                            .Count != 0;
 
-                // OverduePayment checkbox
-                decimal coursesPrice = 0;
-                decimal paidCourses = 0;
-                repository.ToList<Participant>().Where(x => x.Student == _student).ToList().ForEach(e => {
-                    coursesPrice += e.CoursePrice;
-                    repository.ToList<Payment>().Where(y => y.Participant == e).ToList().ForEach(f => paidCourses += f.Amount);
-                });
+                    // OverduePayment checkbox
+                    decimal coursesPrice = 0;
+                    decimal paidCourses = 0;
+                    repository.ToList<Participant>().Where(x => x.Student == _student).ToList().ForEach(e => {
+                        coursesPrice += e.CoursePrice;
+                        repository.ToList<Payment>()
+                            .Where(y => y.Participant == e)
+                            .ToList()
+                            .ForEach(f => paidCourses += f.Amount);
+                    });
 
-                OverduePayment = coursesPrice > paidCourses;
-            }
+                    OverduePayment = coursesPrice > paidCourses;
+                }
+            });
         }
         #endregion
 
