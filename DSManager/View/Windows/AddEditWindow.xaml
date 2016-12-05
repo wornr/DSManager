@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         x:Name="AddEditWindowInstance"
         DataContext="{Binding Source={StaticResource Locator}, Path=AddEdit}"
-        Width="800" Height="600" Icon="/DSManager;component/Resources/Icons/app.ico" MinWidth="800" MinHeight="600" WindowStartupLocation="CenterScreen">
+        Width="800" Height="600" Icon="/DSManager;component/Resources/Icons/app.ico" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
 
     <Window.Resources>
         <!-- Student -->

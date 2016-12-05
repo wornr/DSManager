@@ -86,7 +86,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = null
                     });
-                    addWindow.Show();
+                    addWindow.ShowDialog();
                 }));
             }
         }
@@ -105,7 +105,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = _course
                     });
-                    editWindow.Show();
+                    editWindow.ShowDialog();
                 }));
             }
         }

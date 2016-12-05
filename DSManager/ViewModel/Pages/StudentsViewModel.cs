@@ -131,7 +131,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = null
                     });
-                    addWindow.Show();
+                    addWindow.ShowDialog();
                 }));
             }
         }
@@ -150,7 +150,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = _student
                     });
-                    editWindow.Show();
+                    editWindow.ShowDialog();
                 }));
             }
         }
@@ -198,7 +198,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = null
                     });
-                    addWindow.Show();
+                    addWindow.ShowDialog();
                 }));
             }
         }
@@ -217,7 +217,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = Payment
                     });
-                    editWindow.Show();
+                    editWindow.ShowDialog();
                 }));
             }
         }
