@@ -13,7 +13,7 @@ namespace DSManager.Model.Entities {
         public virtual string Model { get; set; }
         public virtual string RegistrationNr { get; set; }
         public virtual decimal DistanceTraveled { get; set; }
-        public virtual DateTime? InspectionDate { get; set; }
-        public virtual DateTime? InsuranceDate { get; set; }
+        public virtual DateTime InspectionDate { get; set; }
+        public virtual DateTime InsuranceDate { get; set; }
     }
 }

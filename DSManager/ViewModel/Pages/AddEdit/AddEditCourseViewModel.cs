@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 
 using GalaSoft.MvvmLight.Command;
@@ -7,7 +8,21 @@ using DSManager.Model.Entities;
 using DSManager.Model.Services;
 
 namespace DSManager.ViewModel.Pages.AddEdit {
-    public class AddEditCourseViewModel : BaseViewModel {
+    public class AddEditCourseViewModel : AddEditBaseViewModel, IDataErrorInfo {
+        public override bool Save() {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool Validate() {
+            throw new System.NotImplementedException();
+        }
+
+        public string this[string columnName] {
+            get { throw new System.NotImplementedException(); }
+        }
+
+        public string Error { get; }
+
         private Student _availableStudent;
         private Student _chosenStudent;
         private ObservableCollection<Student> _availableStudents;

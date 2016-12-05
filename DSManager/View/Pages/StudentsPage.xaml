@@ -327,7 +327,7 @@
                                         </DataGridTextColumn.ElementStyle>
                                     </DataGridTextColumn>
 
-                                    <DataGridTextColumn Header="Dystans" Binding="{Binding Distance, ConverterCulture='pl-PL', StringFormat='{}{0:#.##} km', TargetNullValue={}}" Width="85">
+                                    <DataGridTextColumn Header="Dystans" Binding="{Binding Distance, ConverterCulture='pl-PL', StringFormat='{}{0:0.##} km', TargetNullValue={}}" Width="85">
                                         <DataGridTextColumn.ElementStyle>
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Setter Property="HorizontalAlignment" Value="Right" />

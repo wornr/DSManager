@@ -129,67 +129,64 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         
         #region Save Methods
         public override bool Validate() {
-            var valid = true;
-
             #region Required
             if (_student.FirstName == null || !Regex.IsMatch(_student.FirstName, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
-                valid = false;
+                return false;
             
             if (_student.LastName == null || !Regex.IsMatch(_student.LastName, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
-                valid = false;
+                return false;
 
-            if (_birthDate == null) 
-                valid = false;
-            else if (!string.IsNullOrEmpty(_student.PESEL)) {
+            if (_birthDate == null)
+                return false;
+            if (!string.IsNullOrEmpty(_student.PESEL)) {
                 if (!BirthDateValidator.Validate(_birthDate, _student.PESEL))
-                    valid = false;
-                else
-                    _student.BirthDate = (DateTime)_birthDate;
+                    return false;
+                _student.BirthDate = (DateTime)_birthDate;
             } else
                 _student.BirthDate = (DateTime) _birthDate;
             
             if(_student.Street == null || !Regex.IsMatch(_student.Street, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
-                valid = false;
-            
+                return false;
+
             if(_student.HouseNr == null || !Regex.IsMatch(_student.HouseNr, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
-                valid = false;
-            
+                return false;
+
             if(_student.City == null || !Regex.IsMatch(_student.City, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
-                valid = false;
+                return false;
             #endregion
 
             #region Not Required
             if(string.IsNullOrEmpty(_student.SecondName))
                 _student.SecondName = null;
             else if(!Regex.IsMatch(_student.SecondName, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
-                valid = false;
+                return false;
 
             if (string.IsNullOrEmpty(_student.PESEL))
                 _student.PESEL = null;
             else if(!PESELValidator.Validate(_student.PESEL))
-                valid = false;
+                return false;
 
             if(string.IsNullOrEmpty(_student.ApartmentNr))
                 _student.ApartmentNr = null;
             else if(!Regex.IsMatch(_student.ApartmentNr, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
-                valid = false;
+                return false;
 
             if(string.IsNullOrEmpty(_student.PostalCode))
                 _student.PostalCode = null;
             else if(!Regex.IsMatch(_student.PostalCode, @"^[0-9]{2}-[0-9]{3}$"))
-                valid = false;
+                return false;
 
             if(string.IsNullOrEmpty(_student.PhoneNr))
                 _student.PhoneNr = null;
             else if(!Regex.IsMatch(_student.PhoneNr, @"^(\+?[0-9]+)?(\([0-9]+\))?[0-9]+$"))
-                valid = false;
-            
+                return false;
+
             // TODO walidacja daty wydania prawa jazdy (pole nieobowiązkowe)
 
             // TODO walidacja numeru prawa jazdy (pole nieobowiązkowe)
             #endregion
 
-            return valid;
+            return true;
         }
 
         public override bool Save() {
@@ -309,6 +306,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 RaisePropertyChanged();
             }
         }
+
+        // TODO dodać właściwości odpowiedzialne za posiadane kategorie prawa jazdy (dostępne/wybrane)
         #endregion
 
         #region Commands

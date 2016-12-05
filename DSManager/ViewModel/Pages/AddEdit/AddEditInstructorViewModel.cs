@@ -44,85 +44,87 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
             switch(propertyName) {
                 case "FirstName":
-                if(string.IsNullOrEmpty(_instructor.FirstName))
-                    validationMessage = "Pole nie może być puste!";
-                else if(!Regex.IsMatch(_instructor.FirstName, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
-                    validationMessage = "Podano niepoprawne imię!";
-                break;
+                    if(string.IsNullOrEmpty(_instructor.FirstName))
+                        validationMessage = "Pole nie może być puste!";
+                    else if(!Regex.IsMatch(_instructor.FirstName, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
+                        validationMessage = "Podano niepoprawne imię!";
+                    break;
 
                 case "SecondName":
-                if(!string.IsNullOrEmpty(_instructor.SecondName) && !Regex.IsMatch(_instructor.SecondName, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
-                    validationMessage = "Podano niepoprawne imię!";
-                break;
+                    if(!string.IsNullOrEmpty(_instructor.SecondName) && !Regex.IsMatch(_instructor.SecondName, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
+                        validationMessage = "Podano niepoprawne imię!";
+                    break;
 
                 case "LastName":
-                if(string.IsNullOrEmpty(_instructor.LastName))
-                    validationMessage = "Pole nie może być puste!";
-                else if(!Regex.IsMatch(_instructor.LastName, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
-                    validationMessage = "Podano niepoprawne nazwisko!";
-                break;
+                    if(string.IsNullOrEmpty(_instructor.LastName))
+                        validationMessage = "Pole nie może być puste!";
+                    else if(!Regex.IsMatch(_instructor.LastName, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
+                        validationMessage = "Podano niepoprawne nazwisko!";
+                    break;
 
                 case "BirthDate":
-                if(_birthDate == null)
-                    validationMessage = "Pole nie może być puste!";
-                else if(!string.IsNullOrEmpty(_instructor.PESEL))
-                    if(!BirthDateValidator.Validate(_birthDate, _instructor.PESEL))
-                        validationMessage = "Podana data urodzenia nie jest zgodna z numerem PESEL!";
-                break;
+                    if(_birthDate == null)
+                        validationMessage = "Pole nie może być puste!";
+                    else if(!string.IsNullOrEmpty(_instructor.PESEL))
+                        if(!BirthDateValidator.Validate(_birthDate, _instructor.PESEL))
+                            validationMessage = "Podana data urodzenia nie jest zgodna z numerem PESEL!";
+                    break;
 
                 case "PESEL":
-                if(!string.IsNullOrEmpty(_instructor.PESEL) && !PESELValidator.Validate(_instructor.PESEL))
-                    validationMessage = "Podano niepoprawny numer PESEL!";
-                BirthDate = _birthDate;
-                break;
+                    if(!string.IsNullOrEmpty(_instructor.PESEL) && !PESELValidator.Validate(_instructor.PESEL))
+                        validationMessage = "Podano niepoprawny numer PESEL!";
+                    BirthDate = _birthDate;
+                    break;
 
                 case "Street":
-                if(string.IsNullOrEmpty(_instructor.Street))
-                    validationMessage = "Pole nie może być puste!";
-                else if(!Regex.IsMatch(_instructor.Street, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
-                    validationMessage = "Podano niepoprawną nazwę ulicy!";
-                break;
+                    if(string.IsNullOrEmpty(_instructor.Street))
+                        validationMessage = "Pole nie może być puste!";
+                    else if(!Regex.IsMatch(_instructor.Street, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
+                        validationMessage = "Podano niepoprawną nazwę ulicy!";
+                    break;
 
                 case "HouseNr":
-                if(string.IsNullOrEmpty(_instructor.HouseNr))
-                    validationMessage = "Pole nie może być puste!";
-                else if(!Regex.IsMatch(_instructor.HouseNr, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
-                    validationMessage = "Podano niepoprawny numer domu!";
-                break;
+                    if(string.IsNullOrEmpty(_instructor.HouseNr))
+                        validationMessage = "Pole nie może być puste!";
+                    else if(!Regex.IsMatch(_instructor.HouseNr, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
+                        validationMessage = "Podano niepoprawny numer domu!";
+                    break;
 
                 case "ApartmentNr":
-                if(!string.IsNullOrEmpty(_instructor.ApartmentNr) && !Regex.IsMatch(_instructor.ApartmentNr, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
-                    validationMessage = "Podano niepoprawny numer lokalu";
-                break;
+                    if(!string.IsNullOrEmpty(_instructor.ApartmentNr) && !Regex.IsMatch(_instructor.ApartmentNr, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
+                        validationMessage = "Podano niepoprawny numer lokalu";
+                    break;
 
                 case "PostalCode":
-                if(!string.IsNullOrEmpty(_instructor.PostalCode) && !Regex.IsMatch(_instructor.PostalCode, @"^[0-9]{2}-[0-9]{3}$"))
-                    validationMessage = "Podano niepoprawny kod pocztowy";
-                break;
+                    if(!string.IsNullOrEmpty(_instructor.PostalCode) && !Regex.IsMatch(_instructor.PostalCode, @"^[0-9]{2}-[0-9]{3}$"))
+                        validationMessage = "Podano niepoprawny kod pocztowy";
+                    break;
 
                 case "City":
-                if(string.IsNullOrEmpty(_instructor.City))
-                    validationMessage = "Pole nie może być puste!";
-                else if(!Regex.IsMatch(_instructor.City, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
-                    validationMessage = "Podano niepoprawną nazwę miejscowości!";
-                break;
+                    if(string.IsNullOrEmpty(_instructor.City))
+                        validationMessage = "Pole nie może być puste!";
+                    else if(!Regex.IsMatch(_instructor.City, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
+                        validationMessage = "Podano niepoprawną nazwę miejscowości!";
+                    break;
 
                 case "PhoneNr":
-                if(!string.IsNullOrEmpty(_instructor.PhoneNr) && !Regex.IsMatch(_instructor.PhoneNr, @"^(\+?[0-9]+)?(\([0-9]+\))?[0-9]+$"))
-                    validationMessage = "Podano niepoprawny numer telefonu";
-                break;
+                    if(!string.IsNullOrEmpty(_instructor.PhoneNr) && !Regex.IsMatch(_instructor.PhoneNr, @"^(\+?[0-9]+)?(\([0-9]+\))?[0-9]+$"))
+                        validationMessage = "Podano niepoprawny numer telefonu";
+                    break;
 
                 case "PermissionsNr":
-                if(string.IsNullOrEmpty(_instructor.PermissionsNr))
-                    validationMessage = "Pole nie może być puste!";
-                else if(!Regex.IsMatch(_instructor.PermissionsNr, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
-                    validationMessage = "Podano niepoprawny numer uprawnień";
-                break;
+                    if(string.IsNullOrEmpty(_instructor.PermissionsNr))
+                        validationMessage = "Pole nie może być puste!";
+                    else if(!Regex.IsMatch(_instructor.PermissionsNr, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
+                        validationMessage = "Podano niepoprawny numer uprawnień";
+                    break;
 
                 case "DrivingLicenseNr":
-                if(!string.IsNullOrEmpty(_instructor.FirstName) && !Regex.IsMatch(_instructor.FirstName, @"^[a-zA-Z]+$"))
-                    validationMessage = "Podano niepoprawny numer prawa jazdy";
-                break;
+                    if(!string.IsNullOrEmpty(_instructor.FirstName) && !Regex.IsMatch(_instructor.FirstName, @"^[a-zA-Z]+$"))
+                        validationMessage = "Podano niepoprawny numer prawa jazdy";
+                    break;
+
+                // TODO dodać walidację uprawnień instruktora
             }
 
             return validationMessage;
@@ -131,66 +133,65 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
         #region Save Methods
         public override bool Validate() {
-            var valid = true;
-
             #region Required
             if(_instructor.FirstName == null || !Regex.IsMatch(_instructor.FirstName, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
-                valid = false;
+                return false;
 
             if(_instructor.LastName == null || !Regex.IsMatch(_instructor.LastName, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
-                valid = false;
+                return false;
 
             if(_birthDate == null)
-                valid = false;
-            else if(!string.IsNullOrEmpty(_instructor.PESEL)) {
+                return false;
+            if(!string.IsNullOrEmpty(_instructor.PESEL)) {
                 if(!BirthDateValidator.Validate(_birthDate, _instructor.PESEL))
-                    valid = false;
-                else
-                    _instructor.BirthDate = (DateTime)_birthDate;
+                    return false;
+                _instructor.BirthDate = (DateTime)_birthDate;
             } else
                 _instructor.BirthDate = (DateTime)_birthDate;
 
             if(_instructor.Street == null || !Regex.IsMatch(_instructor.Street, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
-                valid = false;
+                return false;
 
             if(_instructor.HouseNr == null || !Regex.IsMatch(_instructor.HouseNr, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
-                valid = false;
+                return false;
 
             if(_instructor.City == null || !Regex.IsMatch(_instructor.City, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
-                valid = false;
+                return false;
 
             if(_instructor.PermissionsNr == null || !Regex.IsMatch(_instructor.PermissionsNr, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
-                valid = false;
+                return false;
+            
+            // TODO dodać walidację uprawnień instruktora
             #endregion
 
             #region Not Required
             if(string.IsNullOrEmpty(_instructor.SecondName))
                 _instructor.SecondName = null;
             else if(!Regex.IsMatch(_instructor.SecondName, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
-                valid = false;
+                return false;
 
             if(string.IsNullOrEmpty(_instructor.PESEL))
                 _instructor.PESEL = null;
             else if(!PESELValidator.Validate(_instructor.PESEL))
-                valid = false;
+                return false;
 
             if(string.IsNullOrEmpty(_instructor.ApartmentNr))
                 _instructor.ApartmentNr = null;
             else if(!Regex.IsMatch(_instructor.ApartmentNr, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
-                valid = false;
+                return false;
 
             if(string.IsNullOrEmpty(_instructor.PostalCode))
                 _instructor.PostalCode = null;
             else if(!Regex.IsMatch(_instructor.PostalCode, @"^[0-9]{2}-[0-9]{3}$"))
-                valid = false;
+                return false;
 
             if(string.IsNullOrEmpty(_instructor.PhoneNr))
                 _instructor.PhoneNr = null;
             else if(!Regex.IsMatch(_instructor.PhoneNr, @"^(\+?[0-9]+)?(\([0-9]+\))?[0-9]+$"))
-                valid = false;
+                return false;
             #endregion
 
-            return valid;
+            return true;
         }
 
         public override bool Save() {
@@ -318,6 +319,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 RaisePropertyChanged();
             }
         }
+
+        // TODO dodać właściwości odpowiedzialne za uprawnienia instruktora (dostępne/wybrane)
         #endregion
 
         #region Commands
