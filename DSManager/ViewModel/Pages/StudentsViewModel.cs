@@ -139,9 +139,10 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand EditStudent {
             get {
                 return _editStudent ?? (_editStudent = new RelayCommand(() => {
-                    if(Student == null)
-                        // TODO wyrzucić komunikat "Nie wybrano żadnego kursanta"
+                    if (Student == null) {
+                        ShowDialog("Błąd", "Nie wybrano żadnego kursanta!");
                         return;
+                    }
                     var editWindow = new AddEditWindow { Title = "Edytuj kursanta" };
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditStudent,
@@ -156,14 +157,14 @@ namespace DSManager.ViewModel.Pages {
 
         public RelayCommand DeleteStudent {
             get {
-                return _deleteStudent ?? (_deleteStudent = new RelayCommand(() => {
+                return _deleteStudent ?? (_deleteStudent = new RelayCommand(async () => {
                     if(_student == null) {
-                        // TODO wyrzucić komunikat "Nie wybrano żadnego kursanta"
+                        ShowDialog("Błąd", "Nie wybrano żadnego kursanta!");
                     } else {
-                        // TODO wyrzucić dialog z zapytaniem "Czy jesteś pewien, że chcesz usunąć danego kursanta?"
-                        using(var repository = new BaseRepository()) {
-                            repository.Delete(_student);
-                        }
+                        if(await ConfirmationDialog("Potwierdź", "Czy jesteś pewien, że chcesz usunąć danego kursanta?"))
+                            using(var repository = new BaseRepository()) {
+                                repository.Delete(_student);
+                            }
                     }
                     FillStudents(_filter);
                 }));
@@ -205,9 +206,10 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand EditPayment {
             get {
                 return _editPayment ?? (_editPayment = new RelayCommand(() => {
-                    if(Payment == null)
-                        // TODO wyrzucić komunikat "Nie wybrano żadnej wpłaty"
+                    if(Payment == null) {
+                        ShowDialog("Błąd", "Nie wybrano żadnej wpłaty!");
                         return;
+                    }
                     var editWindow = new AddEditWindow { Title = "Edytuj wpłatę" };
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditPayment,
@@ -222,14 +224,14 @@ namespace DSManager.ViewModel.Pages {
 
         public RelayCommand DeletePayment {
             get {
-                return _deletePayment ?? (_deletePayment = new RelayCommand(() => {
+                return _deletePayment ?? (_deletePayment = new RelayCommand(async () => {
                     if(Payment == null) {
-                        // TODO wyrzucić komunikat "Nie wybrano żadnej wpłaty"
+                        ShowDialog("Błąd", "Nie wybrano żadnej wpłaty!");
                     } else {
-                        // TODO wyrzucić dialog z zapytaniem "Czy jesteś pewien, że chcesz usunąć daną wpłatę?"
-                        using(var repository = new BaseRepository()) {
-                            repository.Delete(Payment);
-                        }
+                        if(await ConfirmationDialog("Potwierdź", "Czy jesteś pewien, że chcesz usunąć daną wpłatę?"))
+                            using(var repository = new BaseRepository()) {
+                                repository.Delete(Payment);
+                            }
                     }
                     FillPayment(_participant);
                 }));

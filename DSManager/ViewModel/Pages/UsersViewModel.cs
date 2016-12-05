@@ -89,9 +89,10 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand EditUser {
             get {
                 return _editUser ?? (_editUser = new RelayCommand(() => {
-                    if(User == null)
-                        // TODO wyrzucić komunikat "Nie wybrano żadnego użytkownika"
+                    if(User == null) {
+                        ShowDialog("Błąd", "Nie wybrano żadnego użytkownika!");
                         return;
+                    }
                     var editWindow = new AddEditWindow { Title = "Edytuj użytkownika" };
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditUser,
@@ -105,14 +106,14 @@ namespace DSManager.ViewModel.Pages {
         }
         public RelayCommand DeleteUser {
             get {
-                return _deleteUser ?? (_deleteUser = new RelayCommand(() => {
+                return _deleteUser ?? (_deleteUser = new RelayCommand(async () => {
                     if(_user == null) {
-                        // TODO wyrzucić komunikat "Nie wybrano żadnego użytkownika"
+                        ShowDialog("Błąd", "Nie wybrano żadnego użytkownika!");
                     } else {
-                        // TODO wyrzucić dialog z zapytaniem "Czy jesteś pewien, że chcesz usunąć danego użytkownika?"
-                        using(var repository = new BaseRepository()) {
-                            repository.Delete(_user);
-                        }
+                        if(await ConfirmationDialog("Potwierdź", "Czy jesteś pewien, że chcesz usunąć danego użytkownika?"))
+                            using(var repository = new BaseRepository()) {
+                                repository.Delete(_user);
+                            }
                     }
                     FillUsers(_filter);
                 }));

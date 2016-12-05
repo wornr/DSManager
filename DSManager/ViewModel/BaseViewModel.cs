@@ -1,7 +1,14 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Windows;
+using System.Threading.Tasks;
+
+using GalaSoft.MvvmLight;
+
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace DSManager.ViewModel {
     public abstract class BaseViewModel : ViewModelBase {
+        private MetroWindow windowsInstance = Application.Current.MainWindow as MetroWindow;
         private bool _isLoading;
         private ViewModelBase _currentViewModel;
 
@@ -33,6 +40,22 @@ namespace DSManager.ViewModel {
             CurrentViewModel = viewModel;
             var dsManagerViewModel = viewModel as BaseViewModel;
             dsManagerViewModel?.OnLoad();
+        }
+
+        public async void ShowDialog(string title, string description) {
+            await windowsInstance.ShowMessageAsync(title, description);
+        }
+
+        public async Task<bool> ConfirmationDialog(string title, string description) {
+            MetroDialogSettings settings = new MetroDialogSettings() {
+                AffirmativeButtonText = "Tak",
+                NegativeButtonText = "Nie",
+                AnimateShow = true,
+                ColorScheme = MetroDialogColorScheme.Theme
+            };
+
+            MessageDialogResult result = await windowsInstance.ShowMessageAsync(title, description, MessageDialogStyle.AffirmativeAndNegative, settings);
+            return result == MessageDialogResult.Affirmative;
         }
 
         //public void RunAsyncOperation(Action toExecute, Action<bool> executeUponFinish) {

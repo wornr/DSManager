@@ -133,9 +133,10 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand EditInstructor {
             get {
                 return _editInstructor ?? (_editInstructor = new RelayCommand(() => {
-                    if(Instructor == null)
-                        // TODO wyrzucić komunikat "Nie wybrano żadnego kursanta"
+                    if(Instructor == null) {
+                        ShowDialog("Błąd", "Nie wybrano żadnego instruktora!");
                         return;
+                    }
                     var editWindow = new AddEditWindow { Title = "Edytuj instruktora" };
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditInstructor,
@@ -150,14 +151,14 @@ namespace DSManager.ViewModel.Pages {
 
         public RelayCommand DeleteInstructor {
             get {
-                return _deleteInstructor ?? (_deleteInstructor = new RelayCommand(() => {
+                return _deleteInstructor ?? (_deleteInstructor = new RelayCommand(async () => {
                     if(_instructor == null) {
-                        // TODO wyrzucić komunikat "Nie wybrano żadnego instruktora"
+                        ShowDialog("Błąd", "Nie wybrano żadnego instruktora!");
                     } else {
-                        // TODO wyrzucić dialog z zapytaniem "Czy jesteś pewien, że chcesz usunąć danego instruktora?"
-                        using(var repository = new BaseRepository()) {
-                            repository.Delete(_instructor);
-                        }
+                        if(await ConfirmationDialog("Potwierdź", "Czy jesteś pewien, że chcesz usunąć danego instruktora?"))
+                            using(var repository = new BaseRepository()) {
+                                repository.Delete(_instructor);
+                            }
                     }
                     FillInstructors(_filter);
                 }));

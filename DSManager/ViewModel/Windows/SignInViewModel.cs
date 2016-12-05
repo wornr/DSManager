@@ -33,6 +33,7 @@ namespace DSManager.ViewModel.Windows {
 
                         var windowInstance = param as SignInWindow;
                         var mainWindow = new MainWindow();
+                        Application.Current.MainWindow = mainWindow;
                         mainWindow.Show();
                         windowInstance?.Close();
                     } else {

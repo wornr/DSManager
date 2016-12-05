@@ -94,9 +94,10 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand EditCourse {
             get {
                 return _editCourse ?? (_editCourse = new RelayCommand(() => {
-                    if(Course == null)
-                        // TODO wyrzucić komunikat "Nie wybrano żadnego szkolenia"
+                    if (Course == null) {
+                        ShowDialog("Błąd", "Nie wybrano żadnego szkolenia!");
                         return;
+                    }
                     var editWindow = new AddEditWindow { Title = "Edytuj szkolenie" };
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditCourse,
@@ -111,14 +112,14 @@ namespace DSManager.ViewModel.Pages {
 
         public RelayCommand DeleteCourse {
             get {
-                return _deleteCourse ?? (_deleteCourse = new RelayCommand(() => {
+                return _deleteCourse ?? (_deleteCourse = new RelayCommand(async () => {
                     if(_course == null) {
-                        // TODO wyrzucić komunikat "Nie wybrano żadnego szkolenia"
+                        ShowDialog("Błąd", "Nie wybrano żadnego szkolenia!");
                     } else {
-                        // TODO wyrzucić dialog z zapytaniem "Czy jesteś pewien, że chcesz usunąć dane szkolenie?"
-                        using(var repository = new BaseRepository()) {
-                            repository.Delete(_course);
-                        }
+                        if(await ConfirmationDialog("Potwierdź", "Czy jesteś pewien, że chcesz usunąć dane szkolenie?"))
+                            using(var repository = new BaseRepository()) {
+                                repository.Delete(_course);
+                            }
                     }
                     FillCourses();
                 }));

@@ -115,9 +115,10 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand EditCar {
             get {
                 return _editCar ?? (_editCar = new RelayCommand(() => {
-                    if(Car == null)
-                        // TODO wyrzucić komunikat "Nie wybrano żadnego pojazdu"
+                    if (Car == null) {
+                        ShowDialog("Błąd", "Nie wybrano żadnego pojazdu!");
                         return;
+                    }
                     var editWindow = new AddEditWindow { Title = "Edytuj pojazd" };
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditCar,
@@ -132,14 +133,14 @@ namespace DSManager.ViewModel.Pages {
 
         public RelayCommand DeleteCar {
             get {
-                return _deleteCar ?? (_deleteCar = new RelayCommand(() => {
+                return _deleteCar ?? (_deleteCar = new RelayCommand(async () => {
                     if(_car == null) {
-                        // TODO wyrzucić komunikat "Nie wybrano żadnego pojazdu"
+                        ShowDialog("Błąd", "Nie wybrano żadnego pojazdu!");
                     } else {
-                        // TODO wyrzucić dialog z zapytaniem "Czy jesteś pewien, że chcesz usunąć dany pojazd?"
-                        using(var repository = new BaseRepository()) {
-                            repository.Delete(_car);
-                        }
+                        if(await ConfirmationDialog("Potwierdź", "Czy jesteś pewien, że chcesz usunąć dany pojazd?"))
+                            using(var repository = new BaseRepository()) {
+                                repository.Delete(_car);
+                            }
                     }
                     FillCars(_filter);
                 }));
