@@ -33,7 +33,6 @@
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <!-- TODO dodać dialog proszący o potwierdzenie -->
             <Button x:Name="DeleteStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteStudent}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
@@ -373,7 +372,6 @@
                                         </Rectangle.OpacityMask>
                                     </Rectangle>
                                 </Button>
-                                <!-- TODO dodać dialog proszący o potwierdzenie -->
                                 <Button x:Name="DeletePayment" Width="25" Height="25" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeletePayment}">
                                     <Rectangle Width="9" Height="9" Fill="{DynamicResource BlackBrush}">
                                         <Rectangle.OpacityMask>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -36,6 +36,9 @@ namespace DSManager.ViewModel.Pages {
         private string _filter;
         private bool _actualInspection;
         private bool _actualInsurance;
+        private bool _isCarsLoading;
+        private bool _isClassesDatesLoading;
+        private bool _isExamsDatesLoading;
         #endregion
 
         #region Helpers
@@ -45,6 +48,7 @@ namespace DSManager.ViewModel.Pages {
         #endregion
 
         public CarsViewModel() {
+            _filter = _prevFilter = string.Empty;
             FillCars(_filter);
         }
 
@@ -158,6 +162,9 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand FilterCars {
             get {
                 return _filterCars ?? (_filterCars = new RelayCommand(() => {
+                    if(_filter.Equals(_prevFilter))
+                        return;
+
                     FillCars(_filter);
                     _prevFilter = _filter;
                 }));
@@ -191,31 +198,71 @@ namespace DSManager.ViewModel.Pages {
                 RaisePropertyChanged();
             }
         }
+
+        public bool IsCarsLoading {
+            get { return _isCarsLoading; }
+            set {
+                _isCarsLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsClassesDatesLoading {
+            get { return _isClassesDatesLoading; }
+            set {
+                _isClassesDatesLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsExamsDatesLoading {
+            get { return _isExamsDatesLoading; }
+            set {
+                _isExamsDatesLoading = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
         #region Helpers
-        private void FillCars(string filter) {
-            if(string.IsNullOrEmpty(filter)) {
-                using(var repository = new BaseRepository()) {
-                    Cars =
-                        new ObservableCollection<Car>(
-                            repository.ToList<Car>().OrderBy(car => car.Brand).ToList());
-                }
-            } else {
-                if(filter.Contains(" ")) {
-                    var filters = filter.Split(' ');
+        private async void FillCars(string filter) {
+            IsCarsLoading = true;
 
-                    if(!string.IsNullOrEmpty(filters[0]) && !string.IsNullOrEmpty(filters[1])) {
-                        using(var repository = new BaseRepository()) {
-                            Cars =
-                                new ObservableCollection<Car>(
-                                    repository.ToList<Car>()
-                                        .Where(x => x.Brand.Contains(filters[0]) && x.Model.Contains(filters[1]) || x.Brand.Contains(filters[1]) && x.Model.Contains(filters[0]))
-                                        .OrderBy(car => car.Brand)
-                                        .ToList());
+            await Task.Run(() => {
+                if (string.IsNullOrEmpty(filter)) {
+                    using (var repository = new BaseRepository()) {
+                        Cars =
+                            new ObservableCollection<Car>(
+                                repository.ToList<Car>().OrderBy(car => car.Brand).ToList());
+                    }
+                } else {
+                    if (filter.Contains(" ")) {
+                        var filters = filter.Split(' ');
+
+                        if (!string.IsNullOrEmpty(filters[0]) && !string.IsNullOrEmpty(filters[1])) {
+                            using (var repository = new BaseRepository()) {
+                                Cars =
+                                    new ObservableCollection<Car>(
+                                        repository.ToList<Car>()
+                                            .Where(
+                                                x =>
+                                                    x.Brand.Contains(filters[0]) && x.Model.Contains(filters[1]) ||
+                                                    x.Brand.Contains(filters[1]) && x.Model.Contains(filters[0]))
+                                            .OrderBy(car => car.Brand)
+                                            .ToList());
+                            }
+                        } else {
+                            using (var repository = new BaseRepository()) {
+                                Cars =
+                                    new ObservableCollection<Car>(
+                                        repository.ToList<Car>()
+                                            .Where(x => x.Brand.Contains(filter) || x.Model.Contains(filter))
+                                            .OrderBy(car => car.Brand)
+                                            .ToList());
+                            }
                         }
                     } else {
-                        using(var repository = new BaseRepository()) {
+                        using (var repository = new BaseRepository()) {
                             Cars =
                                 new ObservableCollection<Car>(
                                     repository.ToList<Car>()
@@ -224,44 +271,55 @@ namespace DSManager.ViewModel.Pages {
                                         .ToList());
                         }
                     }
-                } else {
-                    using(var repository = new BaseRepository()) {
-                        Cars =
-                            new ObservableCollection<Car>(
-                                repository.ToList<Car>()
-                                    .Where(x => x.Brand.Contains(filter) || x.Model.Contains(filter))
-                                    .OrderBy(car => car.Brand)
-                                    .ToList());
-                    }
                 }
-            }
+            });
+
+            IsCarsLoading = false;
         }
 
-        private void FillClassesDates(Car car) {
-            using(BaseRepository repository = new BaseRepository()) {
-                ClassesDates = new ObservableCollection<ClassesDates>(repository.ToList<ClassesDates>().Where(x => x.Car == car && x.Car != null).ToList());
-            }
+        private async void FillClassesDates(Car car) {
+            IsClassesDatesLoading = true;
+
+            await Task.Run(() => {
+                using (BaseRepository repository = new BaseRepository()) {
+                    ClassesDates =
+                        new ObservableCollection<ClassesDates>(
+                            repository.ToList<ClassesDates>().Where(x => x.Car == car && x.Car != null).ToList());
+                }
+            });
+
+            IsClassesDatesLoading = false;
         }
 
-        private void FillExamsDates(Car car) {
-            using(BaseRepository repository = new BaseRepository()) {
-                ExamsDates = new ObservableCollection<ExamsDates>(repository.ToList<ExamsDates>().Where(x => x.Car == car && x.Car != null).ToList());
-            }
+        private async void FillExamsDates(Car car) {
+            IsExamsDatesLoading = true;
+
+            await Task.Run(() => {
+                using (BaseRepository repository = new BaseRepository()) {
+                    ExamsDates =
+                        new ObservableCollection<ExamsDates>(
+                            repository.ToList<ExamsDates>().Where(x => x.Car == car && x.Car != null).ToList());
+                }
+            });
+
+            IsExamsDatesLoading = false;
         }
 
-        private void ResolveCheckboxes() {
-            if(_car == null) {
-                ActualInspection = false;
-                ActualInsurance = false;
+        private async void ResolveCheckboxes() {
+            await Task.Run(() => {
+                if (_car == null) {
+                    ActualInspection = false;
+                    ActualInsurance = false;
 
-                return;
-            }
+                    return;
+                }
 
-            // ActualInspection checkbox
-            ActualInspection = _car.InspectionDate >= DateTime.Now;
+                // ActualInspection checkbox
+                ActualInspection = _car.InspectionDate >= DateTime.Now;
 
-            // ActualInsurance checkbox
-            ActualInsurance = _car.InsuranceDate >= DateTime.Now;
+                // ActualInsurance checkbox
+                ActualInsurance = _car.InsuranceDate >= DateTime.Now;
+            });
         }
         #endregion
 

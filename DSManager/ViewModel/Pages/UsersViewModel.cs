@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -32,6 +32,7 @@ namespace DSManager.ViewModel.Pages {
 
         #region View Elements
         private string _filter;
+        private bool _isUsersLoading;
         #endregion
 
         #region Helpers
@@ -41,6 +42,7 @@ namespace DSManager.ViewModel.Pages {
         #endregion
 
         public UsersViewModel() {
+            _filter = _prevFilter = string.Empty;
             FillUsers(_filter);
         }
 
@@ -131,6 +133,9 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand FilterUsers {
             get {
                 return _filterUsers ?? (_filterUsers = new RelayCommand(() => {
+                    if (_filter.Equals(_prevFilter))
+                        return;
+
                     FillUsers(_filter);
                     _prevFilter = _filter;
                 }));
@@ -148,31 +153,56 @@ namespace DSManager.ViewModel.Pages {
                 RaisePropertyChanged();
             }
         }
+
+        public bool IsUsersLoading {
+            get { return _isUsersLoading; }
+            set {
+                _isUsersLoading = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
         #region Helpers
-        private void FillUsers(string filter) {
-            if(string.IsNullOrEmpty(filter)) {
-                using(var repository = new BaseRepository()) {
-                    Users =
-                        new ObservableCollection<User>(
-                            repository.ToList<User>().OrderBy(user => user.LastName).ToList());
-                }
-            } else {
-                if(filter.Contains(" ")) {
-                    var filters = filter.Split(' ');
+        private async void FillUsers(string filter) {
+            IsUsersLoading = true;
 
-                    if(!string.IsNullOrEmpty(filters[0]) && !string.IsNullOrEmpty(filters[1])) {
-                        using(var repository = new BaseRepository()) {
-                            Users =
-                                new ObservableCollection<User>(
-                                    repository.ToList<User>()
-                                        .Where(x => x.FirstName.Contains(filters[0]) && x.LastName.Contains(filters[1]) || x.FirstName.Contains(filters[1]) && x.LastName.Contains(filters[0]))
-                                        .OrderBy(user => user.LastName)
-                                        .ToList());
+            await Task.Run(() => {
+                if (string.IsNullOrEmpty(filter)) {
+                    using (var repository = new BaseRepository()) {
+                        Users =
+                            new ObservableCollection<User>(
+                                repository.ToList<User>().OrderBy(user => user.LastName).ToList());
+                    }
+                } else {
+                    if (filter.Contains(" ")) {
+                        var filters = filter.Split(' ');
+
+                        if (!string.IsNullOrEmpty(filters[0]) && !string.IsNullOrEmpty(filters[1])) {
+                            using (var repository = new BaseRepository()) {
+                                Users =
+                                    new ObservableCollection<User>(
+                                        repository.ToList<User>()
+                                            .Where(
+                                                x =>
+                                                    x.FirstName.Contains(filters[0]) &&
+                                                    x.LastName.Contains(filters[1]) ||
+                                                    x.FirstName.Contains(filters[1]) && x.LastName.Contains(filters[0]))
+                                            .OrderBy(user => user.LastName)
+                                            .ToList());
+                            }
+                        } else {
+                            using (var repository = new BaseRepository()) {
+                                Users =
+                                    new ObservableCollection<User>(
+                                        repository.ToList<User>()
+                                            .Where(x => x.FirstName.Contains(filter) || x.LastName.Contains(filter))
+                                            .OrderBy(user => user.LastName)
+                                            .ToList());
+                            }
                         }
                     } else {
-                        using(var repository = new BaseRepository()) {
+                        using (var repository = new BaseRepository()) {
                             Users =
                                 new ObservableCollection<User>(
                                     repository.ToList<User>()
@@ -181,17 +211,10 @@ namespace DSManager.ViewModel.Pages {
                                         .ToList());
                         }
                     }
-                } else {
-                    using(var repository = new BaseRepository()) {
-                        Users =
-                            new ObservableCollection<User>(
-                                repository.ToList<User>()
-                                    .Where(x => x.FirstName.Contains(filter) || x.LastName.Contains(filter))
-                                    .OrderBy(user => user.LastName)
-                                    .ToList());
-                    }
                 }
-            }
+            });
+
+            IsUsersLoading = false;
         }
         #endregion
 

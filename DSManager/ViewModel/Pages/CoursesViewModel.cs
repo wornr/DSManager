@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -8,6 +8,7 @@ using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Services;
 using DSManager.View.Windows;
+using NHibernate.Id.Enhanced;
 
 namespace DSManager.ViewModel.Pages {
     public class CoursesViewModel : BaseViewModel {
@@ -30,6 +31,8 @@ namespace DSManager.ViewModel.Pages {
 
         #region View Elements
         private string _filter;
+        private bool _isCoursesLoading;
+        private bool _isParticipantsLoading;
         #endregion
 
         #region Helpers
@@ -127,18 +130,51 @@ namespace DSManager.ViewModel.Pages {
         }
         #endregion
 
-        #region Helpers
-        // TODO dodać filtrowanie
-        private void FillCourses() {
-            using(var repository = new BaseRepository()) {
-                Courses = new ObservableCollection<Course>(repository.ToList<Course>().ToList().OrderBy(x => x.StartDate));
+        #region ViewElements
+        public bool IsCoursesLoading {
+            get { return _isCoursesLoading; }
+            set {
+                _isCoursesLoading = value;
+                RaisePropertyChanged();
             }
         }
 
-        private void FillParticipants(Course course) {
-            using(var repository = new BaseRepository()) {
-                Participants = new ObservableCollection<Participant>(repository.ToList<Participant>().Where(x => x.Course == course && x.Course != null).ToList());
+        public bool IsParticipantsLoading {
+            get { return _isParticipantsLoading; }
+            set {
+                _isParticipantsLoading = value;
+                RaisePropertyChanged();
             }
+        }
+        #endregion
+
+        #region Helpers
+        // TODO dodać filtrowanie
+        private async void FillCourses() {
+            IsCoursesLoading = true;
+
+            await Task.Run(() => {
+                using (var repository = new BaseRepository()) {
+                    Courses =
+                        new ObservableCollection<Course>(repository.ToList<Course>().ToList().OrderBy(x => x.StartDate));
+                }
+            });
+
+            IsCoursesLoading = false;
+        }
+
+        private async void FillParticipants(Course course) {
+            IsParticipantsLoading = true;
+
+            await Task.Run(() => {
+                using (var repository = new BaseRepository()) {
+                    Participants =
+                        new ObservableCollection<Participant>(
+                            repository.ToList<Participant>().Where(x => x.Course == course && x.Course != null).ToList());
+                }
+            });
+
+            IsParticipantsLoading = false;
         }
         #endregion
 

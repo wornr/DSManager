@@ -10,6 +10,7 @@
 
     <UserControl.Resources>
         <converters:ObjectToBoolConverter x:Key="ObjectToBoolConverter"/>
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -61,55 +62,58 @@
         </StackPanel>
 
         <Border Grid.Row="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
-            <DataGrid x:Name="DatesList" ItemsSource="{Binding Users}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding User}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="150">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+            <Grid>
+                <DataGrid x:Name="DatesList" ItemsSource="{Binding Users}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding User}" IsEnabled="{Binding IsUsersLoading, Converter={StaticResource BoolNegationConverter}}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="150">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
 
-                    <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="150">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="150">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
 
-                    <DataGridTextColumn Header="Login" Binding="{Binding Login}" Width="150">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                        <DataGridTextColumn Header="Login" Binding="{Binding Login}" Width="150">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
 
-                    <DataGridTextColumn Header="E-Mail" Binding="{Binding Email}" Width="250">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                        <DataGridTextColumn Header="E-Mail" Binding="{Binding Email}" Width="250">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
 
-                    <DataGridTextColumn Header="Typ konta" Binding="{Binding AccountType}" Width="100">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                        <DataGridTextColumn Header="Typ konta" Binding="{Binding AccountType}" Width="100">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
 
-                    <DataGridCheckBoxColumn Header="Instruktor" Binding="{Binding Instructor, Converter={StaticResource ObjectToBoolConverter}}" Width="94" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+                        <DataGridCheckBoxColumn Header="Instruktor" Binding="{Binding Instructor, Converter={StaticResource ObjectToBoolConverter}}" Width="94" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
 
-                    <DataGridCheckBoxColumn Header="Kursant" Binding="{Binding Student, Converter={StaticResource ObjectToBoolConverter}}" Width="76" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+                        <DataGridCheckBoxColumn Header="Kursant" Binding="{Binding Student, Converter={StaticResource ObjectToBoolConverter}}" Width="76" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
 
-                    <DataGridCheckBoxColumn Header="Aktywne" Binding="{Binding Active}" Width="78" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                        <DataGridCheckBoxColumn Header="Aktywne" Binding="{Binding Active}" Width="78" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <controls:ProgressRing IsActive="{Binding IsUsersLoading}"/>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>

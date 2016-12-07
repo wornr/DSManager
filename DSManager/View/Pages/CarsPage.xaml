@@ -4,8 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:converters="clr-namespace:DSManager.Converters"
       mc:Ignorable="d" 
       d:DesignWidth="1235" d:DesignHeight="650">
+
+    <UserControl.Resources>
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
+    </UserControl.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -28,7 +33,6 @@
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <!-- TODO dodać dialog proszący o potwierdzenie -->
             <Button x:Name="DeleteCar" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteCar}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
@@ -62,15 +66,18 @@
             </Grid.ColumnDefinitions>
 
             <Border BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
-                <DataGrid x:Name="CarsList" ItemsSource="{Binding Cars}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Car}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Marka" Binding="{Binding Brand}" Width="90"/>
+                <Grid>
+                    <DataGrid x:Name="CarsList" ItemsSource="{Binding Cars}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Car}" IsEnabled="{Binding IsCarsLoading, Converter={StaticResource BoolNegationConverter}}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Marka" Binding="{Binding Brand}" Width="90"/>
 
-                        <DataGridTextColumn Header="Model" Binding="{Binding Model}" Width="90"/>
+                            <DataGridTextColumn Header="Model" Binding="{Binding Model}" Width="90"/>
 
-                        <DataGridTextColumn Header="Nr rej." Binding="{Binding RegistrationNr}" Width="90"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                            <DataGridTextColumn Header="Nr rej." Binding="{Binding RegistrationNr}" Width="90"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <controls:ProgressRing IsActive="{Binding IsCarsLoading}"/>
+                </Grid>
             </Border>
 
             <Grid Grid.Column="1">
@@ -151,115 +158,121 @@
                         <TextBlock Text="Terminy zajęć" HorizontalAlignment="Center"/>
                         
                         <Border Grid.Row="1" Grid.Column="0" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
-                            <DataGrid x:Name="DatesList" ItemsSource="{Binding ClassesDates}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Rodzaj" Binding="{Binding CourseKind}" Width="67"/>
+                            <Grid>
+                                <DataGrid x:Name="DatesList" ItemsSource="{Binding ClassesDates}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" IsEnabled="{Binding IsClassesDatesLoading, Converter={StaticResource BoolNegationConverter}}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Rodzaj" Binding="{Binding CourseKind}" Width="67"/>
 
-                                    <DataGridTextColumn Header="Data rozp." Binding="{Binding StartDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="86">
-                                        <DataGridTextColumn.ElementStyle>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                            </Style>
-                                        </DataGridTextColumn.ElementStyle>
-                                    </DataGridTextColumn>
+                                        <DataGridTextColumn Header="Data rozp." Binding="{Binding StartDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="86">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
 
-                                    <DataGridTextColumn Header="Data zak." Binding="{Binding EndDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="86">
-                                        <DataGridTextColumn.ElementStyle>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                            </Style>
-                                        </DataGridTextColumn.ElementStyle>
-                                    </DataGridTextColumn>
+                                        <DataGridTextColumn Header="Data zak." Binding="{Binding EndDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="86">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
 
-                                    <DataGridTextColumn Header="Instruktor" Width="100">
-                                        <DataGridTextColumn.Binding>
-                                            <MultiBinding  StringFormat="{}{0} {1}">
-                                                <Binding Path="Instructor.FirstName"/>
-                                                <Binding Path="Instructor.LastName"/>
-                                            </MultiBinding>
-                                        </DataGridTextColumn.Binding>
-                                    
-                                        <DataGridTextColumn.ElementStyle>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                            </Style>
-                                        </DataGridTextColumn.ElementStyle>
-                                    </DataGridTextColumn>
+                                        <DataGridTextColumn Header="Instruktor" Width="100">
+                                            <DataGridTextColumn.Binding>
+                                                <MultiBinding  StringFormat="{}{0} {1}">
+                                                    <Binding Path="Instructor.FirstName"/>
+                                                    <Binding Path="Instructor.LastName"/>
+                                                </MultiBinding>
+                                            </DataGridTextColumn.Binding>
 
-                                    <DataGridTextColumn Header="Kursant" Width="100">
-                                        <DataGridTextColumn.Binding>
-                                            <MultiBinding  StringFormat="{}{0} {1}">
-                                                <Binding Path="Participant.Student.FirstName"/>
-                                                <Binding Path="Participant.Student.LastName"/>
-                                            </MultiBinding>
-                                        </DataGridTextColumn.Binding>
-                                    
-                                        <DataGridTextColumn.ElementStyle>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                            </Style>
-                                        </DataGridTextColumn.ElementStyle>
-                                    </DataGridTextColumn>
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
 
-                                    <DataGridTextColumn Header="Dystans" Binding="{Binding Distance, ConverterCulture='pl-PL', StringFormat='{}{0:#.##} km', TargetNullValue={}}" Width="73">
-                                        <DataGridTextColumn.ElementStyle>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="HorizontalAlignment" Value="Right" />
-                                            </Style>
-                                        </DataGridTextColumn.ElementStyle>
-                                    </DataGridTextColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
+                                        <DataGridTextColumn Header="Kursant" Width="100">
+                                            <DataGridTextColumn.Binding>
+                                                <MultiBinding  StringFormat="{}{0} {1}">
+                                                    <Binding Path="Participant.Student.FirstName"/>
+                                                    <Binding Path="Participant.Student.LastName"/>
+                                                </MultiBinding>
+                                            </DataGridTextColumn.Binding>
+
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Dystans" Binding="{Binding Distance, ConverterCulture='pl-PL', StringFormat='{}{0:#.##} km', TargetNullValue={}}" Width="73">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Right" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <controls:ProgressRing IsActive="{Binding IsClassesDatesLoading}"/>
+                            </Grid>
                         </Border>
                         
                         <TextBlock Grid.Row="0" Grid.Column="1" Text="Terminy egzaminów" HorizontalAlignment="Center"/>
 
                         <Border Grid.Row="1" Grid.Column="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
-                            <DataGrid x:Name="ExamsList" ItemsSource="{Binding ExamsDates}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Rodzaj" Binding="{Binding CourseKind}" Width="67"/>
+                            <Grid>
+                                <DataGrid x:Name="ExamsList" ItemsSource="{Binding ExamsDates}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" IsEnabled="{Binding IsExamsDatesLoading, Converter={StaticResource BoolNegationConverter}}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Rodzaj" Binding="{Binding CourseKind}" Width="67"/>
 
-                                    <DataGridTextColumn Header="Data rozp." Binding="{Binding StartDate, ConverterCulture='pl-PL', StringFormat=\{0:d\}}" Width="86">
-                                        <DataGridTextColumn.ElementStyle>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                            </Style>
-                                        </DataGridTextColumn.ElementStyle>
-                                    </DataGridTextColumn>
+                                        <DataGridTextColumn Header="Data rozp." Binding="{Binding StartDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="86">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
 
-                                    <DataGridTextColumn Header="Instruktor" Width="100">
-                                        <DataGridTextColumn.Binding>
-                                            <MultiBinding  StringFormat="{}{0} {1}">
-                                                <Binding Path="Instructor.FirstName"/>
-                                                <Binding Path="Instructor.LastName"/>
-                                            </MultiBinding>
-                                        </DataGridTextColumn.Binding>
+                                        <DataGridTextColumn Header="Instruktor" Width="100">
+                                            <DataGridTextColumn.Binding>
+                                                <MultiBinding  StringFormat="{}{0} {1}">
+                                                    <Binding Path="Instructor.FirstName"/>
+                                                    <Binding Path="Instructor.LastName"/>
+                                                </MultiBinding>
+                                            </DataGridTextColumn.Binding>
 
-                                        <DataGridTextColumn.ElementStyle>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                            </Style>
-                                        </DataGridTextColumn.ElementStyle>
-                                    </DataGridTextColumn>
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
 
-                                    <DataGridTextColumn Header="Kursant" Width="100">
-                                        <DataGridTextColumn.Binding>
-                                            <MultiBinding  StringFormat="{}{0} {1}">
-                                                <Binding Path="Participant.Student.FirstName"/>
-                                                <Binding Path="Participant.Student.LastName"/>
-                                            </MultiBinding>
-                                        </DataGridTextColumn.Binding>
+                                        <DataGridTextColumn Header="Kursant" Width="100">
+                                            <DataGridTextColumn.Binding>
+                                                <MultiBinding  StringFormat="{}{0} {1}">
+                                                    <Binding Path="Participant.Student.FirstName"/>
+                                                    <Binding Path="Participant.Student.LastName"/>
+                                                </MultiBinding>
+                                            </DataGridTextColumn.Binding>
 
-                                        <DataGridTextColumn.ElementStyle>
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                            </Style>
-                                        </DataGridTextColumn.ElementStyle>
-                                    </DataGridTextColumn>
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
 
-                                    <DataGridCheckBoxColumn Header="Zal." Binding="{Binding IsPassed}" Width="46" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
+                                        <DataGridCheckBoxColumn Header="Zal." Binding="{Binding IsPassed}" Width="46" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <controls:ProgressRing IsActive="{Binding IsExamsDatesLoading}"/>
+                            </Grid>
                         </Border>
                     </Grid>
                 </Grid>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -35,6 +35,10 @@ namespace DSManager.ViewModel.Pages {
 
         #region View Elements
         private string _filter;
+        private bool _isInstructorsLoading;
+        private bool _isParticipantsLoading;
+        private bool _isClassesDatesLoading;
+        private bool _isExamsDatesLoading;
         #endregion
 
         #region Helpers
@@ -43,6 +47,7 @@ namespace DSManager.ViewModel.Pages {
 
         #endregion
         public InstructorsViewModel() {
+            _filter = _prevFilter = string.Empty;
             FillInstructors(_filter);
         }
 
@@ -176,6 +181,9 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand FilterInstructors {
             get {
                 return _filterInstructors ?? (_filterInstructors = new RelayCommand(() => {
+                    if (_filter.Equals(_prevFilter))
+                        return;
+
                     FillInstructors(_filter);
                     _prevFilter = _filter;
                 }));
@@ -193,31 +201,80 @@ namespace DSManager.ViewModel.Pages {
                 RaisePropertyChanged();
             }
         }
+
+        public bool IsInstructorsLoading {
+            get { return _isInstructorsLoading; }
+            set {
+                _isInstructorsLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsParticipantsLoading {
+            get { return _isParticipantsLoading; }
+            set {
+                _isParticipantsLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsClassesDatesLoading {
+            get { return _isClassesDatesLoading; }
+            set {
+                _isClassesDatesLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsExamsDatesLoading {
+            get { return _isExamsDatesLoading; }
+            set {
+                _isExamsDatesLoading = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
         #region Helpers
-        private void FillInstructors(string filter) {
-            if(string.IsNullOrEmpty(filter)) {
-                using(var repository = new BaseRepository()) {
-                    Instructors =
-                        new ObservableCollection<Instructor>(
-                            repository.ToList<Instructor>().OrderBy(instructor => instructor.LastName).ToList());
-                }
-            } else {
-                if(filter.Contains(" ")) {
-                    var filters = filter.Split(' ');
+        private async void FillInstructors(string filter) {
+            IsInstructorsLoading = true;
 
-                    if(!string.IsNullOrEmpty(filters[0]) && !string.IsNullOrEmpty(filters[1])) {
-                        using(var repository = new BaseRepository()) {
-                            Instructors =
-                                new ObservableCollection<Instructor>(
-                                    repository.ToList<Instructor>()
-                                        .Where(x => x.FirstName.Contains(filters[0]) && x.LastName.Contains(filters[1]) || x.FirstName.Contains(filters[1]) && x.LastName.Contains(filters[0]))
-                                        .OrderBy(instructor => instructor.LastName)
-                                        .ToList());
+            await Task.Run(() => {
+                if (string.IsNullOrEmpty(filter)) {
+                    using (var repository = new BaseRepository()) {
+                        Instructors =
+                            new ObservableCollection<Instructor>(
+                                repository.ToList<Instructor>().OrderBy(instructor => instructor.LastName).ToList());
+                    }
+                } else {
+                    if (filter.Contains(" ")) {
+                        var filters = filter.Split(' ');
+
+                        if (!string.IsNullOrEmpty(filters[0]) && !string.IsNullOrEmpty(filters[1])) {
+                            using (var repository = new BaseRepository()) {
+                                Instructors =
+                                    new ObservableCollection<Instructor>(
+                                        repository.ToList<Instructor>()
+                                            .Where(
+                                                x =>
+                                                    x.FirstName.Contains(filters[0]) &&
+                                                    x.LastName.Contains(filters[1]) ||
+                                                    x.FirstName.Contains(filters[1]) && x.LastName.Contains(filters[0]))
+                                            .OrderBy(instructor => instructor.LastName)
+                                            .ToList());
+                            }
+                        } else {
+                            using (var repository = new BaseRepository()) {
+                                Instructors =
+                                    new ObservableCollection<Instructor>(
+                                        repository.ToList<Instructor>()
+                                            .Where(x => x.FirstName.Contains(filter) || x.LastName.Contains(filter))
+                                            .OrderBy(instructor => instructor.LastName)
+                                            .ToList());
+                            }
                         }
                     } else {
-                        using(var repository = new BaseRepository()) {
+                        using (var repository = new BaseRepository()) {
                             Instructors =
                                 new ObservableCollection<Instructor>(
                                     repository.ToList<Instructor>()
@@ -226,54 +283,77 @@ namespace DSManager.ViewModel.Pages {
                                         .ToList());
                         }
                     }
-                } else {
-                    using(var repository = new BaseRepository()) {
-                        Instructors =
-                            new ObservableCollection<Instructor>(
-                                repository.ToList<Instructor>()
-                                    .Where(x => x.FirstName.Contains(filter) || x.LastName.Contains(filter))
-                                    .OrderBy(instructor => instructor.LastName)
-                                    .ToList());
+                }
+            });
+
+            IsInstructorsLoading = false;
+        }
+
+        private async void FillParticipant(Instructor instructor) {
+            IsParticipantsLoading = true;
+
+            await Task.Run(() => {
+                using (var repository = new BaseRepository()) {
+                    Participants =
+                        new ObservableCollection<Participant>(
+                            repository.ToList<Participant>()
+                                .Where(x => x.Instructor == instructor && x.Instructor != null)
+                                .ToList());
+                }
+
+                // This is working LazyLoading?!
+                /*using(var session = NHibernateConfiguration.SessionFactory.OpenSession()) {
+                    if(this.Participants != null && this.Participants.Any())
+                        this.Participants.Clear();
+                    var list = session.QueryOver<Participant>().Where(p => p.Student == student).List<Participant>().ToList();
+                    list.ForEach(l => this.Participants.Add(l));
+                    foreach(var p in Participants) {
+                            p.Course = session.QueryOver<Course>().Where(c => c.Id == p.Course.Id).SingleOrDefault<Course>();
                     }
+                }*/
+            });
+
+            IsParticipantsLoading = false;
+        }
+
+        private async void FillClassesDates(Participant participant) {
+            IsClassesDatesLoading = true;
+
+            await Task.Run(() => {
+                using (var repository = new BaseRepository()) {
+                    ClassesDates = participant != null
+                        ? new ObservableCollection<ClassesDates>(
+                            repository.ToList<ClassesDates>()
+                                .Where(
+                                    x =>
+                                        x.Participant == participant && x.Participant != null &&
+                                        x.Instructor == participant.Instructor && x.Instructor != null)
+                                .ToList())
+                        : new ObservableCollection<ClassesDates>();
                 }
-            }
+            });
+
+            IsClassesDatesLoading = false;
         }
 
-        private void FillParticipant(Instructor instructor) {
-            using(var repository = new BaseRepository()) {
-                Participants = new ObservableCollection<Participant>(repository.ToList<Participant>().Where(x => x.Instructor == instructor && x.Instructor != null).ToList());
-            }
+        private async void FillExamsDates(Participant participant) {
+            IsExamsDatesLoading = true;
 
-            // This is working LazyLoading?!
-            /*using(var session = NHibernateConfiguration.SessionFactory.OpenSession()) {
-                if(this.Participants != null && this.Participants.Any())
-                    this.Participants.Clear();
-                var list = session.QueryOver<Participant>().Where(p => p.Student == student).List<Participant>().ToList();
-                list.ForEach(l => this.Participants.Add(l));
-                foreach(var p in Participants) {
-                        p.Course = session.QueryOver<Course>().Where(c => c.Id == p.Course.Id).SingleOrDefault<Course>();
+            await Task.Run(() => {
+                using (var repository = new BaseRepository()) {
+                    ExamsDates = participant != null
+                        ? new ObservableCollection<ExamsDates>(
+                            repository.ToList<ExamsDates>()
+                                .Where(
+                                    x =>
+                                        x.Participant == participant && x.Participant != null &&
+                                        x.Instructor == participant.Instructor && x.Instructor != null)
+                                .ToList())
+                        : new ObservableCollection<ExamsDates>();
                 }
-            }*/
-        }
+            });
 
-        private void FillClassesDates(Participant participant) {
-            using(var repository = new BaseRepository()) {
-                ClassesDates = participant != null
-                    ?
-                    new ObservableCollection<ClassesDates>(repository.ToList<ClassesDates>().Where(x => x.Participant == participant && x.Participant != null && x.Instructor == participant.Instructor && x.Instructor != null).ToList())
-                    :
-                    new ObservableCollection<ClassesDates>();
-            }
-        }
-
-        private void FillExamsDates(Participant participant) {
-            using(var repository = new BaseRepository()) {
-                ExamsDates = participant != null
-                    ?
-                    new ObservableCollection<ExamsDates>(repository.ToList<ExamsDates>().Where(x => x.Participant == participant && x.Participant != null && x.Instructor == participant.Instructor && x.Instructor != null).ToList())
-                    :
-                    new ObservableCollection<ExamsDates>();
-            }
+            IsExamsDatesLoading = false;
         }
         #endregion
 

@@ -57,6 +57,7 @@ namespace DSManager.ViewModel.Pages {
         #endregion
         
         public StudentsViewModel() {
+            _filter = _prevFilter = string.Empty;
             FillStudents(_filter);
         }
 
@@ -188,6 +189,9 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand FilterStudents {
             get {
                 return _filterStudents ?? (_filterStudents = new RelayCommand(() => {
+                    if(_filter.Equals(_prevFilter))
+                        return;
+
                     FillStudents(_filter);
                     _prevFilter = _filter;
                 }));
