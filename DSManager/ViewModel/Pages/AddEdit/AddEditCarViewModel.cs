@@ -1,12 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 using GalaSoft.MvvmLight.Messaging;
 
 using DSManager.Messengers;
 using DSManager.Model.Entities;
+using DSManager.Model.Enums;
 using DSManager.Model.Services;
+using DSManager.Utilities;
+using GalaSoft.MvvmLight.Command;
+using NHibernate.Util;
 
 namespace DSManager.ViewModel.Pages.AddEdit {
     public class AddEditCarViewModel : AddEditBaseViewModel, IDataErrorInfo {
@@ -14,6 +21,13 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         private decimal? _distanceTraveled;
         private DateTime? _inspectionDate;
         private DateTime? _insuranceDate;
+        private CarPermissions _availableCategory;
+        private CarPermissions _chosenCategory;
+        private ObservableCollection<CarPermissions> _availableCategories;
+        private ObservableCollection<CarPermissions> _chosenCategories;
+
+        private RelayCommand _moveCategoryToLeft;
+        private RelayCommand _moveCategoryToRight;
 
         public AddEditCarViewModel() {
             Messenger.Default.Register<AddEditEntityMessage>(this, HandleMessage);
@@ -25,12 +39,17 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _distanceTraveled = _car.DistanceTraveled;
                 _inspectionDate = _car.InspectionDate;
                 _insuranceDate = _car.InsuranceDate;
+                _chosenCategories = new ObservableCollection<CarPermissions>(_car.Permissions);
             } else {
                 _car = new Car();
                 _distanceTraveled = null;
                 _inspectionDate = null;
                 _insuranceDate = null;
+                _car.Permissions = new List<CarPermissions>();
+                _chosenCategories = new ObservableCollection<CarPermissions>();
             }
+
+            _availableCategories = FillCategories();
         }
 
         #region IDataErrorInfo Methods
@@ -80,7 +99,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                         validationMessage = "Pole nie może być puste!";
                     break;
 
-                // TODO dodać walidację uprawnień pojazdu
+                case "ChosenCategories":
+                    if(_chosenCategories.Count == 0)
+                        validationMessage = "Pole nie może być puste!";
+                    break;
             }
 
             return validationMessage;
@@ -112,7 +134,9 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 return false;
             _car.InsuranceDate = (DateTime) _insuranceDate;
 
-            // TODO dodać walidację uprawnień pojazdu
+            if (_chosenCategories.Count == 0)
+                return false;
+            _car.Permissions = _chosenCategories;
             #endregion
 
             return true;
@@ -130,7 +154,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         }
         #endregion
 
-        #region Properties
+        #region ViewElements
         public string Brand {
             get { return _car.Brand; }
             set {
@@ -179,7 +203,71 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             }
         }
 
-        // TODO dodać właściwości odpowiedzialne za uprawnienia pojazdu (dostępne/wybrane)
+        public CarPermissions AvailableCategory {
+            get { return _availableCategory; }
+            set {
+                _availableCategory = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public CarPermissions ChosenCategory {
+            get { return _chosenCategory; }
+            set {
+                _chosenCategory = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<CarPermissions> AvailableCategories {
+            get { return _availableCategories; }
+            set {
+                _availableCategories = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<CarPermissions> ChosenCategories {
+            get { return _chosenCategories; }
+            set {
+                _chosenCategories = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Commands
+
+        public RelayCommand MoveCategoryToRight => _moveCategoryToRight ?? (_moveCategoryToRight = new RelayCommand(() => {
+            _chosenCategories.Add(_availableCategory);
+            _availableCategories.Remove(_availableCategory);
+            ChosenCategories = ChosenCategories;
+        }));
+
+        public RelayCommand MoveCategoryToLeft => _moveCategoryToLeft ?? (_moveCategoryToLeft = new RelayCommand(() => {
+            _availableCategories.Add(_chosenCategory);
+            _chosenCategories.Remove(_chosenCategory);
+            ChosenCategories = ChosenCategories;
+        }));
+        #endregion
+
+        #region Helpers
+        private ObservableCollection<CarPermissions> FillCategories() {
+            var availableCategories = new ObservableCollection<CarPermissions>();
+
+            new EnumToList<DrivingLicenseCategory>().Enums.ForEach(x => availableCategories.Add(new CarPermissions {
+                Car = _car,
+                Category = x
+            }));
+
+
+            _chosenCategories.ForEach(x => {
+                var availableCategory = availableCategories.FirstOrDefault(y => y.Category == x.Category);
+                availableCategories.Remove(availableCategory);
+            });
+
+            return availableCategories;
+        }
         #endregion
     }
 }

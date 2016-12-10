@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -8,7 +9,6 @@ using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Services;
 using DSManager.View.Windows;
-using NHibernate.Id.Enhanced;
 
 namespace DSManager.ViewModel.Pages {
     public class CoursesViewModel : BaseViewModel {
