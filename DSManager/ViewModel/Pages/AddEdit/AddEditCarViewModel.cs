@@ -239,15 +239,15 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         #region Commands
 
         public RelayCommand MoveCategoryToRight => _moveCategoryToRight ?? (_moveCategoryToRight = new RelayCommand(() => {
-            _chosenCategories.Add(_availableCategory);
-            _availableCategories.Remove(_availableCategory);
-            ChosenCategories = ChosenCategories;
+            ChosenCategories.Add(_availableCategory);
+            AvailableCategories.Remove(_availableCategory);
+            ChosenCategories = new ObservableCollection<CarPermissions>(ChosenCategories.OrderBy(x => x.Category));
         }));
 
         public RelayCommand MoveCategoryToLeft => _moveCategoryToLeft ?? (_moveCategoryToLeft = new RelayCommand(() => {
-            _availableCategories.Add(_chosenCategory);
-            _chosenCategories.Remove(_chosenCategory);
-            ChosenCategories = ChosenCategories;
+            AvailableCategories.Add(_chosenCategory);
+            ChosenCategories.Remove(_chosenCategory);
+            AvailableCategories = new ObservableCollection<CarPermissions>(AvailableCategories.OrderBy(x => x.Category));
         }));
         #endregion
 
