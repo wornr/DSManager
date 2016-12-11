@@ -244,13 +244,13 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         public RelayCommand MoveCategoryToRight => _moveCategoryToRight ?? (_moveCategoryToRight = new RelayCommand(() => {
             ChosenCategories.Add(_availableCategory);
             AvailableCategories.Remove(_availableCategory);
-            ChosenCategories = new ObservableCollection<CarPermissions>(ChosenCategories.OrderBy(x => x.Category));
+            RefreshTables();
         }));
 
         public RelayCommand MoveCategoryToLeft => _moveCategoryToLeft ?? (_moveCategoryToLeft = new RelayCommand(() => {
             AvailableCategories.Add(_chosenCategory);
             ChosenCategories.Remove(_chosenCategory);
-            AvailableCategories = new ObservableCollection<CarPermissions>(AvailableCategories.OrderBy(x => x.Category));
+            RefreshTables();
         }));
         #endregion
 
@@ -270,6 +270,11 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             });
 
             return availableCategories;
+        }
+
+        private void RefreshTables() {
+            ChosenCategories = new ObservableCollection<CarPermissions>(ChosenCategories.OrderBy(x => x.Category));
+            AvailableCategories = new ObservableCollection<CarPermissions>(AvailableCategories.OrderBy(x => x.Category));
         }
         #endregion
     }

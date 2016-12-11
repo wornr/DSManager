@@ -136,7 +136,7 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Orientation="Vertical">
+        <StackPanel Width="320" Orientation="Vertical">
             <TextBlock Text="Prawo jazdy" Margin="20,15,0,5" FontSize="18"/>
 
             <StackPanel Orientation="Horizontal">

@@ -1,13 +1,19 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
+using NHibernate.Util;
+
 using DSManager.Messengers;
 using DSManager.Model.Entities;
+using DSManager.Model.Enums;
 using DSManager.Model.Services;
+using DSManager.Utilities;
 using DSManager.Validators;
 
 namespace DSManager.ViewModel.Pages.AddEdit {
@@ -15,8 +21,14 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         private Instructor _instructor;
         private DateTime? _birthDate;
         private bool _PESELValid;
+        private InstructorPermissions _availableCategory;
+        private InstructorPermissions _chosenCategory;
+        private ObservableCollection<InstructorPermissions> _availableCategories;
+        private ObservableCollection<InstructorPermissions> _chosenCategories;
 
         private RelayCommand _PESELToDate;
+        private RelayCommand _moveCategoryToLeft;
+        private RelayCommand _moveCategoryToRight;
 
         public AddEditInstructorViewModel() {
             Messenger.Default.Register<AddEditEntityMessage>(this, HandleMessage);
@@ -30,11 +42,15 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _instructor = (Instructor) message.Entity;
                 _birthDate = _instructor.BirthDate;
                 _PESELValid = PESELValidator.Validate(_instructor.PESEL);
+                _chosenCategories = new ObservableCollection<InstructorPermissions>(_instructor.Permissions);
             } else {
                 _instructor = new Instructor();
                 _birthDate = null;
                 _PESELValid = false;
+                _chosenCategories = new ObservableCollection<InstructorPermissions>();
             }
+
+            _availableCategories = FillCategories();
         }
 
         #region IDataErrorInfo Methods
@@ -127,7 +143,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                         validationMessage = "Podano niepoprawny numer prawa jazdy";
                     break;
 
-                // TODO dodać walidację uprawnień instruktora
+                case "ChosenCategories":
+                    if(_chosenCategories.Count == 0)
+                        validationMessage = "Pole nie może być puste!";
+                    break;
             }
 
             return validationMessage;
@@ -163,8 +182,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
             if(_instructor.PermissionsNr == null || !Regex.IsMatch(_instructor.PermissionsNr, @"^[0-9a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ ]+$"))
                 return false;
-            
-            // TODO dodać walidację uprawnień instruktora
+
+            if(_chosenCategories.Count == 0)
+                return false;
+            _instructor.Permissions = _chosenCategories;
             #endregion
 
             #region Not Required
@@ -315,6 +336,38 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             }
         }
 
+        public InstructorPermissions AvailableCategory {
+            get { return _availableCategory; }
+            set {
+                _availableCategory = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public InstructorPermissions ChosenCategory {
+            get { return _chosenCategory; }
+            set {
+                _chosenCategory = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<InstructorPermissions> AvailableCategories {
+            get { return _availableCategories; }
+            set {
+                _availableCategories = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<InstructorPermissions> ChosenCategories {
+            get { return _chosenCategories; }
+            set {
+                _chosenCategories = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool PESELValid {
             get { return _PESELValid; }
             set {
@@ -322,14 +375,48 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 RaisePropertyChanged();
             }
         }
-
-        // TODO dodać właściwości odpowiedzialne za uprawnienia instruktora (dostępne/wybrane)
         #endregion
 
         #region Commands
         public RelayCommand PESELToDate => _PESELToDate ?? (_PESELToDate = new RelayCommand(() => {
             BirthDate = Utilities.PESELToDate.Translate(_instructor.PESEL);
         }));
+
+        public RelayCommand MoveCategoryToRight => _moveCategoryToRight ?? (_moveCategoryToRight = new RelayCommand(() => {
+            ChosenCategories.Add(_availableCategory);
+            AvailableCategories.Remove(_availableCategory);
+            RefreshTables();
+        }));
+
+        public RelayCommand MoveCategoryToLeft => _moveCategoryToLeft ?? (_moveCategoryToLeft = new RelayCommand(() => {
+            AvailableCategories.Add(_chosenCategory);
+            ChosenCategories.Remove(_chosenCategory);
+            RefreshTables();
+        }));
+        #endregion
+
+        #region Helpers
+        private ObservableCollection<InstructorPermissions> FillCategories() {
+            var availableCategories = new ObservableCollection<InstructorPermissions>();
+
+            new EnumToList<DrivingLicenseCategory>().Enums.ForEach(x => availableCategories.Add(new InstructorPermissions {
+                Instructor = _instructor,
+                Category = x
+            }));
+
+
+            _chosenCategories.ForEach(x => {
+                var availableCategory = availableCategories.FirstOrDefault(y => y.Category == x.Category);
+                availableCategories.Remove(availableCategory);
+            });
+
+            return availableCategories;
+        }
+
+        private void RefreshTables() {
+            ChosenCategories = new ObservableCollection<InstructorPermissions>(ChosenCategories.OrderBy(x => x.Category));
+            AvailableCategories = new ObservableCollection<InstructorPermissions>(AvailableCategories.OrderBy(x => x.Category));
+        }
         #endregion
     }
 }
