@@ -5,15 +5,16 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+
+using NHibernate.Util;
 
 using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Enums;
 using DSManager.Model.Services;
 using DSManager.Utilities;
-using GalaSoft.MvvmLight.Command;
-using NHibernate.Util;
 
 namespace DSManager.ViewModel.Pages.AddEdit {
     public class AddEditCarViewModel : AddEditBaseViewModel, IDataErrorInfo {
@@ -237,7 +238,6 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         #endregion
 
         #region Commands
-
         public RelayCommand MoveCategoryToRight => _moveCategoryToRight ?? (_moveCategoryToRight = new RelayCommand(() => {
             ChosenCategories.Add(_availableCategory);
             AvailableCategories.Remove(_availableCategory);

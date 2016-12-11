@@ -6,7 +6,7 @@
       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
       xmlns:converters="clr-namespace:DSManager.Converters"
       mc:Ignorable="d" 
-      d:DesignWidth="800" d:DesignHeight="600">
+      d:DesignWidth="752" d:DesignHeight="481">
 
     <UserControl.Resources>
         <converters:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter"/>
@@ -108,8 +108,8 @@
                         <ColumnDefinition Width="101"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Dostępne kategorie" HorizontalAlignment="Center"/>
-                    <TextBlock Grid.Row="0" Grid.Column="2" Text="Wybrane kategorie" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Dostępne kat." HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="Wybrane kat." HorizontalAlignment="Center"/>
 
                     <Border Grid.Row="1" Grid.Column="0" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
                         <DataGrid Name="AvailableCategories" ItemsSource="{Binding AvailableCategories}" SelectedItem="{Binding AvailableCategory}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True">

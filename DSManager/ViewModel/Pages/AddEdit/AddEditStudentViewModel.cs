@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 using GalaSoft.MvvmLight.Command;
@@ -7,16 +10,27 @@ using GalaSoft.MvvmLight.Messaging;
 
 using DSManager.Messengers;
 using DSManager.Model.Entities;
+using DSManager.Model.Enums;
 using DSManager.Model.Services;
+using DSManager.Utilities;
 using DSManager.Validators;
+using NHibernate.Util;
 
 namespace DSManager.ViewModel.Pages.AddEdit {
     public class AddEditStudentViewModel : AddEditBaseViewModel, IDataErrorInfo {
         private Student _student;
+        private DrivingLicense _drivingLicense;
         private DateTime? _birthDate;
+        private DateTime? _drivingLicenseIssueDate;
         private bool _PESELValid;
+        private DrivingLicensePermissions _availableCategory;
+        private DrivingLicensePermissions _chosenCategory;
+        private ObservableCollection<DrivingLicensePermissions> _availableCategories;
+        private ObservableCollection<DrivingLicensePermissions> _chosenCategories;
 
         private RelayCommand _PESELToDate;
+        private RelayCommand _moveCategoryToLeft;
+        private RelayCommand _moveCategoryToRight;
 
         public AddEditStudentViewModel() {
             Messenger.Default.Register<AddEditEntityMessage>(this, HandleMessage);
@@ -27,11 +41,21 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _student = (Student) message.Entity;
                 _birthDate = _student.BirthDate;
                 _PESELValid = PESELValidator.Validate(_student.PESEL);
+                _drivingLicense = _student.DrivingLicense ?? new DrivingLicense {
+                    DrivingLicensePermissions = new List<DrivingLicensePermissions>()
+                };
+                _chosenCategories = new ObservableCollection<DrivingLicensePermissions>(_drivingLicense.DrivingLicensePermissions);
             } else {
                 _student = new Student();
                 _birthDate = null;
                 _PESELValid = false;
+                _drivingLicense = new DrivingLicense {
+                    DrivingLicensePermissions = new List<DrivingLicensePermissions>()
+                };
+                _chosenCategories = new ObservableCollection<DrivingLicensePermissions>();
             }
+
+            _availableCategories = FillCategories();
         }
 
         #region IDataErrorInfo Methods
@@ -111,16 +135,6 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                     if(!string.IsNullOrEmpty(_student.PhoneNr) && !Regex.IsMatch(_student.PhoneNr, @"^(\+?[0-9]+)?(\([0-9]+\))?[0-9]+$"))
                         validationMessage = "Podano niepoprawny numer telefonu";
                     break;
-
-                case "DrivingLicenseIssueDate":
-                    if(!string.IsNullOrEmpty(_student.FirstName) && !Regex.IsMatch(_student.FirstName, @"^[a-zA-Z]+$"))
-                        validationMessage = "Podano niepoprawną datę wydania prawa jazdy";
-                    break;
-
-                case "DrivingLicenseNr":
-                    if(!string.IsNullOrEmpty(_student.FirstName) && !Regex.IsMatch(_student.FirstName, @"^[a-zA-Z]+$"))
-                        validationMessage = "Podano niepoprawny numer prawa jazdy";
-                    break;
             }
 
             return validationMessage;
@@ -181,9 +195,21 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             else if(!Regex.IsMatch(_student.PhoneNr, @"^(\+?[0-9]+)?(\([0-9]+\))?[0-9]+$"))
                 return false;
 
-            // TODO walidacja daty wydania prawa jazdy (pole nieobowiązkowe)
+            if (_drivingLicenseIssueDate != null || !string.IsNullOrEmpty(_drivingLicense.DrivingLicenseNr) || _chosenCategories.Count != 0) {
+                if (_drivingLicenseIssueDate == null)
+                    return false;
+                if (string.IsNullOrEmpty(_drivingLicense.DrivingLicenseNr))
+                    return false;
+                if (_chosenCategories.Count == 0)
+                    return false;
 
-            // TODO walidacja numeru prawa jazdy (pole nieobowiązkowe)
+                _drivingLicense.IssueDate = (DateTime)_drivingLicenseIssueDate;
+                _drivingLicense.DrivingLicensePermissions = _chosenCategories;
+                _drivingLicense.Student = _student;
+                _student.DrivingLicense = _drivingLicense;
+            } else {
+                _student.DrivingLicense = null;
+            }
             #endregion
 
             return true;
@@ -299,6 +325,54 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             }
         }
 
+        public DateTime? DrivingLicenseIssueDate {
+            get { return _drivingLicenseIssueDate; }
+            set {
+                _drivingLicenseIssueDate = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string DrivingLicenseNr {
+            get { return _drivingLicense.DrivingLicenseNr; }
+            set {
+                _drivingLicense.DrivingLicenseNr = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public DrivingLicensePermissions AvailableCategory {
+            get { return _availableCategory; }
+            set {
+                _availableCategory = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public DrivingLicensePermissions ChosenCategory {
+            get { return _chosenCategory; }
+            set {
+                _chosenCategory = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<DrivingLicensePermissions> AvailableCategories {
+            get { return _availableCategories; }
+            set {
+                _availableCategories = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<DrivingLicensePermissions> ChosenCategories {
+            get { return _chosenCategories; }
+            set {
+                _chosenCategories = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool PESELValid {
             get { return _PESELValid; }
             set {
@@ -314,6 +388,37 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         public RelayCommand PESELToDate => _PESELToDate ?? (_PESELToDate = new RelayCommand(() => {
             BirthDate = Utilities.PESELToDate.Translate(_student.PESEL);
         }));
+
+        public RelayCommand MoveCategoryToRight => _moveCategoryToRight ?? (_moveCategoryToRight = new RelayCommand(() => {
+            ChosenCategories.Add(_availableCategory);
+            AvailableCategories.Remove(_availableCategory);
+            ChosenCategories = new ObservableCollection<DrivingLicensePermissions>(ChosenCategories.OrderBy(x => x.Category));
+        }));
+
+        public RelayCommand MoveCategoryToLeft => _moveCategoryToLeft ?? (_moveCategoryToLeft = new RelayCommand(() => {
+            AvailableCategories.Add(_chosenCategory);
+            ChosenCategories.Remove(_chosenCategory);
+            AvailableCategories = new ObservableCollection<DrivingLicensePermissions>(AvailableCategories.OrderBy(x => x.Category));
+        }));
+        #endregion
+
+        #region Helpers
+        private ObservableCollection<DrivingLicensePermissions> FillCategories() {
+            var availableCategories = new ObservableCollection<DrivingLicensePermissions>();
+
+            new EnumToList<DrivingLicenseCategory>().Enums.ForEach(x => availableCategories.Add(new DrivingLicensePermissions {
+                DrivingLicense = _drivingLicense,
+                Category = x
+            }));
+
+
+            _chosenCategories.ForEach(x => {
+                var availableCategory = availableCategories.FirstOrDefault(y => y.Category == x.Category);
+                availableCategories.Remove(availableCategory);
+            });
+
+            return availableCategories;
+        }
         #endregion
     }
 }
