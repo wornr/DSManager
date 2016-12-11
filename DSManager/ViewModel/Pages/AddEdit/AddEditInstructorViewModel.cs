@@ -24,7 +24,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
         private void HandleMessage(AddEditEntityMessage message) {
             if(message.Entity != null) {
-                _instructor = (Instructor)message.Entity;
+                if (message.Entity.GetType() != typeof(Instructor))
+                    return;
+
+                _instructor = (Instructor) message.Entity;
                 _birthDate = _instructor.BirthDate;
                 _PESELValid = PESELValidator.Validate(_instructor.PESEL);
             } else {

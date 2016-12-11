@@ -36,6 +36,9 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
         private void HandleMessage(AddEditEntityMessage message) {
             if(message.Entity != null) {
+                if(message.Entity.GetType() != typeof(Car))
+                    return;
+
                 _car = (Car)message.Entity;
                 _distanceTraveled = _car.DistanceTraveled;
                 _inspectionDate = _car.InspectionDate;
