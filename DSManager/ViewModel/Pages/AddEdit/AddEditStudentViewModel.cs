@@ -8,13 +8,14 @@ using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
+using NHibernate.Util;
+
 using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Enums;
 using DSManager.Model.Services;
 using DSManager.Utilities;
 using DSManager.Validators;
-using NHibernate.Util;
 
 namespace DSManager.ViewModel.Pages.AddEdit {
     public class AddEditStudentViewModel : AddEditBaseViewModel, IDataErrorInfo {
@@ -223,6 +224,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 return false;
 
             using(var repository = new BaseRepository()) {
+                if(_student.DrivingLicense != null)
+                    repository.Save(_drivingLicense);
                 repository.Save(_student);
             }
 
@@ -383,8 +386,6 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 RaisePropertyChanged();
             }
         }
-
-        // TODO dodać właściwości odpowiedzialne za posiadane kategorie prawa jazdy (dostępne/wybrane)
         #endregion
 
         #region Commands
