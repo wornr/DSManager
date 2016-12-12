@@ -20,7 +20,6 @@ using DSManager.Validators;
 namespace DSManager.ViewModel.Pages.AddEdit {
     public class AddEditStudentViewModel : AddEditBaseViewModel, IDataErrorInfo {
         private Student _student;
-        private DrivingLicense _drivingLicense;
         private DateTime? _birthDate;
         private DateTime? _drivingLicenseIssueDate;
         private bool _PESELValid;
@@ -45,17 +44,25 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _student = (Student) message.Entity;
                 _birthDate = _student.BirthDate;
                 _PESELValid = PESELValidator.Validate(_student.PESEL);
-                _drivingLicense = _student.DrivingLicense ?? new DrivingLicense {
-                    DrivingLicensePermissions = new List<DrivingLicensePermissions>()
-                };
-                _chosenCategories = new ObservableCollection<DrivingLicensePermissions>(_drivingLicense.DrivingLicensePermissions);
+
+                if (_student.DrivingLicense != null) {
+                    _drivingLicenseIssueDate = _student.DrivingLicense.IssueDate;
+                } else {
+                    _student.DrivingLicense = new DrivingLicense {
+                        DrivingLicensePermissions = new List<DrivingLicensePermissions>()
+                    };
+                    _drivingLicenseIssueDate = null;
+                }
+
+                _chosenCategories = new ObservableCollection<DrivingLicensePermissions>(_student.DrivingLicense.DrivingLicensePermissions);
             } else {
                 _student = new Student();
                 _birthDate = null;
                 _PESELValid = false;
-                _drivingLicense = new DrivingLicense {
+                _student.DrivingLicense = new DrivingLicense {
                     DrivingLicensePermissions = new List<DrivingLicensePermissions>()
                 };
+                _drivingLicenseIssueDate = null;
                 _chosenCategories = new ObservableCollection<DrivingLicensePermissions>();
             }
 
@@ -199,18 +206,17 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             else if(!Regex.IsMatch(_student.PhoneNr, @"^(\+?[0-9]+)?(\([0-9]+\))?[0-9]+$"))
                 return false;
 
-            if (_drivingLicenseIssueDate != null || !string.IsNullOrEmpty(_drivingLicense.DrivingLicenseNr) || _chosenCategories.Count != 0) {
+            if (_drivingLicenseIssueDate != null || !string.IsNullOrEmpty(_student.DrivingLicense.DrivingLicenseNr) || _chosenCategories.Count != 0) {
                 if (_drivingLicenseIssueDate == null)
                     return false;
-                if (string.IsNullOrEmpty(_drivingLicense.DrivingLicenseNr))
+                if (string.IsNullOrEmpty(_student.DrivingLicense.DrivingLicenseNr))
                     return false;
                 if (_chosenCategories.Count == 0)
                     return false;
 
-                _drivingLicense.IssueDate = (DateTime)_drivingLicenseIssueDate;
-                _drivingLicense.DrivingLicensePermissions = _chosenCategories;
-                _drivingLicense.Student = _student;
-                _student.DrivingLicense = _drivingLicense;
+                _student.DrivingLicense.IssueDate = (DateTime)_drivingLicenseIssueDate;
+                _student.DrivingLicense.DrivingLicensePermissions = _chosenCategories;
+                _student.DrivingLicense.Student = _student;
             } else {
                 _student.DrivingLicense = null;
             }
@@ -220,20 +226,21 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         }
 
         public override bool Save() {
-            if(!Validate())
+            if (!Validate())
                 return false;
 
-            using(var repository = new BaseRepository()) {
-                if(_student.DrivingLicense != null)
-                    repository.Save(_drivingLicense);
+            using (var repository = new BaseRepository()) {
                 repository.Save(_student);
+                // TODO zmienić mapowanie (dodać odpowiednie cascade, tak aby zapis rodzica => Student, powodował automatycznie zapis dziecka => DrivingLicense), wtedy linie 229-230 staną się zbędne
+                if (_student.DrivingLicense != null)
+                    repository.Save(_student.DrivingLicense);
             }
 
             return true;
         }
         #endregion
 
-        #region Properties
+        #region ViewElements
         public string FirstName {
             get { return _student.FirstName; }
             set {
@@ -340,25 +347,9 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         }
 
         public string DrivingLicenseNr {
-            get { return _drivingLicense.DrivingLicenseNr; }
+            get { return _student.DrivingLicense.DrivingLicenseNr; }
             set {
-                _drivingLicense.DrivingLicenseNr = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public DrivingLicensePermissions AvailableCategory {
-            get { return _availableCategory; }
-            set {
-                _availableCategory = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public DrivingLicensePermissions ChosenCategory {
-            get { return _chosenCategory; }
-            set {
-                _chosenCategory = value;
+                _student.DrivingLicense.DrivingLicenseNr = value;
                 RaisePropertyChanged();
             }
         }
@@ -371,6 +362,14 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             }
         }
 
+        public DrivingLicensePermissions AvailableCategory {
+            get { return _availableCategory; }
+            set {
+                _availableCategory = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ObservableCollection<DrivingLicensePermissions> ChosenCategories {
             get { return _chosenCategories; }
             set {
@@ -379,6 +378,14 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             }
         }
 
+        public DrivingLicensePermissions ChosenCategory {
+            get { return _chosenCategory; }
+            set {
+                _chosenCategory = value;
+                RaisePropertyChanged();
+            }
+        }
+        
         public bool PESELValid {
             get { return _PESELValid; }
             set {
@@ -411,7 +418,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             var availableCategories = new ObservableCollection<DrivingLicensePermissions>();
 
             new EnumToList<DrivingLicenseCategory>().Enums.ForEach(x => availableCategories.Add(new DrivingLicensePermissions {
-                DrivingLicense = _drivingLicense,
+                DrivingLicense = _student.DrivingLicense,
                 Category = x
             }));
 

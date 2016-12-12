@@ -325,7 +325,7 @@
 
                                         <DataGridTextColumn Header="Pojazd" Width="188">
                                             <DataGridTextColumn.Binding>
-                                                <MultiBinding  StringFormat="{}{0} {1}">
+                                                <MultiBinding StringFormat="{}{0} {1}">
                                                     <Binding Path="Car.Brand"/>
                                                     <Binding Path="Car.Model"/>
                                                 </MultiBinding>

@@ -18,7 +18,6 @@ namespace DSManager.ViewModel.Pages {
         #region Selections
         private Student _student;
         private Participant _participant;
-
         #endregion
 
         #region Lists

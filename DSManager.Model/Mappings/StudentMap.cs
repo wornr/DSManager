@@ -19,7 +19,7 @@ namespace DSManager.Model.Mappings {
             Map(x => x.PhoneNr).Nullable().Length(20);
             Map(x => x.Email).Nullable().Length(100);
 
-            References(x => x.DrivingLicense).Nullable().Cascade.All();
+            References(x => x.DrivingLicense).Nullable();
             References(x => x.User).Nullable().Cascade.All();
             HasMany(x => x.Participants).Cascade.All();
         }

@@ -20,6 +20,7 @@ namespace DSManager.ViewModel.Pages {
         #endregion
 
         #region Lists
+        private ObservableCollection<Course> _courses;
         private ObservableCollection<Participant> _participants;
         #endregion
 
@@ -27,6 +28,8 @@ namespace DSManager.ViewModel.Pages {
         private RelayCommand _addCourse;
         private RelayCommand _editCourse;
         private RelayCommand _deleteCourse;
+        private RelayCommand _refreshCourses;
+        private RelayCommand _filterCourses;
         #endregion
 
         #region View Elements
@@ -67,7 +70,13 @@ namespace DSManager.ViewModel.Pages {
         #endregion
 
         #region Lists
-        public ObservableCollection<Course> Courses { get; set; }
+        public ObservableCollection<Course> Courses {
+            get { return _courses; }
+            set {
+                _courses = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public ObservableCollection<Participant> Participants {
             get { return _participants; }
@@ -89,6 +98,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditEntityMessage {
                         Entity = null
                     });
+                    addWindow.Width = 986;
                     addWindow.ShowDialog();
                 }));
             }
@@ -124,6 +134,14 @@ namespace DSManager.ViewModel.Pages {
                                 repository.Delete(_course);
                             }
                     }
+                    FillCourses();
+                }));
+            }
+        }
+
+        public RelayCommand RefreshCourses {
+            get {
+                return _refreshCourses ?? (_refreshCourses = new RelayCommand(() => {
                     FillCourses();
                 }));
             }
