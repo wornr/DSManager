@@ -1,7 +1,7 @@
 ﻿using DSManager.Model.Enums;
 
 namespace DSManager.Model.Entities {
-    public class InstructorPermissions : BaseEntity {
+    public class InstructorPermissions : BaseEntity<InstructorPermissions> {
         #region Relations
         public virtual Instructor Instructor { get; set; }
         #endregion

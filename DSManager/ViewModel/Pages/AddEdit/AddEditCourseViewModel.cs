@@ -31,11 +31,11 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         private RelayCommand _moveStudentToLeft;
 
         public AddEditCourseViewModel() {
-            Messenger.Default.Register<AddEditEntityMessage>(this, HandleMessage);
+            Messenger.Default.Register<AddEditEntityMessage<Course>>(this, HandleMessage);
             FillStudents();
         }
 
-        private void HandleMessage(AddEditEntityMessage message) {
+        private void HandleMessage(AddEditEntityMessage<Course> message) {
             if (message.Entity != null) {
                 if(message.Entity.GetType() != typeof(Course))
                     return;

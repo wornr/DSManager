@@ -33,10 +33,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         private RelayCommand _moveCategoryToRight;
 
         public AddEditStudentViewModel() {
-            Messenger.Default.Register<AddEditEntityMessage>(this, HandleMessage);
+            Messenger.Default.Register<AddEditEntityMessage<Student>>(this, HandleMessage);
         }
 
-        private void HandleMessage(AddEditEntityMessage message) {
+        private void HandleMessage(AddEditEntityMessage<Student> message) {
             if (message.Entity != null) {
                 if (message.Entity.GetType() != typeof(Student))
                     return;

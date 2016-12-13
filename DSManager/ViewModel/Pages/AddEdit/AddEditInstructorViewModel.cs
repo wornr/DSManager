@@ -31,10 +31,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         private RelayCommand _moveCategoryToRight;
 
         public AddEditInstructorViewModel() {
-            Messenger.Default.Register<AddEditEntityMessage>(this, HandleMessage);
+            Messenger.Default.Register<AddEditEntityMessage<Instructor>>(this, HandleMessage);
         }
 
-        private void HandleMessage(AddEditEntityMessage message) {
+        private void HandleMessage(AddEditEntityMessage<Instructor> message) {
             if(message.Entity != null) {
                 if (message.Entity.GetType() != typeof(Instructor))
                     return;

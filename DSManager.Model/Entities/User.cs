@@ -1,7 +1,7 @@
 ﻿using DSManager.Model.Enums;
 
 namespace DSManager.Model.Entities {
-    public class User : BaseEntity {
+    public class User : BaseEntity<User> {
         #region Relations
         public virtual Instructor Instructor { get; set; }
         public virtual Student Student { get; set; }

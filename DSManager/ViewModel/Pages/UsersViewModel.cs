@@ -80,7 +80,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditUser,
                     });
-                    Messenger.Default.Send(new AddEditEntityMessage {
+                    Messenger.Default.Send(new AddEditEntityMessage<User> {
                         Entity = null
                     });
                     addWindow.ShowDialog();
@@ -99,7 +99,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditUser,
                     });
-                    Messenger.Default.Send(new AddEditEntityMessage {
+                    Messenger.Default.Send(new AddEditEntityMessage<User> {
                         Entity = User
                     });
                     editWindow.ShowDialog();

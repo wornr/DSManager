@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace DSManager.Model.Entities {
-    public class Person : BaseEntity {
+    public class Person<T> : BaseEntity<T> where T : BaseEntity<T> {
         public virtual string FirstName { get; set; }
         public virtual string SecondName { get; set; }
         public virtual string LastName { get; set; }

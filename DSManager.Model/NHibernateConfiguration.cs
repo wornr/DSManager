@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reflection;
 
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
@@ -41,7 +42,7 @@ namespace DSManager.Model {
             return Fluently.Configure()
                 .Database(SQLiteConfiguration.Standard.UsingFile(dbPath))
                 .Mappings(m => m.FluentMappings
-                            .AddFromAssemblyOf<BaseEntity>()
+                            .AddFromAssembly(Assembly.Load("DSManager.Model"))
                             .Conventions.Add(DefaultLazy.Never())
                          )
                 .ExposeConfiguration(BuildSchema)

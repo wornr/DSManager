@@ -95,7 +95,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditCourse,
                     });
-                    Messenger.Default.Send(new AddEditEntityMessage {
+                    Messenger.Default.Send(new AddEditEntityMessage<Course> {
                         Entity = null
                     });
                     addWindow.Width = 986;
@@ -115,7 +115,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditCourse,
                     });
-                    Messenger.Default.Send(new AddEditEntityMessage {
+                    Messenger.Default.Send(new AddEditEntityMessage<Course> {
                         Entity = _course
                     });
                     editWindow.ShowDialog();

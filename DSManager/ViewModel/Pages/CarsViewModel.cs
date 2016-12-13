@@ -108,7 +108,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditCar,
                     });
-                    Messenger.Default.Send(new AddEditEntityMessage {
+                    Messenger.Default.Send(new AddEditEntityMessage<Car> {
                         Entity = null
                     });
                     addWindow.ShowDialog();
@@ -127,7 +127,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditCar,
                     });
-                    Messenger.Default.Send(new AddEditEntityMessage {
+                    Messenger.Default.Send(new AddEditEntityMessage<Car> {
                         Entity = _car
                     });
                     editWindow.ShowDialog();

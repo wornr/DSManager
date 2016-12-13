@@ -134,7 +134,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditStudent,
                     });
-                    Messenger.Default.Send(new AddEditEntityMessage {
+                    Messenger.Default.Send(new AddEditEntityMessage<Student> {
                         Entity = null
                     });
                     addWindow.ShowDialog();
@@ -153,7 +153,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditStudent,
                     });
-                    Messenger.Default.Send(new AddEditEntityMessage {
+                    Messenger.Default.Send(new AddEditEntityMessage<Student> {
                         Entity = _student
                     });
                     editWindow.ShowDialog();
@@ -204,7 +204,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditPayment,
                     });
-                    Messenger.Default.Send(new AddEditEntityMessage {
+                    Messenger.Default.Send(new AddEditEntityMessage<Payment> {
                         Entity = null
                     });
                     addWindow.ShowDialog();
@@ -223,7 +223,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditPayment,
                     });
-                    Messenger.Default.Send(new AddEditEntityMessage {
+                    Messenger.Default.Send(new AddEditEntityMessage<Payment> {
                         Entity = Payment
                     });
                     editWindow.ShowDialog();

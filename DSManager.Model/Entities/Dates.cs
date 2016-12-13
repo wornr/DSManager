@@ -3,7 +3,7 @@
 using DSManager.Model.Enums;
 
 namespace DSManager.Model.Entities {
-    public class Dates : BaseEntity {
+    public class Dates<T> : BaseEntity<T> where T : BaseEntity<T> {
         #region Relations
         public virtual Participant Participant { get; set; }
         public virtual Instructor Instructor { get; set; }

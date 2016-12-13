@@ -127,7 +127,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditInstructor,
                     });
-                    Messenger.Default.Send(new AddEditEntityMessage {
+                    Messenger.Default.Send(new AddEditEntityMessage<Instructor> {
                         Entity = null
                     });
                     addWindow.ShowDialog();
@@ -146,7 +146,7 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditInstructor,
                     });
-                    Messenger.Default.Send(new AddEditEntityMessage {
+                    Messenger.Default.Send(new AddEditEntityMessage<Instructor> {
                         Entity = _instructor
                     });
                     editWindow.ShowDialog();

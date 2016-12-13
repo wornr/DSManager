@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace DSManager.Model.Entities {
-    public class Payment : BaseEntity {
+    public class Payment : BaseEntity<Payment> {
         #region Relations
         public virtual Participant Participant { get; set; }
         #endregion

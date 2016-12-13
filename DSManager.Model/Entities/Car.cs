@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace DSManager.Model.Entities {
-    public class Car : BaseEntity {
+    public class Car : BaseEntity<Car> {
         #region Relations
         public virtual IList<CarPermissions> Permissions { get; set; }
         public virtual IList<ClassesDates> ClassesDates { get; set; }

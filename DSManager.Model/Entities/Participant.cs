@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace DSManager.Model.Entities {
-    public class Participant : BaseEntity {
+    public class Participant : BaseEntity<Participant> {
         #region Relations
         public virtual Student Student { get; set; }
         public virtual Instructor Instructor { get; set; }

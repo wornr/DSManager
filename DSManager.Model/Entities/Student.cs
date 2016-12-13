@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace DSManager.Model.Entities {
-    public class Student : Person {
+    public class Student : Person<Student> {
         #region Relations
         public virtual DrivingLicense DrivingLicense { get; set; }
         public virtual User User { get; set; }
