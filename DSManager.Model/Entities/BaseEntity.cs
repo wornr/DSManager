@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DSManager.Model.Entities {
+﻿namespace DSManager.Model.Entities {
     public class BaseEntity<T> where T : BaseEntity<T> {
         public virtual int Id { get; set; }
 

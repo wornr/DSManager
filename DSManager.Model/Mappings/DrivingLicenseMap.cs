@@ -10,7 +10,7 @@ namespace DSManager.Model.Mappings {
             Map(x => x.DrivingLicenseNr).Not.Nullable().Length(20);
 
             HasMany(x => x.DrivingLicensePermissions).Cascade.All();
-            References(x => x.Student).Not.Nullable();
+            References(x => x.Student).Unique().Not.Nullable();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace DSManager.Model.Mappings {
             Map(x => x.Email).Nullable().Length(100);
             Map(x => x.PermissionsNr).Not.Nullable().Length(20);
 
-            References(x => x.User).Nullable();
+            HasOne(x => x.User).PropertyRef(x => x.Instructor);
             HasMany(x => x.Participants);
             HasMany(x => x.Permissions).Cascade.All();
             HasMany(x => x.ClassesDates);

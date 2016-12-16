@@ -231,9 +231,6 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
             using (var repository = new BaseRepository()) {
                 repository.Save(_student);
-                // TODO zmienić mapowanie (dodać odpowiednie cascade, tak aby zapis rodzica => Student, powodował automatycznie zapis dziecka => DrivingLicense), wtedy linie 229-230 staną się zbędne
-                if (_student.DrivingLicense != null)
-                    repository.Save(_student.DrivingLicense);
             }
 
             return true;

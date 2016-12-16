@@ -14,8 +14,8 @@ namespace DSManager.Model.Mappings {
             Map(x => x.AccountType).Not.Nullable();
             Map(x => x.Active).Not.Nullable();
 
-            References(x => x.Instructor).Nullable();
-            References(x => x.Student).Nullable();
+            References(x => x.Instructor).Unique().Nullable();
+            References(x => x.Student).Unique().Nullable();
         }
     }
 }
