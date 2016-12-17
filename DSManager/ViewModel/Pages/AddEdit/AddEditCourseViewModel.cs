@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
+using NHibernate.Util;
+
 using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Enums;
@@ -90,7 +92,6 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                         validationMessage = "Pole nie może być puste!";
                     break;
 
-                // TODO dodać walidację pól szczegółowych informacji o każdym z uczestników
                 case "KEOSNr":
                     if (string.IsNullOrEmpty(_chosenStudent?.KEOSNr))
                         validationMessage = "Pole nie może być puste!";
@@ -104,6 +105,11 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 case "Instructor":
                     if (_chosenStudent?.Instructor == null)
                         validationMessage = "Pole nie może być puste!";
+                    break;
+
+                case "CoursePrice":
+                    if (_chosenStudent?.CoursePrice <= 0)
+                        validationMessage = "Cena kursu musi być większa od zera!";
                     break;
             }
 
@@ -129,7 +135,6 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             if (_chosenStudents.Count == 0)
                 return false;
 
-            // TODO dodać walidację pól szczegółowych informacji o każdym z uczestników
             foreach(var participant in _chosenStudents) {
                 if (string.IsNullOrEmpty(participant.KEOSNr))
                     return false;
@@ -137,8 +142,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 if (string.IsNullOrEmpty(participant.PKKNr))
                     return false;
 
-                // TODO dodać walidację ceny kursu => musi być większa od zera (nie może być null?)
-                //if(participant.CoursePrice == null)
+                if (participant.CoursePrice <= 0)
+                    return false;
 
                 if(participant.Instructor == null)
                     return false;
@@ -275,6 +280,14 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 RaisePropertyChanged();
             }
         }
+
+        public decimal? CoursePrice {
+            get { return _chosenStudent?.CoursePrice; }
+            set {
+                _chosenStudent.CoursePrice = value ?? 0;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
         #region Commands
@@ -283,7 +296,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 return _moveStudentToRight ?? (_moveStudentToRight = new RelayCommand(() => {
                     if(AvailableStudent == null)
                         return;
-                    ChosenStudents.Add(new Participant {Student = AvailableStudent});
+                    ChosenStudents.Add(new Participant {
+                        Student = AvailableStudent,
+                        Course = _course
+                    });
                     AvailableStudents.Remove(AvailableStudent);
                     RefreshTables();
                 }));
@@ -305,7 +321,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
         #region Helpers
         private async void FillStudents() {
-            // TODO dla przypadku edycji zaimplementować usuwanie z listy osób, które znajdują się już po prawej stronie tabeli
+            // chyba juz zrobione TODO dla przypadku edycji zaimplementować usuwanie z listy osób, które znajdują się już po prawej stronie tabeli
             if (_drivingLicenseCategory == null || _courseType == null)
                 return;
 
@@ -313,9 +329,21 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
             await Task.Run(() => {
                 using (var repository = new BaseRepository()) {
-                    AvailableStudents = new ObservableCollection<Student>(repository.ToList<Student>().Where(x =>
-                                x.DrivingLicense == null /* || (x.DrivingLicense != null && test(x.DrivingLicense))*/
-                    ));
+                    var studentsToEliminate = new ObservableCollection<Student>();
+                    // eliminate students with selected category
+                    repository.ToList<DrivingLicensePermissions>()
+                        .Where(x => x.Category == _drivingLicenseCategory)
+                        .ForEach(x => studentsToEliminate.Add(x.DrivingLicense.Student));
+                    // eliminate students who are attending course for selected category
+                    repository.ToList<Course>()
+                        .Where(x => x.Category == _drivingLicenseCategory)
+                        .ForEach(x =>
+                            x.Participants
+                                .ForEach(y => {
+                                    if (y.EndDate == null || y.EndDate > _startDate)
+                                        studentsToEliminate.Add(y.Student);
+                                }));
+                    AvailableStudents = new ObservableCollection<Student>(repository.ToList<Student>().Where(x => !studentsToEliminate.Contains(x)));
                 }
             });
 
@@ -328,9 +356,12 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
             await Task.Run(() => {
                 using (var repository = new BaseRepository()) {
-                    Instructors = new ObservableCollection<Instructor>(repository.ToList<Instructor>());
-                    // TODO dodać metodę, która wyciąga tylko instruktorów mających uprawnienia do szkolenia na wybraną kategorię
-                    //Instructors = new ObservableCollection<Instructor>(repository.ToList<Instructor>().Where(x => x.Permissions.Contains(_drivingLicenseCategory)));
+                    var instructorsToInclude = new ObservableCollection<Instructor>();
+                    // include instructors who does have permission for selected category
+                    repository.ToList<InstructorPermissions>()
+                        .Where(x => x.Category == _drivingLicenseCategory)
+                        .ForEach(x => instructorsToInclude.Add(x.Instructor));
+                    Instructors = instructorsToInclude;
                 }
             });
         }
@@ -343,6 +374,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             PKKNr = _chosenStudent.PKKNr;
             Instructor = _chosenStudent.Instructor;
             IsTheory = _chosenStudent.IsTheory;
+            CoursePrice = _chosenStudent.CoursePrice;
         }
 
         private void RefreshTables() {

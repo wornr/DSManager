@@ -8,6 +8,8 @@ namespace DSManager.Converters {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if(value is string)
                 return string.IsNullOrEmpty((string)value) ? Visibility.Hidden : Visibility.Visible;
+            if (value is decimal)
+                return (decimal)value == 0 ? Visibility.Hidden : Visibility.Visible;
 
             return value == null ? Visibility.Hidden : Visibility.Visible;
         }

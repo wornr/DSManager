@@ -180,6 +180,7 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand RefreshStudents {
             get {
                 return _refreshStudents ?? (_refreshStudents = new RelayCommand(() => {
+                    Student = null;
                     FillStudents(_prevFilter);
                 }));
             }

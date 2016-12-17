@@ -55,8 +55,8 @@ namespace DSManager.ViewModel.Pages {
             get { return _course; }
             set {
                 _course = value;
-                RaisePropertyChanged();
                 FillParticipants(_course);
+                RaisePropertyChanged();
             }
         }
 
@@ -142,6 +142,7 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand RefreshCourses {
             get {
                 return _refreshCourses ?? (_refreshCourses = new RelayCommand(() => {
+                    Course = null;
                     FillCourses();
                 }));
             }

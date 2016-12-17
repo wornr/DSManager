@@ -5,12 +5,12 @@ using DSManager.Model.Entities;
 namespace DSManager.Model.Mappings {
     class DrivingLicenseMap : ClassMap<DrivingLicense> {
         public DrivingLicenseMap() {
-            Id(x => x.Id);
+            Id(x => x.Id).GeneratedBy.Foreign("Student");
             Map(x => x.IssueDate).Not.Nullable();
             Map(x => x.DrivingLicenseNr).Not.Nullable().Length(20);
 
             HasMany(x => x.DrivingLicensePermissions).Cascade.All();
-            References(x => x.Student).Unique().Not.Nullable();
+            HasOne(x => x.Student);
         }
     }
 }

@@ -130,13 +130,18 @@
 
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="KEOS" Visibility="{Binding KEOSNr, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                            <TextBlock Text="KEOS" Visibility="{Binding KEOSNr, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}"/>
                             <TextBox controls:TextBoxHelper.Watermark="KEOS" Width="85" MaxLength="11" Text="{Binding KEOSNr, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="PKK" Visibility="{Binding PKKNr, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                            <TextBlock Text="PKK" Visibility="{Binding PKKNr, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}"/>
                             <TextBox controls:TextBoxHelper.Watermark="PKK" Width="85" MaxLength="11" Text="{Binding PKKNr, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Teoria"/>
+                            <CheckBox ToolTip="Teoria" IsChecked="{Binding IsTheory, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}"/>
                         </StackPanel>
                     </StackPanel>
 
@@ -162,8 +167,8 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Szkolenie teoretyczne"/>
-                            <CheckBox ToolTip="Szkolenie teoretyczne" IsChecked="{Binding IsTheory, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}"/>
+                            <TextBlock Text="Cena szkolenia" Visibility="{Binding CoursePrice, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                            <TextBox controls:TextBoxHelper.Watermark="Cena szkolenia" Width="120" Text="{Binding CoursePrice, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>

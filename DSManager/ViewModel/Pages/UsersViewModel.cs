@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -125,6 +126,7 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand RefreshUsers {
             get {
                 return _refreshUsers ?? (_refreshUsers = new RelayCommand(() => {
+                    User = null;
                     FillUsers(_prevFilter);
                 }));
             }

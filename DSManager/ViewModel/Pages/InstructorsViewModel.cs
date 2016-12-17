@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -57,8 +58,6 @@ namespace DSManager.ViewModel.Pages {
         public Instructor Instructor {
             get { return _instructor; }
             set {
-                if(_instructor == value)
-                    return;
                 _instructor = value;
                 FillParticipant(value);
                 RaisePropertyChanged();
@@ -68,11 +67,10 @@ namespace DSManager.ViewModel.Pages {
         public Participant Participant {
             get { return _participant; }
             set {
-                if(_participant == value)
-                    return;
                 _participant = value;
                 FillClassesDates(value);
                 FillExamsDates(value);
+                RaisePropertyChanged();
             }
         }
         #endregion
@@ -173,6 +171,7 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand RefreshInstructors {
             get {
                 return _refreshInstructors ?? (_refreshInstructors = new RelayCommand(() => {
+                    Instructor = null;
                     FillInstructors(_prevFilter);
                 }));
             }
@@ -300,17 +299,6 @@ namespace DSManager.ViewModel.Pages {
                                 .Where(x => x.Instructor == instructor && x.Instructor != null)
                                 .ToList());
                 }
-
-                // This is working LazyLoading?!
-                /*using(var session = NHibernateConfiguration.SessionFactory.OpenSession()) {
-                    if(this.Participants != null && this.Participants.Any())
-                        this.Participants.Clear();
-                    var list = session.QueryOver<Participant>().Where(p => p.Student == student).List<Participant>().ToList();
-                    list.ForEach(l => this.Participants.Add(l));
-                    foreach(var p in Participants) {
-                            p.Course = session.QueryOver<Course>().Where(c => c.Id == p.Course.Id).SingleOrDefault<Course>();
-                    }
-                }*/
             });
 
             IsParticipantsLoading = false;

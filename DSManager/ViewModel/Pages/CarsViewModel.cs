@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -58,8 +59,6 @@ namespace DSManager.ViewModel.Pages {
         public Car Car {
             get { return _car; }
             set {
-                if(_car == value)
-                    return;
                 _car = value;
                 FillClassesDates(value);
                 FillExamsDates(value);
@@ -154,6 +153,7 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand RefreshCars {
             get {
                 return _refreshCars ?? (_refreshCars = new RelayCommand(() => {
+                    Car = null;
                     FillCars(_prevFilter);
                 }));
             }
