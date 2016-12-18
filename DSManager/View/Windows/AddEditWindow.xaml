@@ -28,6 +28,10 @@
         <DataTemplate DataType="{x:Type pages:AddEditCourseViewModel}">
             <views:CoursePage/>
         </DataTemplate>
+        <!-- Agenda -->
+        <DataTemplate DataType="{x:Type pages:AddEditAgendaViewModel}">
+            <views:AgendaPage/>
+        </DataTemplate>
         <!-- Payment -->
         <DataTemplate DataType="{x:Type pages:AddEditPaymentViewModel}">
             <views:PaymentPage/>

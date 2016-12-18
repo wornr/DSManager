@@ -34,6 +34,10 @@
         <DataTemplate DataType="{x:Type pages:CoursesViewModel}">
             <views:CoursesPage/>
         </DataTemplate>
+        <!-- Agenda -->
+        <DataTemplate DataType="{x:Type pages:AgendaViewModel}">
+            <views:AgendaPage/>
+        </DataTemplate>
 
         <!-- Users -->
         <DataTemplate DataType="{x:Type pages:UsersViewModel}">
@@ -57,6 +61,7 @@
             <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Instructors}" MaxHeight="34" SelectionCommand="{Binding OpenInstructorsPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png"/>
             <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Cars}" MaxHeight="34" SelectionCommand="{Binding OpenCarsPage}" Icon="/DSManager;component/Resources/Icons/Menu/car.png"/>
             <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Courses}" MaxHeight="34" SelectionCommand="{Binding OpenCoursesPage}" Icon="/DSManager;component/Resources/Icons/Menu/book.png"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Agenda}" MaxHeight="34" SelectionCommand="{Binding OpenAgendaPage}" Icon="/DSManager;component/Resources/Icons/Menu/calendar.png"/>
 
             <hamburgerMenu:HamburgerMenuItem IsEnabled="False"/>
 

@@ -70,6 +70,15 @@ namespace DSManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agenda.
+        /// </summary>
+        public static string Agenda {
+            get {
+                return ResourceManager.GetString("Agenda", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DSManager.
         /// </summary>
         public static string AppName {

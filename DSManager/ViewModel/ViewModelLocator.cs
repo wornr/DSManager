@@ -60,6 +60,7 @@ namespace DSManager.ViewModel {
             SimpleIoc.Default.Register<InstructorsViewModel>();
             SimpleIoc.Default.Register<CarsViewModel>();
             SimpleIoc.Default.Register<CoursesViewModel>();
+            SimpleIoc.Default.Register<AgendaViewModel>();
 
             SimpleIoc.Default.Register<UsersViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
@@ -70,6 +71,7 @@ namespace DSManager.ViewModel {
             SimpleIoc.Default.Register<AddEditCarViewModel>();
             SimpleIoc.Default.Register<AddEditCourseViewModel>();
             SimpleIoc.Default.Register<AddEditPaymentViewModel>();
+            SimpleIoc.Default.Register<AddEditAgendaViewModel>();
 
             SimpleIoc.Default.Register<AddEditUserViewModel>();
             #endregion
@@ -90,6 +92,7 @@ namespace DSManager.ViewModel {
         public InstructorsViewModel Instructors => ServiceLocator.Current.GetInstance<InstructorsViewModel>();
         public CarsViewModel Cars => ServiceLocator.Current.GetInstance<CarsViewModel>();
         public CoursesViewModel Courses => ServiceLocator.Current.GetInstance<CoursesViewModel>();
+        public AgendaViewModel Agenda => ServiceLocator.Current.GetInstance<AgendaViewModel>();
 
         public UsersViewModel Users => ServiceLocator.Current.GetInstance<UsersViewModel>();
         public SettingsViewModel Settings => ServiceLocator.Current.GetInstance<SettingsViewModel>();
@@ -99,6 +102,7 @@ namespace DSManager.ViewModel {
         public AddEditInstructorViewModel AddEditInstructor => ServiceLocator.Current.GetInstance<AddEditInstructorViewModel>();
         public AddEditCarViewModel AddEditCar => ServiceLocator.Current.GetInstance<AddEditCarViewModel>();
         public AddEditCourseViewModel AddEditCourse => ServiceLocator.Current.GetInstance<AddEditCourseViewModel>();
+        public AddEditAgendaViewModel AddEditAgenda => ServiceLocator.Current.GetInstance<AddEditAgendaViewModel>();
         public AddEditPaymentViewModel AddEditPayment => ServiceLocator.Current.GetInstance<AddEditPaymentViewModel>();
 
         public AddEditUserViewModel AddEditUser => ServiceLocator.Current.GetInstance<AddEditUserViewModel>();

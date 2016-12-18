@@ -120,6 +120,9 @@
   <data name="Add" xml:space="preserve">
     <value>Dodaj</value>
   </data>
+  <data name="Agenda" xml:space="preserve">
+    <value>Terminarz</value>
+  </data>
   <data name="AppName" xml:space="preserve">
     <value>DSManager</value>
   </data>
