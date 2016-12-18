@@ -10,7 +10,7 @@ namespace DSManager.Model.Mappings {
             Map(x => x.CourseType).Not.Nullable();
             Map(x => x.StartDate).Not.Nullable();
 
-            HasMany(x => x.Participants).Inverse().Cascade.All();
+            HasMany(x => x.Participants).Cascade.All();
         }
     }
 }

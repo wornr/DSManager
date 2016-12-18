@@ -333,7 +333,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                     // eliminate students with selected category
                     repository.ToList<DrivingLicensePermissions>()
                         .Where(x => x.Category == _drivingLicenseCategory)
-                        .ForEach(x => studentsToEliminate.Add(x.DrivingLicense.Student));
+                        .ForEach(x => {
+                            if (x.DrivingLicense != null)
+                                studentsToEliminate.Add(x.DrivingLicense.Student);
+                        });
                     // eliminate students who are attending course for selected category
                     repository.ToList<Course>()
                         .Where(x => x.Category == _drivingLicenseCategory)

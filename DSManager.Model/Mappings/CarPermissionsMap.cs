@@ -8,7 +8,7 @@ namespace DSManager.Model.Mappings {
             Id(x => x.Id);
             Map(x => x.Category).Not.Nullable();
 
-            References(x => x.Car).Not.Nullable();
+            References(x => x.Car).Nullable();
         }
     }
 }

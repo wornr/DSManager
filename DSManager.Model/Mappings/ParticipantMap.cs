@@ -15,7 +15,7 @@ namespace DSManager.Model.Mappings {
 
             References(x => x.Student).Not.Nullable();
             References(x => x.Instructor).Not.Nullable();
-            References(x => x.Course).Not.Nullable();
+            References(x => x.Course).Nullable();
             HasMany(x => x.Payments).Cascade.All();
             HasMany(x => x.ClassesDates).Cascade.All();
             HasMany(x => x.ExamsDates).Cascade.All();
