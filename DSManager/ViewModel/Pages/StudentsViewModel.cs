@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight.Messaging;
 using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Services;
+using DSManager.PDF.Templates;
 using DSManager.View.Windows;
 
 namespace DSManager.ViewModel.Pages {
@@ -33,6 +34,7 @@ namespace DSManager.ViewModel.Pages {
         private RelayCommand _deleteStudent;
         private RelayCommand _refreshStudents;
         private RelayCommand _filterStudents;
+        private RelayCommand _printParticipant;
         private RelayCommand _addPayment;
         private RelayCommand _editPayment;
         private RelayCommand _deletePayment;
@@ -253,6 +255,23 @@ namespace DSManager.ViewModel.Pages {
                 return _printPayment ?? (_printPayment = new RelayCommand(() => {
                     // TODO dodać obsługę generowania wydruków potwierdzenia wpłat
                     Console.WriteLine(Payment.Date); // TODO DELETE ME
+                }));
+            }
+        }
+
+        public RelayCommand PrintParticipant {
+            get {
+                return _printParticipant ?? (_printParticipant = new RelayCommand(async () => {
+                    var error = false;
+                    await Task.Run(() => {
+                        try {
+                            new CoursePrint(_participant);
+                        } catch {
+                            error = true;
+                        }
+                    });
+                    if (error)
+                        ShowDialog("Błąd", "Nie można zapisać pliku!\nUpewnij się, że nie jest on otwarty.");
                 }));
             }
         }

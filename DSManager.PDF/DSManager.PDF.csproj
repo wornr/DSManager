@@ -30,28 +30,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EPPlus, Version=4.0.4.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.4.0.4\lib\net20\EPPlus.dll</HintPath>
+    <Reference Include="MigraDoc.DocumentObjectModel-WPF, Version=1.32.3885.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp-MigraDoc-WPF.1.32.2608.0\lib\net20\MigraDoc.DocumentObjectModel-WPF.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="itextsharp, Version=5.5.8.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\packages\iTextSharp.5.5.8\lib\itextsharp.dll</HintPath>
+    <Reference Include="MigraDoc.Rendering-WPF, Version=1.32.3885.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp-MigraDoc-WPF.1.32.2608.0\lib\net20\MigraDoc.Rendering-WPF.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="itextsharp.pdfa, Version=5.5.8.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\packages\itextsharp.pdfa.5.5.8\lib\itextsharp.pdfa.dll</HintPath>
+    <Reference Include="MigraDoc.RtfRendering-WPF, Version=1.32.3885.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp-MigraDoc-WPF.1.32.2608.0\lib\net20\MigraDoc.RtfRendering-WPF.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="itextsharp.xmlworker, Version=5.5.8.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\packages\itextsharp.xmlworker.5.5.8\lib\itextsharp.xmlworker.dll</HintPath>
+    <Reference Include="PdfSharp-WPF, Version=1.32.2608.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp-MigraDoc-WPF.1.32.2608.0\lib\net20\PdfSharp-WPF.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PdfRpt, Version=2.8.3.0, Culture=neutral, PublicKeyToken=9aed730b935239dd, processorArchitecture=MSIL">
-      <HintPath>..\packages\PdfReport.2.8.3\lib\net45\PdfRpt.dll</HintPath>
+    <Reference Include="PdfSharp.Charting-WPF, Version=1.32.2608.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp-MigraDoc-WPF.1.32.2608.0\lib\net20\PdfSharp.Charting-WPF.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,12 +62,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Templates\CoursePrint.cs" />
+    <Compile Include="Utilities\AddLeadingZeros.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DSManager.Model\DSManager.Model.csproj">
+      <Project>{7E77B531-FB26-40D8-B12B-3F8B986C15D4}</Project>
+      <Name>DSManager.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Templates\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
