@@ -265,7 +265,7 @@ namespace DSManager.ViewModel.Pages {
                     var error = false;
                     await Task.Run(() => {
                         try {
-                            new CoursePrint(_participant);
+                            new CoursePdf(_participant);
                         } catch {
                             error = true;
                         }
