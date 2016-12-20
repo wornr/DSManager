@@ -8,6 +8,7 @@
         xmlns:res="clr-namespace:DSManager.Properties"
         xmlns:pages="clr-namespace:DSManager.ViewModel.Pages"
         xmlns:views="clr-namespace:DSManager.View.Pages"
+        xmlns:converters="clr-namespace:DSManager.Converters"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
         Title="DS Manager" Icon="/DSManager;component/Resources/Icons/app.ico" MinWidth="1250" MinHeight="650" WindowStartupLocation="CenterScreen" GlowBrush="Black">
@@ -47,6 +48,8 @@
         <DataTemplate DataType="{x:Type pages:SettingsViewModel}">
             <views:SettingsPage/>
         </DataTemplate>
+        
+        <converters:ValueToCollapsedConverter x:Key="ValueToCollapsedConverter"/>
     </Window.Resources>
 
     <Grid>
@@ -57,15 +60,15 @@
 
             <hamburgerMenu:HamburgerMenuItem IsEnabled="False"/>
             
-            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Students}" MaxHeight="34" SelectionCommand="{Binding OpenStudentsPage}" Icon="/DSManager;component/Resources/Icons/Menu/student.png"/>
-            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Instructors}" MaxHeight="34" SelectionCommand="{Binding OpenInstructorsPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png"/>
-            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Cars}" MaxHeight="34" SelectionCommand="{Binding OpenCarsPage}" Icon="/DSManager;component/Resources/Icons/Menu/car.png"/>
-            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Courses}" MaxHeight="34" SelectionCommand="{Binding OpenCoursesPage}" Icon="/DSManager;component/Resources/Icons/Menu/book.png"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Students}" MaxHeight="34" SelectionCommand="{Binding OpenStudentsPage}" Icon="/DSManager;component/Resources/Icons/Menu/student.png" Visibility="{Binding StudentsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Instructors}" MaxHeight="34" SelectionCommand="{Binding OpenInstructorsPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png" Visibility="{Binding InstructorsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Cars}" MaxHeight="34" SelectionCommand="{Binding OpenCarsPage}" Icon="/DSManager;component/Resources/Icons/Menu/car.png" Visibility="{Binding CarsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Courses}" MaxHeight="34" SelectionCommand="{Binding OpenCoursesPage}" Icon="/DSManager;component/Resources/Icons/Menu/book.png" Visibility="{Binding CoursesMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}"/>
             <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Agenda}" MaxHeight="34" SelectionCommand="{Binding OpenAgendaPage}" Icon="/DSManager;component/Resources/Icons/Menu/calendar.png"/>
 
             <hamburgerMenu:HamburgerMenuItem IsEnabled="False"/>
 
-            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Users}" MaxHeight="34" SelectionCommand="{Binding OpenUsersPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Users}" MaxHeight="34" SelectionCommand="{Binding OpenUsersPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png" Visibility="{Binding UsersMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}"/>
             <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Settings}" MaxHeight="34" SelectionCommand="{Binding OpenSettingsPage}" Icon="/DSManager;component/Resources/Icons/Menu/cog-wheel.png"/>
 
             <hamburgerMenu:HamburgerMenuItem IsEnabled="False"/>

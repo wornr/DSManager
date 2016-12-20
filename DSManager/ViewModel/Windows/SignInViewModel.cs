@@ -42,9 +42,9 @@ namespace DSManager.ViewModel.Windows {
                         if(windowInstance != null) {
                             string password = MD5Encrypter.Encrypt(windowInstance.Password.Password);
                             User user = UserRepository.GetUser(_login, password);
-                                                        
+
                             if (SignedUser == null) {
-                                if (user != null) {
+                                if (user != null && user.Active) {
                                     SignedUser = user;
                                     Locked = false;
                                     MainWindow = new MainWindow();
@@ -52,10 +52,18 @@ namespace DSManager.ViewModel.Windows {
                                     windowInstance.Close();
                                     return;
                                 }
+                                if (user != null && !user.Active) {
+                                    windowInstance.ShowMessageAsync("Błąd", "Konto jest nieaktywne!\nSkontaktuj się z administratorem.");
+                                    return;
+                                }
                             } else {
-                                if (user != null && SignedUser == user) {
+                                if (user != null && SignedUser == user && user.Active) {
                                     Locked = false;
                                     windowInstance.Close();
+                                    return;
+                                }
+                                if(user != null && SignedUser == user && !user.Active) {
+                                    windowInstance.ShowMessageAsync("Błąd", "Konto jest nieaktywne!\nSkontaktuj się z administratorem.");
                                     return;
                                 }
                             }

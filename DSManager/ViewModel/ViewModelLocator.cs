@@ -47,6 +47,10 @@ namespace DSManager.ViewModel {
             ////    SimpleIoc.Default.Register<IDataService, DataService>();
             ////}
 
+            Initialize();
+        }
+
+        private static void Initialize() {
             #region Windows
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<SignInViewModel>();
@@ -110,7 +114,42 @@ namespace DSManager.ViewModel {
 
         #endregion
 
-        public static void Cleanup() {
+        private static void Cleanup() {
+            #region Windows
+            SimpleIoc.Default.Unregister<MainViewModel>();
+            SimpleIoc.Default.Unregister<SignInViewModel>();
+            SimpleIoc.Default.Unregister<AddEditViewModel>();
+            #endregion
+
+            #region Pages
+            SimpleIoc.Default.Unregister<HomeViewModel>();
+
+            SimpleIoc.Default.Unregister<StudentsViewModel>();
+            SimpleIoc.Default.Unregister<InstructorsViewModel>();
+            SimpleIoc.Default.Unregister<CarsViewModel>();
+            SimpleIoc.Default.Unregister<CoursesViewModel>();
+            SimpleIoc.Default.Unregister<AgendaViewModel>();
+
+            SimpleIoc.Default.Unregister<UsersViewModel>();
+            SimpleIoc.Default.Unregister<SettingsViewModel>();
+
+            #region AddEdit
+            SimpleIoc.Default.Unregister<AddEditStudentViewModel>();
+            SimpleIoc.Default.Unregister<AddEditInstructorViewModel>();
+            SimpleIoc.Default.Unregister<AddEditCarViewModel>();
+            SimpleIoc.Default.Unregister<AddEditCourseViewModel>();
+            SimpleIoc.Default.Unregister<AddEditPaymentViewModel>();
+            SimpleIoc.Default.Unregister<AddEditAgendaViewModel>();
+
+            SimpleIoc.Default.Unregister<AddEditUserViewModel>();
+            #endregion
+
+            #endregion
+        }
+
+        public static void ReinitializeViewModels() {
+            Cleanup();
+            Initialize();
         }
     }
 }

@@ -130,6 +130,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.pl-PL.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\CheckPermissions.cs" />
     <Compile Include="Utilities\EnumToList.cs" />
     <Compile Include="Utilities\MD5Encrypter.cs" />
     <Compile Include="Utilities\PESELToDate.cs" />

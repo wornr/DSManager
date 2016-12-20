@@ -10,6 +10,8 @@ namespace DSManager.Converters {
                 return string.IsNullOrEmpty((string)value) ? Visibility.Collapsed : Visibility.Visible;
             if (value is decimal)
                 return (decimal)value == 0 ? Visibility.Collapsed : Visibility.Visible;
+            if (value is bool)
+                return (bool) value ? Visibility.Visible : Visibility.Collapsed;
 
             return value == null ? Visibility.Collapsed : Visibility.Visible;
         }

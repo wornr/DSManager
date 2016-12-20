@@ -15,11 +15,17 @@ using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Enums;
 using DSManager.Model.Services;
+using DSManager.Utilities;
 using DSManager.View.Windows;
 
 namespace DSManager.ViewModel.Pages {
     public class AgendaViewModel : BaseViewModel {
         #region Variables
+
+        #region Permissions
+        private bool _agendaDisplayPermission;
+        private bool _agendaMgmtPermission;
+        #endregion
 
         #region Selections
         private DateTime _instructorSelectedDate;
@@ -68,6 +74,8 @@ namespace DSManager.ViewModel.Pages {
         #endregion
         
         public AgendaViewModel() {
+            InitializePermissions();
+
             InstructorSelectedDate = DateTime.Now;
             InstructorEvents = new ObservableCollection<Event>();
             FillInstructors();
@@ -448,6 +456,20 @@ namespace DSManager.ViewModel.Pages {
             });
 
             IsCarEventsLoading = false;
+        }
+        #endregion
+
+        #region Permissions
+        private void InitializePermissions() {
+            _agendaMgmtPermission = CheckPermissions.CheckPermission(SignedUser.AccountType, "AgendaManagement");
+        }
+
+        public bool AgendaMgmtPermission {
+            get { return _agendaMgmtPermission; }
+            set {
+                _agendaMgmtPermission = value;
+                RaisePropertyChanged();
+            }
         }
         #endregion
 
