@@ -40,6 +40,10 @@
             <views:AgendaPage/>
         </DataTemplate>
 
+        <!-- Statistics -->
+        <DataTemplate DataType="{x:Type pages:StatisticsViewModel}">
+            <views:StatisticsPage/>
+        </DataTemplate>
         <!-- Users -->
         <DataTemplate DataType="{x:Type pages:UsersViewModel}">
             <views:UsersPage/>
@@ -68,6 +72,7 @@
 
             <hamburgerMenu:HamburgerMenuItem IsEnabled="False"/>
 
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Statistics}" MaxHeight="34" SelectionCommand="{Binding OpenStatisticsPage}" Icon="/DSManager;component/Resources/Icons/Menu/statistics.png"/>
             <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Users}" MaxHeight="34" SelectionCommand="{Binding OpenUsersPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png" Visibility="{Binding UsersMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}"/>
             <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Settings}" MaxHeight="34" SelectionCommand="{Binding OpenSettingsPage}" Icon="/DSManager;component/Resources/Icons/Menu/cog-wheel.png"/>
 

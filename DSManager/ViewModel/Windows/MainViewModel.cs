@@ -19,6 +19,7 @@ namespace DSManager.ViewModel.Windows {
         private RelayCommand _openCarsPageCommand;
         private RelayCommand _openCoursesPageCommand;
         private RelayCommand _openAgendaPageCommand;
+        private RelayCommand _openStatisticsPageCommand;
         private RelayCommand _openUsersPageCommand;
         private RelayCommand _openSettingsPageCommand;
         private RelayCommand _lockCommand;
@@ -37,6 +38,7 @@ namespace DSManager.ViewModel.Windows {
         public RelayCommand OpenCoursesPage => _openCoursesPageCommand ?? (_openCoursesPageCommand = new RelayCommand(() => NavigateTo(ViewModelLocator.Instance.Courses)));
         public RelayCommand OpenAgendaPage => _openAgendaPageCommand ?? (_openAgendaPageCommand = new RelayCommand(() => NavigateTo(ViewModelLocator.Instance.Agenda)));
 
+        public RelayCommand OpenStatisticsPage => _openStatisticsPageCommand ?? (_openStatisticsPageCommand = new RelayCommand(() => NavigateTo(ViewModelLocator.Instance.Statistics)));
         public RelayCommand OpenUsersPage => _openUsersPageCommand ?? (_openUsersPageCommand = new RelayCommand(() => NavigateTo(ViewModelLocator.Instance.Users)));
         public RelayCommand OpenSettingsPage => _openSettingsPageCommand ?? (_openSettingsPageCommand = new RelayCommand(() => NavigateTo(ViewModelLocator.Instance.Settings)));
 

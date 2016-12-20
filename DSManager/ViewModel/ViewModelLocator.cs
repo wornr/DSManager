@@ -66,6 +66,7 @@ namespace DSManager.ViewModel {
             SimpleIoc.Default.Register<CoursesViewModel>();
             SimpleIoc.Default.Register<AgendaViewModel>();
 
+            SimpleIoc.Default.Register<StatisticsViewModel>();
             SimpleIoc.Default.Register<UsersViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
 
@@ -98,6 +99,7 @@ namespace DSManager.ViewModel {
         public CoursesViewModel Courses => ServiceLocator.Current.GetInstance<CoursesViewModel>();
         public AgendaViewModel Agenda => ServiceLocator.Current.GetInstance<AgendaViewModel>();
 
+        public StatisticsViewModel Statistics => ServiceLocator.Current.GetInstance<StatisticsViewModel>();
         public UsersViewModel Users => ServiceLocator.Current.GetInstance<UsersViewModel>();
         public SettingsViewModel Settings => ServiceLocator.Current.GetInstance<SettingsViewModel>();
 
@@ -130,6 +132,7 @@ namespace DSManager.ViewModel {
             SimpleIoc.Default.Unregister<CoursesViewModel>();
             SimpleIoc.Default.Unregister<AgendaViewModel>();
 
+            SimpleIoc.Default.Unregister<StatisticsViewModel>();
             SimpleIoc.Default.Unregister<UsersViewModel>();
             SimpleIoc.Default.Unregister<SettingsViewModel>();
 
