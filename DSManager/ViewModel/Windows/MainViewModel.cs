@@ -1,7 +1,6 @@
 using GalaSoft.MvvmLight.Command;
 
-using DSManager.Model.Entities;
-using DSManager.Utilities;
+using DSManager.View.Windows;
 
 namespace DSManager.ViewModel.Windows {
     public sealed class MainViewModel : BaseViewModel {
@@ -13,6 +12,8 @@ namespace DSManager.ViewModel.Windows {
         private RelayCommand _openAgendaPageCommand;
         private RelayCommand _openUsersPageCommand;
         private RelayCommand _openSettingsPageCommand;
+        private RelayCommand _lockCommand;
+        private RelayCommand _signOutCommand;
 
         public MainViewModel() {
             NavigateTo(ViewModelLocator.Instance.Home);
@@ -29,6 +30,19 @@ namespace DSManager.ViewModel.Windows {
         public RelayCommand OpenUsersPage => _openUsersPageCommand ?? (_openUsersPageCommand = new RelayCommand(() => NavigateTo(ViewModelLocator.Instance.Users)));
         public RelayCommand OpenSettingsPage => _openSettingsPageCommand ?? (_openSettingsPageCommand = new RelayCommand(() => NavigateTo(ViewModelLocator.Instance.Settings)));
 
-        public User User => UserSignedIn.User;
+        public RelayCommand Lock => _lockCommand ?? (_lockCommand = new RelayCommand(() => {
+            NavigateTo(ViewModelLocator.Instance.Home);
+            Locked = true;
+            var signInWindow = new SignInWindow();
+            signInWindow.ShowDialog();
+        }));
+        public RelayCommand SignOut => _signOutCommand ?? (_signOutCommand = new RelayCommand(() => {
+            NavigateTo(ViewModelLocator.Instance.Home);
+            SignedUser = null;
+            Locked = false;
+            var signInWindow = new SignInWindow();
+            signInWindow.Show();
+            MainWindow.Close();
+        }));
     }
 }

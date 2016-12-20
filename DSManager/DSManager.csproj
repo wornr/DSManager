@@ -120,7 +120,8 @@
     <Compile Include="Converters\CourseKindConverter.cs" />
     <Compile Include="Converters\CourseTypeConverter.cs" />
     <Compile Include="Converters\ObjectToBoolConverter.cs" />
-    <Compile Include="Converters\ValueToVisibilityConverter.cs" />
+    <Compile Include="Converters\ValueToCollapsedConverter.cs" />
+    <Compile Include="Converters\ValueToHiddenConverter.cs" />
     <Compile Include="Interfaces\IClosable.cs" />
     <Compile Include="Messengers\AddEditEntityMessage.cs" />
     <Compile Include="Messengers\AddEditPageMessage.cs" />
@@ -132,7 +133,6 @@
     <Compile Include="Utilities\EnumToList.cs" />
     <Compile Include="Utilities\MD5Encrypter.cs" />
     <Compile Include="Utilities\PESELToDate.cs" />
-    <Compile Include="Utilities\UserSignedIn.cs" />
     <Compile Include="Validators\BirthDateValidator.cs" />
     <Compile Include="Validators\PESELValidator.cs" />
     <Compile Include="Utilities\ValueToText.cs" />
@@ -330,7 +330,9 @@
     <Resource Include="Resources\Entypo.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Localization\" />
@@ -385,6 +387,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Menu\calendar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Menu\sign-out.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Menu\lock.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets')" />

@@ -147,6 +147,9 @@
   <data name="Instructors" xml:space="preserve">
     <value>Instruktorzy</value>
   </data>
+  <data name="Lock" xml:space="preserve">
+    <value>Zablokuj</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
   </data>
@@ -167,6 +170,9 @@
   </data>
   <data name="SignInWindow" xml:space="preserve">
     <value>Logowanie</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Wyloguj</value>
   </data>
   <data name="Students" xml:space="preserve">
     <value>Kursanci</value>

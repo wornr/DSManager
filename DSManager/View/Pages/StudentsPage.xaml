@@ -190,7 +190,7 @@
                                 
                                 <TextBlock Margin="5,0" Text="{Binding Student.DrivingLicense.DrivingLicenseNr, StringFormat='{}Nr prawa jazdy {0}', TargetNullValue={}}" FontSize="16" />
 
-                                <TextBlock Margin="5,0" Text="{Binding Student.DrivingLicense.IssueDate, StringFormat='{}Data wydania {0}', TargetNullValue={}}" FontSize="16" />
+                                <TextBlock Margin="5,0" Text="{Binding Student.DrivingLicense.IssueDate, ConverterCulture='pl-PL', StringFormat='{}Data wydania {0:d}', TargetNullValue={}}" FontSize="16" />
                             </StackPanel>
                         </Border>
                     </Grid>

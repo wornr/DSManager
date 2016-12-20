@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
 using MahApps.Metro.Controls.Dialogs;
@@ -12,7 +11,7 @@ using DSManager.Utilities;
 using DSManager.View.Windows;
 
 namespace DSManager.ViewModel.Windows {
-    public class SignInViewModel : ViewModelBase {
+    public class SignInViewModel : BaseViewModel {
         private RelayCommand<object> _signInCommand;
         RelayCommand _cancelCommand;
         private string _login;
@@ -24,32 +23,44 @@ namespace DSManager.ViewModel.Windows {
         #region Commands
         public RelayCommand<object> SignInCommand {
             get {
-                return _signInCommand ?? (_signInCommand = new RelayCommand<object>((param) => {
+                return _signInCommand ?? (_signInCommand = new RelayCommand<object>(param => {
                     if((bool)Properties.Settings.Default["DeveloperMode"]) {
-                        UserSignedIn.User = new User {
-                            FirstName = "Developer",
-                            LastName = "Mode"
-                        };
-
                         var windowInstance = param as SignInWindow;
-                        var mainWindow = new MainWindow();
-                        Application.Current.MainWindow = mainWindow;
-                        mainWindow.Show();
+
+                        if (SignedUser == null) {
+                            SignedUser = new User {
+                                FirstName = "Developer",
+                                LastName = "Mode"
+                            };
+                            MainWindow = new MainWindow();
+                            MainWindow.Show();
+                        }
+                        Locked = false;
                         windowInstance?.Close();
                     } else {
-                        if(param is SignInWindow) {
-                            var windowInstance = param as SignInWindow;
+                        var windowInstance = param as SignInWindow;
+                        if(windowInstance != null) {
                             string password = MD5Encrypter.Encrypt(windowInstance.Password.Password);
                             User user = UserRepository.GetUser(_login, password);
-
-                            if(user != null) {
-                                UserSignedIn.User = user;
-                                var mainWindow = new MainWindow();
-                                mainWindow.Show();
-                                windowInstance.Close();
+                                                        
+                            if (SignedUser == null) {
+                                if (user != null) {
+                                    SignedUser = user;
+                                    Locked = false;
+                                    MainWindow = new MainWindow();
+                                    MainWindow.Show();
+                                    windowInstance.Close();
+                                    return;
+                                }
                             } else {
-                                windowInstance.ShowMessageAsync("Błąd", "Podano błędne dane logowania!");
+                                if (user != null && SignedUser == user) {
+                                    Locked = false;
+                                    windowInstance.Close();
+                                    return;
+                                }
                             }
+
+                            windowInstance.ShowMessageAsync("Błąd", "Podano błędne dane logowania!");
                         }
                     }
                 }));
@@ -65,7 +76,7 @@ namespace DSManager.ViewModel.Windows {
         }
         #endregion
 
-        #region Getters/Setters
+        #region View Elements
         public string Login {
             get { return _login; }
             set {

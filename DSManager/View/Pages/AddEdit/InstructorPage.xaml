@@ -9,7 +9,7 @@
       d:DesignWidth="752" d:DesignHeight="481">
 
     <UserControl.Resources>
-        <converters:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter"/>
+        <converters:ValueToHiddenConverter x:Key="ValueToHiddenConverter"/>
         <converters:ObjectToBoolConverter x:Key="ObjectToBoolConverter"/>
     </UserControl.Resources>
 
@@ -25,17 +25,17 @@
                 </StackPanel.Resources>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Imię" Visibility="{Binding FirstName, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Imię" Visibility="{Binding FirstName, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="Imię" Width="95" MaxLength="25" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Drugie imię" Visibility="{Binding SecondName, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Drugie imię" Visibility="{Binding SecondName, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="Drugie imię" Width="95" MaxLength="25" Text="{Binding SecondName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Nazwisko" Visibility="{Binding LastName, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Nazwisko" Visibility="{Binding LastName, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="Nazwisko" Width="100" MaxLength="50" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
             </StackPanel>
@@ -48,7 +48,7 @@
                 </StackPanel.Resources>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Data urodzenia" Visibility="{Binding BirthDate, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Data urodzenia" Visibility="{Binding BirthDate, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <DatePicker controls:TextBoxHelper.Watermark="Data urodzenia" Width="115" SelectedDate="{Binding BirthDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
                         <!--<DatePicker.Resources>
                                 <Style TargetType="DatePickerTextBox">
@@ -67,7 +67,7 @@
                 </Button>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="PESEL" Visibility="{Binding PESEL, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="PESEL" Visibility="{Binding PESEL, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="PESEL" Width="85" MaxLength="11" Text="{Binding PESEL, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
             </StackPanel>
@@ -82,17 +82,17 @@
                 </StackPanel.Resources>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Ulica" Visibility="{Binding Street, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Ulica" Visibility="{Binding Street, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="Ulica" Width="150" MaxLength="50" Text="{Binding Street, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Nr domu" Visibility="{Binding HouseNr, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Nr domu" Visibility="{Binding HouseNr, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="Nr domu" Width="70" MaxLength="10" Text="{Binding HouseNr, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Nr lokalu" Visibility="{Binding ApartmentNr, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Nr lokalu" Visibility="{Binding ApartmentNr, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="Nr lokalu" Width="70" MaxLength="10" Text="{Binding ApartmentNr, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
             </StackPanel>
@@ -105,12 +105,12 @@
                 </StackPanel.Resources>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Kod pocztowy" Visibility="{Binding PostalCode, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Kod pocztowy" Visibility="{Binding PostalCode, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="Kod pocztowy" Width="95" MaxLength="6" Text="{Binding PostalCode, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Miejscowość" Visibility="{Binding City, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Miejscowość" Visibility="{Binding City, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="Miejscowość" Width="215" MaxLength="50" Text="{Binding City, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
             </StackPanel>
@@ -125,12 +125,12 @@
                 </StackPanel.Resources>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Telefon" Visibility="{Binding PhoneNr, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Telefon" Visibility="{Binding PhoneNr, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="Telefon" Width="110" MaxLength="20" Text="{Binding PhoneNr, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="E-mail" Visibility="{Binding Email, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="E-mail" Visibility="{Binding Email, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="E-mail" Width="200" MaxLength="100" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
             </StackPanel>
@@ -147,7 +147,7 @@
                 </StackPanel.Resources>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Numer uprawnień" Visibility="{Binding PermissionsNr, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Numer uprawnień" Visibility="{Binding PermissionsNr, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="Numer uprawnień" Width="115" MaxLength="20" Text="{Binding PermissionsNr, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
             </StackPanel>

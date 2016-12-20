@@ -4,14 +4,14 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace DSManager.Converters {
-    class ValueToVisibilityConverter : IValueConverter {
+    class ValueToCollapsedConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if(value is string)
-                return string.IsNullOrEmpty((string)value) ? Visibility.Hidden : Visibility.Visible;
+                return string.IsNullOrEmpty((string)value) ? Visibility.Collapsed : Visibility.Visible;
             if (value is decimal)
-                return (decimal)value == 0 ? Visibility.Hidden : Visibility.Visible;
+                return (decimal)value == 0 ? Visibility.Collapsed : Visibility.Visible;
 
-            return value == null ? Visibility.Hidden : Visibility.Visible;
+            return value == null ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

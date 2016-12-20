@@ -67,6 +67,11 @@
 
             <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Users}" MaxHeight="34" SelectionCommand="{Binding OpenUsersPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png"/>
             <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Settings}" MaxHeight="34" SelectionCommand="{Binding OpenSettingsPage}" Icon="/DSManager;component/Resources/Icons/Menu/cog-wheel.png"/>
+
+            <hamburgerMenu:HamburgerMenuItem IsEnabled="False"/>
+
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Lock}" MaxHeight="34" SelectionCommand="{Binding Lock}" Icon="/DSManager;component/Resources/Icons/Menu/lock.png" SelectionIndicatorColor="Transparent"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.SignOut}" MaxHeight="34" SelectionCommand="{Binding SignOut}" Icon="/DSManager;component/Resources/Icons/Menu/sign-out.png" SelectionIndicatorColor="Transparent"/>
         </hamburgerMenu:HamburgerMenu>
     </Grid>
 </mahApps:MetroWindow>
