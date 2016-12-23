@@ -31,7 +31,7 @@
                         </Rectangle>
                     </Button>
 
-                    <TextBox controls:TextBoxHelper.Watermark="Filtruj" controls:TextBoxHelper.ClearTextButton="True" Width="155" Height="12" Text="{Binding Filter}"/>
+                    <TextBox controls:TextBoxHelper.Watermark="Filtruj" controls:TextBoxHelper.ClearTextButton="True" Width="155" Height="12" Text="{Binding IncomeFilter}"/>
 
                     <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FilterIncome}">
                         <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
@@ -50,6 +50,61 @@
                     </wpf:CartesianChart.AxisX>
                     <wpf:CartesianChart.AxisY>
                         <wpf:Axis LabelFormatter="{Binding IncomeFormatter}"/>
+                    </wpf:CartesianChart.AxisY>
+                </wpf:CartesianChart>
+            </Grid>
+        </controls:MetroTabItem>
+
+        <controls:MetroTabItem Header="Przebieg pojazdów">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding RefreshCarExploitation}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_refresh}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+
+                    <ComboBox Height="25" Width="150" Margin="5,0" ItemsSource="{Binding Cars}" SelectedItem="{Binding Car}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} {1}">
+                                            <Binding Path="Brand"/>
+                                            <Binding Path="Model"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <TextBox controls:TextBoxHelper.Watermark="Filtruj" controls:TextBoxHelper.ClearTextButton="True" Width="155" Height="12" Text="{Binding CarExploitationFilter}"/>
+
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FilterCarExploitation}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                </StackPanel>
+
+                <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Brak danych do wyświetlenia" Visibility="{Binding IsCarExploitationEmpty, Converter={StaticResource ValueToCollapsedConverter}}"/>
+
+                <wpf:CartesianChart Grid.Row="1" Series="{Binding CarExploitationCollection}" LegendLocation="Left" Visibility="{Binding IsCarExploitationEmpty, Converter={StaticResource ValueToCollapsedNegativeConverter}}">
+                    <wpf:CartesianChart.AxisX>
+                        <wpf:Axis Labels="{Binding CarExploitationLabels}"/>
+                    </wpf:CartesianChart.AxisX>
+                    <wpf:CartesianChart.AxisY>
+                        <wpf:Axis LabelFormatter="{Binding CarExploitationFormatter}"/>
                     </wpf:CartesianChart.AxisY>
                 </wpf:CartesianChart>
             </Grid>
