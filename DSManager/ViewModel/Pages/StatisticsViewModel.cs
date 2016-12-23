@@ -24,6 +24,8 @@ namespace DSManager.ViewModel.Pages {
         #endregion
 
         #region Lists
+        private ObservableCollection<string> _incomeYears;
+        private ObservableCollection<string> _carExploitationYears;
         private ObservableCollection<Car> _cars;
         #endregion
 
@@ -51,29 +53,31 @@ namespace DSManager.ViewModel.Pages {
 
         #region Commands
         private RelayCommand _refreshIncome;
-        private RelayCommand _filterIncome;
+        private RelayCommand _filterIncomeYear;
         private RelayCommand _refreshCarExploitation;
-        private RelayCommand _filterCarExploitation;
+        private RelayCommand _filterCarExploitationYear;
         private RelayCommand _refreshInstructorPassRate;
         #endregion
 
         #region View Elements
-        private string _incomeFilter;
-        private string _carExploitationFilter;
+        private string _incomeYearFilter;
+        private string _carExploitationYearFilter;
         #endregion
 
         #region Helpers
-        private string _prevIncomeFilter;
-        private string _prevCarExploitationFilter;
+        private string _prevIncomeYearFilter;
+        private string _prevCarExploitationYearFilter;
         #endregion
 
         #endregion
 
         public StatisticsViewModel() {
             InitializeEmptyFilters();
-            FillIncome(_incomeFilter);
+            FillIncomeYears();
+            FillIncome(_incomeYearFilter);
             FillCars();
-            FillCarExploitation(_carExploitationFilter, _car);
+            FillCarExploitationYears();
+            FillCarExploitation(_carExploitationYearFilter, _car);
             FillInstructorPassRate();
         }
 
@@ -83,19 +87,19 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand RefreshIncome {
             get {
                 return _refreshIncome ?? (_refreshIncome = new RelayCommand(() => {
-                    FillIncome(_prevIncomeFilter);
+                    FillIncome(_prevIncomeYearFilter);
                 }));
             }
         }
 
-        public RelayCommand FilterIncome {
+        public RelayCommand FilterYearIncome {
             get {
-                return _filterIncome ?? (_filterIncome = new RelayCommand(() => {
-                    if(_incomeFilter.Equals(_prevIncomeFilter))
+                return _filterIncomeYear ?? (_filterIncomeYear = new RelayCommand(() => {
+                    if(_incomeYearFilter.Equals(_prevIncomeYearFilter))
                         return;
 
-                    FillIncome(_incomeFilter);
-                    _prevIncomeFilter = _incomeFilter;
+                    FillIncome(_incomeYearFilter);
+                    _prevIncomeYearFilter = _incomeYearFilter;
                 }));
             }
         }
@@ -104,40 +108,43 @@ namespace DSManager.ViewModel.Pages {
             get {
                 return _refreshCarExploitation ?? (_refreshCarExploitation = new RelayCommand(() => {
                     FillCars();
-                    FillCarExploitation(_prevCarExploitationFilter, _prevCar);
+                    FillCarExploitation(_prevCarExploitationYearFilter, _prevCar);
                 }));
             }
         }
 
-        public RelayCommand FilterCarExploitation {
+        public RelayCommand FilterYearCarExploitation {
             get {
-                return _filterCarExploitation ?? (_filterCarExploitation = new RelayCommand(() => {
-                    if(_carExploitationFilter.Equals(_prevCarExploitationFilter) && _car == _prevCar)
+                return _filterCarExploitationYear ?? (_filterCarExploitationYear = new RelayCommand(() => {
+                    if(_carExploitationYearFilter.Equals(_prevCarExploitationYearFilter) && _car == _prevCar)
                         return;
 
-                    FillCarExploitation(_carExploitationFilter, _car);
-                    _prevCarExploitationFilter = _carExploitationFilter;
+                    FillCarExploitation(_carExploitationYearFilter, _car);
+                    _prevCarExploitationYearFilter = _carExploitationYearFilter;
                     _prevCar = _car;
                 }));
             }
         }
 
-        public RelayCommand RefreshInstructorPassRate {
-            get {
-                return _refreshInstructorPassRate ?? (_refreshInstructorPassRate = new RelayCommand(() => {
-                    FillInstructorPassRate();
-                }));
-            }
-        }
+        public RelayCommand RefreshInstructorPassRate => _refreshInstructorPassRate ?? (_refreshInstructorPassRate = new RelayCommand(FillInstructorPassRate));
+
         #endregion
 
         #region View Elements
-        public string IncomeFilter {
-            get { return _incomeFilter; }
+        public string IncomeYearFilter {
+            get { return _incomeYearFilter; }
             set {
-                if (_incomeFilter == value)
+                if (_incomeYearFilter == value)
                     return;
-                _incomeFilter = value;
+                _incomeYearFilter = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<string> IncomeYearsFilter {
+            get { return _incomeYears; }
+            set {
+                _incomeYears = value;
                 RaisePropertyChanged();
             }
         }
@@ -158,12 +165,20 @@ namespace DSManager.ViewModel.Pages {
             }
         }
 
-        public string CarExploitationFilter {
-            get { return _carExploitationFilter; }
+        public string CarExploitationYearFilter {
+            get { return _carExploitationYearFilter; }
             set {
-                if(_carExploitationFilter == value)
+                if(_carExploitationYearFilter == value)
                     return;
-                _carExploitationFilter = value;
+                _carExploitationYearFilter = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<string> CarExploitationYearsFilter {
+            get { return _carExploitationYears; }
+            set {
+                _carExploitationYears = value;
                 RaisePropertyChanged();
             }
         }
@@ -255,14 +270,23 @@ namespace DSManager.ViewModel.Pages {
         #region Helpers
 
         private void InitializeEmptyFilters() {
-            _incomeFilter = _prevIncomeFilter = string.Empty;
-            _carExploitationFilter = _prevCarExploitationFilter = string.Empty;
+            _incomeYearFilter =
+                _prevIncomeYearFilter =
+                _carExploitationYearFilter =
+                _prevCarExploitationYearFilter =
+                    DateTime.Now.Year.ToString();
             _car = _prevCar = null;
         }
 
+        private void FillIncomeYears() {
+            using (var repository = new BaseRepository()) {
+                IncomeYearsFilter = new ObservableCollection<string>(repository.ToList<Payment>().GroupBy(g => g.Date.Year).Select(s => s.First().Date.Year.ToString()));
+            }
+        }
+
         private void FillIncome(string filter) {
-            var firstDayOfYear = string.IsNullOrEmpty(filter) ? new DateTime(DateTime.Now.Year, 1, 1, 0, 0, 0) : new DateTime(int.Parse(filter), 1, 1, 0, 0, 0);
-            var lastDayOfYear = string.IsNullOrEmpty(filter) ? new DateTime(DateTime.Now.Year, 12, 31, 23, 59, 59) : new DateTime(int.Parse(filter), 12, 31, 23, 59, 59);
+            var firstDayOfYear = new DateTime(int.Parse(filter), 1, 1, 0, 0, 0);
+            var lastDayOfYear = new DateTime(int.Parse(filter), 12, 31, 23, 59, 59);
 
             var columnSeries = new ColumnSeries {
                 Title = firstDayOfYear.Year.ToString(),
@@ -298,9 +322,15 @@ namespace DSManager.ViewModel.Pages {
             }
         }
 
+        private void FillCarExploitationYears() {
+            using(var repository = new BaseRepository()) {
+                CarExploitationYearsFilter = new ObservableCollection<string>(repository.ToList<ClassesDates>().Where(x => x.Car != null && x.Distance != null).GroupBy(g => g.StartDate.Year).Select(s => s.First().StartDate.Year.ToString()));
+            }
+        }
+
         private void FillCarExploitation(string filter, Car car) {
-            var firstDayOfYear = string.IsNullOrEmpty(filter) ? new DateTime(DateTime.Now.Year, 1, 1, 0, 0, 0) : new DateTime(int.Parse(filter), 1, 1, 0, 0, 0);
-            var lastDayOfYear = string.IsNullOrEmpty(filter) ? new DateTime(DateTime.Now.Year, 12, 31, 23, 59, 59) : new DateTime(int.Parse(filter), 12, 31, 23, 59, 59);
+            var firstDayOfYear = new DateTime(int.Parse(filter), 1, 1, 0, 0, 0);
+            var lastDayOfYear = new DateTime(int.Parse(filter), 12, 31, 23, 59, 59);
 
             // TODO zmienić w przyszłości na wykres liniowy (obecnie framework nie działa poprawnie)
             var lineSeries = new ColumnSeries {
