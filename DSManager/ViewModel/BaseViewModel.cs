@@ -6,11 +6,16 @@ using GalaSoft.MvvmLight;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 
+using DSManager.Model.Entities;
+using DSManager.View.Windows;
+
 namespace DSManager.ViewModel {
     public abstract class BaseViewModel : ViewModelBase {
-        private MetroWindow windowsInstance = Application.Current.MainWindow as MetroWindow;
+        private static MetroWindow _windowsInstance = Application.Current.MainWindow as MetroWindow;
         private bool _isLoading;
         private ViewModelBase _currentViewModel;
+        private static User _signedUser;
+        public static bool Locked { get; set; }
 
         public ViewModelBase CurrentViewModel {
             get { return _currentViewModel; }
@@ -32,6 +37,22 @@ namespace DSManager.ViewModel {
             }
         }
 
+        public MetroWindow MainWindow {
+            get { return _windowsInstance; }
+            set {
+                if (value is MainWindow)
+                    _windowsInstance = value;
+            }
+        }
+
+        public User SignedUser {
+            get { return _signedUser; }
+            set {
+                _signedUser = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public virtual void OnLoad() {
             CurrentViewModel = null;
         }
@@ -43,7 +64,7 @@ namespace DSManager.ViewModel {
         }
 
         public async void ShowDialog(string title, string description) {
-            await windowsInstance.ShowMessageAsync(title, description);
+            await _windowsInstance.ShowMessageAsync(title, description);
         }
 
         public async Task<bool> ConfirmationDialog(string title, string description) {
@@ -54,7 +75,7 @@ namespace DSManager.ViewModel {
                 ColorScheme = MetroDialogColorScheme.Theme
             };
 
-            MessageDialogResult result = await windowsInstance.ShowMessageAsync(title, description, MessageDialogStyle.AffirmativeAndNegative, settings);
+            MessageDialogResult result = await _windowsInstance.ShowMessageAsync(title, description, MessageDialogStyle.AffirmativeAndNegative, settings);
             return result == MessageDialogResult.Affirmative;
         }
 

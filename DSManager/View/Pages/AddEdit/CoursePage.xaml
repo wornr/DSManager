@@ -10,7 +10,7 @@
 
     <UserControl.Resources>
         <converters:ObjectToBoolConverter x:Key="ObjectToBoolConverter"/>
-        <converters:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter"/>
+        <converters:ValueToHiddenConverter x:Key="ValueToHiddenConverter"/>
         <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
     </UserControl.Resources>
 
@@ -28,7 +28,7 @@
             </StackPanel.Resources>
             
             <StackPanel Orientation="Vertical">
-                <TextBlock Text="Data rozpoczęcia" Visibility="{Binding StartDate, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                <TextBlock Text="Data rozpoczęcia" Visibility="{Binding StartDate, Converter={StaticResource ValueToHiddenConverter}}"/>
                 <DatePicker controls:TextBoxHelper.Watermark="Data rozpoczęcia" Width="125" SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
                     <!--<DatePicker.Resources>
                                 <Style TargetType="DatePickerTextBox">
@@ -130,12 +130,12 @@
 
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="KEOS" Visibility="{Binding KEOSNr, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                            <TextBlock Text="KEOS" Visibility="{Binding KEOSNr, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToHiddenConverter}}"/>
                             <TextBox controls:TextBoxHelper.Watermark="KEOS" Width="85" MaxLength="11" Text="{Binding KEOSNr, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="PKK" Visibility="{Binding PKKNr, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                            <TextBlock Text="PKK" Visibility="{Binding PKKNr, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToHiddenConverter}}"/>
                             <TextBox controls:TextBoxHelper.Watermark="PKK" Width="85" MaxLength="11" Text="{Binding PKKNr, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}"/>
                         </StackPanel>
 
@@ -167,7 +167,7 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Cena szkolenia" Visibility="{Binding CoursePrice, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                            <TextBlock Text="Cena szkolenia" Visibility="{Binding CoursePrice, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToHiddenConverter}}"/>
                             <TextBox controls:TextBoxHelper.Watermark="Cena szkolenia" Width="120" Text="{Binding CoursePrice, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}"/>
                         </StackPanel>
                     </StackPanel>

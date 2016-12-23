@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace DSManager.Converters {
-    class ValueToVisibilityConverter : IValueConverter {
+    class ValueToHiddenConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if(value is string)
                 return string.IsNullOrEmpty((string)value) ? Visibility.Hidden : Visibility.Visible;

@@ -47,6 +47,10 @@ namespace DSManager.ViewModel {
             ////    SimpleIoc.Default.Register<IDataService, DataService>();
             ////}
 
+            Initialize();
+        }
+
+        private static void Initialize() {
             #region Windows
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<SignInViewModel>();
@@ -62,6 +66,7 @@ namespace DSManager.ViewModel {
             SimpleIoc.Default.Register<CoursesViewModel>();
             SimpleIoc.Default.Register<AgendaViewModel>();
 
+            SimpleIoc.Default.Register<StatisticsViewModel>();
             SimpleIoc.Default.Register<UsersViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
 
@@ -94,6 +99,7 @@ namespace DSManager.ViewModel {
         public CoursesViewModel Courses => ServiceLocator.Current.GetInstance<CoursesViewModel>();
         public AgendaViewModel Agenda => ServiceLocator.Current.GetInstance<AgendaViewModel>();
 
+        public StatisticsViewModel Statistics => ServiceLocator.Current.GetInstance<StatisticsViewModel>();
         public UsersViewModel Users => ServiceLocator.Current.GetInstance<UsersViewModel>();
         public SettingsViewModel Settings => ServiceLocator.Current.GetInstance<SettingsViewModel>();
 
@@ -110,7 +116,43 @@ namespace DSManager.ViewModel {
 
         #endregion
 
-        public static void Cleanup() {
+        private static void Cleanup() {
+            #region Windows
+            SimpleIoc.Default.Unregister<MainViewModel>();
+            SimpleIoc.Default.Unregister<SignInViewModel>();
+            SimpleIoc.Default.Unregister<AddEditViewModel>();
+            #endregion
+
+            #region Pages
+            SimpleIoc.Default.Unregister<HomeViewModel>();
+
+            SimpleIoc.Default.Unregister<StudentsViewModel>();
+            SimpleIoc.Default.Unregister<InstructorsViewModel>();
+            SimpleIoc.Default.Unregister<CarsViewModel>();
+            SimpleIoc.Default.Unregister<CoursesViewModel>();
+            SimpleIoc.Default.Unregister<AgendaViewModel>();
+
+            SimpleIoc.Default.Unregister<StatisticsViewModel>();
+            SimpleIoc.Default.Unregister<UsersViewModel>();
+            SimpleIoc.Default.Unregister<SettingsViewModel>();
+
+            #region AddEdit
+            SimpleIoc.Default.Unregister<AddEditStudentViewModel>();
+            SimpleIoc.Default.Unregister<AddEditInstructorViewModel>();
+            SimpleIoc.Default.Unregister<AddEditCarViewModel>();
+            SimpleIoc.Default.Unregister<AddEditCourseViewModel>();
+            SimpleIoc.Default.Unregister<AddEditPaymentViewModel>();
+            SimpleIoc.Default.Unregister<AddEditAgendaViewModel>();
+
+            SimpleIoc.Default.Unregister<AddEditUserViewModel>();
+            #endregion
+
+            #endregion
+        }
+
+        public static void ReinitializeViewModels() {
+            Cleanup();
+            Initialize();
         }
     }
 }

@@ -120,7 +120,8 @@
     <Compile Include="Converters\CourseKindConverter.cs" />
     <Compile Include="Converters\CourseTypeConverter.cs" />
     <Compile Include="Converters\ObjectToBoolConverter.cs" />
-    <Compile Include="Converters\ValueToVisibilityConverter.cs" />
+    <Compile Include="Converters\ValueToCollapsedConverter.cs" />
+    <Compile Include="Converters\ValueToHiddenConverter.cs" />
     <Compile Include="Interfaces\IClosable.cs" />
     <Compile Include="Messengers\AddEditEntityMessage.cs" />
     <Compile Include="Messengers\AddEditPageMessage.cs" />
@@ -129,10 +130,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.pl-PL.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\CheckPermissions.cs" />
     <Compile Include="Utilities\EnumToList.cs" />
     <Compile Include="Utilities\MD5Encrypter.cs" />
     <Compile Include="Utilities\PESELToDate.cs" />
-    <Compile Include="Utilities\UserSignedIn.cs" />
     <Compile Include="Validators\BirthDateValidator.cs" />
     <Compile Include="Validators\PESELValidator.cs" />
     <Compile Include="Utilities\ValueToText.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="ViewModel\Pages\AgendaViewModel.cs" />
     <Compile Include="ViewModel\Pages\CoursesViewModel.cs" />
     <Compile Include="ViewModel\Pages\InstructorsViewModel.cs" />
+    <Compile Include="ViewModel\Pages\StatisticsViewModel.cs" />
     <Compile Include="ViewModel\Pages\SettingsViewModel.cs" />
     <Compile Include="ViewModel\Pages\StudentsViewModel.cs" />
     <Compile Include="ViewModel\Pages\HomeViewModel.cs" />
@@ -189,6 +191,9 @@
     </Compile>
     <Compile Include="View\Pages\InstructorsPage.xaml.cs">
       <DependentUpon>InstructorsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pages\StatisticsPage.xaml.cs">
+      <DependentUpon>StatisticsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -260,6 +265,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Pages\StatisticsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\Pages\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -330,7 +339,9 @@
     <Resource Include="Resources\Entypo.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Localization\" />
@@ -385,6 +396,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Menu\calendar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Menu\sign-out.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Menu\lock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Menu\statistics.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets')" />

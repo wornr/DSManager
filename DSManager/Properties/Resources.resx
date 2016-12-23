@@ -147,6 +147,9 @@
   <data name="Instructors" xml:space="preserve">
     <value>Instructors</value>
   </data>
+  <data name="Lock" xml:space="preserve">
+    <value>Lock</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
   </data>
@@ -167,6 +170,12 @@
   </data>
   <data name="SignInWindow" xml:space="preserve">
     <value>Sign In</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistics</value>
   </data>
   <data name="Students" xml:space="preserve">
     <value>Students</value>

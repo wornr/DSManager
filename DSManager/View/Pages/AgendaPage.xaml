@@ -11,6 +11,7 @@
 
     <UserControl.Resources>
         <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
+        <converters:ValueToCollapsedConverter x:Key="ValueToCollapsedConverter"/>
     </UserControl.Resources>
 
     <TabControl>
@@ -22,21 +23,21 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddEvent}">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                         <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditEvent}">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                         <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteEvent}">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                         <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>
@@ -153,21 +154,21 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddEvent}">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                         <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditEvent}">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                         <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteEvent}">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                         <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>
@@ -284,21 +285,21 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddEvent}">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                         <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditEvent}">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                         <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteEvent}">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                         <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>

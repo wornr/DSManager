@@ -9,7 +9,7 @@
       d:DesignWidth="752" d:DesignHeight="481">
 
     <UserControl.Resources>
-        <converters:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter"/>
+        <converters:ValueToHiddenConverter x:Key="ValueToHiddenConverter"/>
         <converters:ObjectToBoolConverter x:Key="ObjectToBoolConverter"/>
     </UserControl.Resources>
 
@@ -25,12 +25,12 @@
                 </StackPanel.Resources>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Marka" Visibility="{Binding Brand, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Marka" Visibility="{Binding Brand, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="Marka" Width="125" MaxLength="25" Text="{Binding Brand, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Model" Visibility="{Binding Model, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Model" Visibility="{Binding Model, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="Model" Width="125" MaxLength="25" Text="{Binding Model, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
             </StackPanel>
@@ -43,12 +43,12 @@
                 </StackPanel.Resources>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Nr rejestracyjny" Visibility="{Binding RegistrationNr, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Nr rejestracyjny" Visibility="{Binding RegistrationNr, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <TextBox controls:TextBoxHelper.Watermark="Nr rejestracyjny" Width="125" MaxLength="10" Text="{Binding RegistrationNr, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Przebieg" Visibility="{Binding DistanceTraveled, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Przebieg" Visibility="{Binding DistanceTraveled, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <controls:NumericUpDown controls:TextBoxHelper.Watermark="Przebieg" Width="125" Minimum="0" Maximum="999999.99" HasDecimals="True" StringFormat="{}{0:0.##}" Culture="pl-PL" Value="{Binding DistanceTraveled, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
             </StackPanel>
@@ -63,7 +63,7 @@
                 </StackPanel.Resources>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Data ważności przeglądu" Visibility="{Binding InspectionDate, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Data ważności przeglądu" Visibility="{Binding InspectionDate, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <DatePicker controls:TextBoxHelper.Watermark="Data waż. przeg." Width="120" HorizontalAlignment="Left" SelectedDate="{Binding InspectionDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
                         <!--<DatePicker.Resources>
                                 <Style TargetType="DatePickerTextBox">
@@ -74,7 +74,7 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Data ważności ubezpieczenia" Visibility="{Binding InsuranceDate, Converter={StaticResource ValueToVisibilityConverter}}"/>
+                    <TextBlock Text="Data ważności ubezpieczenia" Visibility="{Binding InsuranceDate, Converter={StaticResource ValueToHiddenConverter}}"/>
                     <DatePicker controls:TextBoxHelper.Watermark="Data waż. ubezp." Width="121" HorizontalAlignment="Left" SelectedDate="{Binding InsuranceDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
                         <!--<DatePicker.Resources>
                                 <Style TargetType="DatePickerTextBox">

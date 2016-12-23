@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:res="clr-namespace:DSManager.Properties"
+        xmlns:converters="clr-namespace:DSManager.Converters"
         mc:Ignorable="d"
         x:Name="SignInWindowInstance"
         Title="{x:Static res:Resources.SignInWindow}"
@@ -13,6 +14,11 @@
         WindowStartupLocation="CenterScreen" WindowStyle="None" GlowBrush="Black"
         FocusManager.FocusedElement="{Binding ElementName=Login}"
         DataContext="{Binding Source={StaticResource Locator}, Path=SignIn}">
+    
+    <mahApps:MetroWindow.Resources>
+        <converters:ValueToCollapsedConverter x:Key="ValueToCollapsedConverter"/>
+    </mahApps:MetroWindow.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -22,7 +28,17 @@
         <Image x:Name="PersonImage" Source="/DSManager;component/Resources/Images/user.png" Height="110" HorizontalAlignment="Right"/>
         <Image Grid.Column="0" x:Name="LockImage" Source="/DSManager;component/Resources/Images/lock.png" Margin="120,40,10,-40"/>
         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-            <TextBlock x:Name="LoginInfoBlock" Text="{x:Static res:Resources.EnterAuthenticationData}" HorizontalAlignment="Center" Margin="0,5"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock x:Name="LoginInfoBlock" Text="{x:Static res:Resources.EnterAuthenticationData}" HorizontalAlignment="Center" Margin="0,5"/>
+                <TextBlock x:Name="UserInfoBlock" Visibility="{Binding SignedUser, Converter={StaticResource ValueToCollapsedConverter}}" HorizontalAlignment="Center" Margin="0,5">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} {1}">
+                            <Binding Path="SignedUser.FirstName"/>
+                            <Binding Path="SignedUser.LastName"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </StackPanel>
             <StackPanel>
                 <TextBox x:Name="Login" Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" mahApps:TextBoxHelper.Watermark="{x:Static res:Resources.Login}" VerticalContentAlignment="Center" Height="23" Width="145" Margin="2,2"/>
                 <PasswordBox x:Name="Password" mahApps:TextBoxHelper.Watermark="{x:Static res:Resources.Password}" VerticalContentAlignment="Center" Height="23" Width="145" Margin="2,2"/>

@@ -190,7 +190,7 @@
                                 
                                 <TextBlock Margin="5,0" Text="{Binding Student.DrivingLicense.DrivingLicenseNr, StringFormat='{}Nr prawa jazdy {0}', TargetNullValue={}}" FontSize="16" />
 
-                                <TextBlock Margin="5,0" Text="{Binding Student.DrivingLicense.IssueDate, StringFormat='{}Data wydania {0}', TargetNullValue={}}" FontSize="16" />
+                                <TextBlock Margin="5,0" Text="{Binding Student.DrivingLicense.IssueDate, ConverterCulture='pl-PL', StringFormat='{}Data wydania {0:d}', TargetNullValue={}}" FontSize="16" />
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -201,6 +201,20 @@
                         <Grid>
                             <DataGrid x:Name="CoursesList" ItemsSource="{Binding Participants}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Participant}" IsEnabled="{Binding IsParticipantsLoading, Converter={StaticResource BoolNegationConverter}}">
                                 <DataGrid.Columns>
+                                    <DataGridTemplateColumn>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Width="25" Height="22" MinHeight="22" Padding="0" BorderThickness="1" Background="Transparent" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.PrintParticipant}">
+                                                    <Rectangle HorizontalAlignment="Center" Width="15" Height="15" Fill="{DynamicResource BlackBrush}">
+                                                        <Rectangle.OpacityMask>
+                                                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_printer_text}"/>
+                                                        </Rectangle.OpacityMask>
+                                                    </Rectangle>
+                                                </Button>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    
                                     <DataGridTextColumn Header="Data rozp." Binding="{Binding Course.StartDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
                                         <DataGridTextColumn.ElementStyle>
                                             <Style TargetType="{x:Type TextBlock}">
@@ -233,7 +247,7 @@
                                         </DataGridTextColumn.ElementStyle>
                                     </DataGridTextColumn>
 
-                                    <DataGridTextColumn Header="KEOS" Binding="{Binding KEOSNr}" Width="110">
+                                    <DataGridTextColumn Header="KEOS" Binding="{Binding KEOSNr}" Width="100">
                                         <DataGridTextColumn.ElementStyle>
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -241,7 +255,7 @@
                                         </DataGridTextColumn.ElementStyle>
                                     </DataGridTextColumn>
 
-                                    <DataGridTextColumn Header="PKK" Binding="{Binding PKKNr}" Width="110">
+                                    <DataGridTextColumn Header="PKK" Binding="{Binding PKKNr}" Width="100">
                                         <DataGridTextColumn.ElementStyle>
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Setter Property="HorizontalAlignment" Value="Center" />
