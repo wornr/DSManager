@@ -2,10 +2,57 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:converters="clr-namespace:DSManager.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            <TextBlock Text="Statystyki"/>
-    </Grid>
+    
+    <UserControl.Resources>
+        <converters:ValueToCollapsedConverter x:Key="ValueToCollapsedConverter"/>
+        <converters:ValueToCollapsedNegativeConverter x:Key="ValueToCollapsedNegativeConverter"/>
+    </UserControl.Resources>
+    
+    <TabControl>
+        <controls:MetroTabItem Header="Przychody">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding RefreshIncome}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_refresh}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+
+                    <TextBox controls:TextBoxHelper.Watermark="Filtruj" controls:TextBoxHelper.ClearTextButton="True" Width="155" Height="12" Text="{Binding Filter}"/>
+
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FilterIncome}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                </StackPanel>
+
+                <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Brak danych do wyświetlenia" Visibility="{Binding IsIncomeEmpty, Converter={StaticResource ValueToCollapsedConverter}}"/>
+
+                <wpf:CartesianChart Grid.Row="1" Series="{Binding IncomeCollection}" LegendLocation="Left" Visibility="{Binding IsIncomeEmpty, Converter={StaticResource ValueToCollapsedNegativeConverter}}">
+                    <wpf:CartesianChart.AxisX>
+                        <wpf:Axis Labels="{Binding IncomeLabels}"/>
+                    </wpf:CartesianChart.AxisX>
+                    <wpf:CartesianChart.AxisY>
+                        <wpf:Axis LabelFormatter="{Binding IncomeFormatter}"/>
+                    </wpf:CartesianChart.AxisY>
+                </wpf:CartesianChart>
+            </Grid>
+        </controls:MetroTabItem>
+    </TabControl>
 </UserControl>
