@@ -109,5 +109,45 @@
                 </wpf:CartesianChart>
             </Grid>
         </controls:MetroTabItem>
+
+        <controls:MetroTabItem Header="Zdawalność instruktorów">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding RefreshInstructorPassRate}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_refresh}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+
+                    <!--<TextBox controls:TextBoxHelper.Watermark="Filtruj" controls:TextBoxHelper.ClearTextButton="True" Width="155" Height="12" Text="{Binding InstructorPassRateFilter}"/>
+
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FilterInstructorPassRate}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>-->
+                </StackPanel>
+
+                <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Brak danych do wyświetlenia" Visibility="{Binding IsInstructorPassRateEmpty, Converter={StaticResource ValueToCollapsedConverter}}"/>
+
+                <wpf:CartesianChart Grid.Row="1" Series="{Binding InstructorPassRateCollection}" LegendLocation="Left" Visibility="{Binding IsInstructorPassRateEmpty, Converter={StaticResource ValueToCollapsedNegativeConverter}}">
+                    <wpf:CartesianChart.AxisX>
+                        <wpf:Axis Labels="{Binding InstructorPassRateLabels}"/>
+                    </wpf:CartesianChart.AxisX>
+                    <wpf:CartesianChart.AxisY>
+                        <wpf:Axis MaxValue="100" MinValue="0" LabelFormatter="{Binding InstructorPassRateFormatter}"/>
+                    </wpf:CartesianChart.AxisY>
+                </wpf:CartesianChart>
+            </Grid>
+        </controls:MetroTabItem>
     </TabControl>
 </UserControl>

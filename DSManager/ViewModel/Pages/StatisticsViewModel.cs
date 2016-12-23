@@ -34,11 +34,17 @@ namespace DSManager.ViewModel.Pages {
         private string[] _incomeLabels;
         private bool _isIncomeEmpty;
         #endregion
-
+        
         #region CarExploitation
         private SeriesCollection _carExploitationCollection;
         private string[] _carExploitationLabels;
         private bool _isCarExploitationEmpty;
+        #endregion
+
+        #region InstructorPassRate
+        private SeriesCollection _instructorPassRateCollection;
+        private string[] _instructorPassRateLabels;
+        private bool _isInstructorPassRateEmpty;
         #endregion
 
         #endregion
@@ -48,6 +54,7 @@ namespace DSManager.ViewModel.Pages {
         private RelayCommand _filterIncome;
         private RelayCommand _refreshCarExploitation;
         private RelayCommand _filterCarExploitation;
+        private RelayCommand _refreshInstructorPassRate;
         #endregion
 
         #region View Elements
@@ -67,6 +74,7 @@ namespace DSManager.ViewModel.Pages {
             FillIncome(_incomeFilter);
             FillCars();
             FillCarExploitation(_carExploitationFilter, _car);
+            FillInstructorPassRate();
         }
 
         #region Methods
@@ -113,6 +121,14 @@ namespace DSManager.ViewModel.Pages {
                 }));
             }
         }
+
+        public RelayCommand RefreshInstructorPassRate {
+            get {
+                return _refreshInstructorPassRate ?? (_refreshInstructorPassRate = new RelayCommand(() => {
+                    FillInstructorPassRate();
+                }));
+            }
+        }
         #endregion
 
         #region View Elements
@@ -155,7 +171,6 @@ namespace DSManager.ViewModel.Pages {
         #region Collections
 
         #region Income
-
         public SeriesCollection IncomeCollection {
             get { return _incomeCollection; }
             set {
@@ -182,7 +197,6 @@ namespace DSManager.ViewModel.Pages {
         #endregion
 
         #region CarExploitation
-
         public SeriesCollection CarExploitationCollection {
             get { return _carExploitationCollection; }
             set {
@@ -203,6 +217,32 @@ namespace DSManager.ViewModel.Pages {
             get { return _isCarExploitationEmpty; }
             set {
                 _isCarExploitationEmpty = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        #region InstructorPassRate
+        public SeriesCollection InstructorPassRateCollection {
+            get { return _instructorPassRateCollection; }
+            set {
+                _instructorPassRateCollection = value;
+                RaisePropertyChanged();
+            }
+        }
+        public string[] InstructorPassRateLabels {
+            get { return _instructorPassRateLabels; }
+            set {
+                _instructorPassRateLabels = value;
+                RaisePropertyChanged();
+            }
+        }
+        public Func<double, string> InstructorPassRateFormatter { get; set; }
+
+        public bool IsInstructorPassRateEmpty {
+            get { return _isInstructorPassRateEmpty; }
+            set {
+                _isInstructorPassRateEmpty = value;
                 RaisePropertyChanged();
             }
         }
@@ -289,6 +329,41 @@ namespace DSManager.ViewModel.Pages {
             CarExploitationFormatter = value => value + " km";
 
             IsCarExploitationEmpty = CarExploitationCollection[0].Values.Count == 0;
+        }
+
+        private void FillInstructorPassRate() {
+            var columnSeries = new ColumnSeries {
+                Title = "Zdawalność",
+                Values = new ChartValues<decimal>()
+            };
+            var label = new List<string>();
+
+            using(var repository = new BaseRepository()) {
+                repository.ToList<ExamsDates>()
+                    .Where(x => x.IsPassed == true)
+                    .GroupBy(g => g.Instructor).Select(s => new {
+                        countPassed = s.Count(),
+                        instructor = s.First().Instructor
+                        //date = s.First().StartDate
+                    }).ForEach(x => {
+                        repository.ToList<ExamsDates>()
+                        .Where(y => y.IsPassed != null)
+                            .GroupBy(g => g.Instructor).Select(s => new {
+                                count = s.Count(),
+                            }).ForEach(y => {
+                                label.Add(x.instructor.FirstName + " " + x.instructor.LastName);
+                                columnSeries.Values.Add(decimal.Multiply(decimal.Divide(x.countPassed, y.count), 100));
+                            });
+                    });
+            }
+
+            InstructorPassRateCollection = new SeriesCollection { columnSeries };
+            InstructorPassRateLabels = new string[label.Count];
+            var i = 0;
+            label.ForEach(x => InstructorPassRateLabels[i++] = x);
+            InstructorPassRateFormatter = value => value + " %";
+
+            IsInstructorPassRateEmpty = InstructorPassRateCollection[0].Values.Count == 0;
         }
         #endregion
 
