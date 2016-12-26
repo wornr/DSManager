@@ -2,11 +2,358 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:converters="clr-namespace:DSManager.Converters"
       mc:Ignorable="d" 
       d:DesignWidth="800" d:DesignHeight="600">
+    
+    <UserControl.Resources>
+        <converters:ValueToCollapsedConverter x:Key="ValueToCollapsedConverter"/>
+        <converters:ValueToCollapsedNegativeConverter x:Key="ValueToCollapsedNegativeConverter"/>
+        <converters:ValueToHiddenConverter x:Key="ValueToHiddenConverter"/>
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
+    </UserControl.Resources>
 
-    <Grid>
-        <TextBlock Text="Dodawanie/Edycja wydarzenia"/>
-    </Grid>
+    <TabControl SelectedItem="{Binding SelectedTab, Mode=OneWayToSource}">
+        <controls:MetroTabItem Header="Zajęcia">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Margin" Value="10,0"/>
+                    </Style>
+                </StackPanel.Resources>
+
+                <Grid>
+                    <Grid Visibility="{Binding Instructor, Converter={StaticResource ValueToCollapsedConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Border BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                            <Grid>
+                                <DataGrid ItemsSource="{Binding AvailableStudents}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding ChosenStudent}" IsEnabled="{Binding IsStudentsLoading, Converter={StaticResource BoolNegationConverter}}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="87"/>
+
+                                        <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="83"/>
+
+                                        <DataGridTextColumn Header="Drugie imię" Binding="{Binding SecondName}" Width="92"/>
+
+                                        <DataGridTextColumn Header="Data ur." Binding="{Binding BirthDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="73">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <controls:ProgressRing IsActive="{Binding IsStudentsLoading}" />
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                            <Grid>
+                                <DataGrid ItemsSource="{Binding AvailableParticipants}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding ChosenParticipant, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding IsParticipantsLoading, Converter={StaticResource BoolNegationConverter}}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Data rozp." Binding="{Binding Course.StartDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Data zak." Binding="{Binding EndDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Kat." Binding="{Binding Course.Category}" Width="50">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Typ" Binding="{Binding Course.CourseType}" Width="94">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridCheckBoxColumn Header="Teoria" Binding="{Binding IsTheory}" Width="63" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+
+                                        <!--<DataGridTemplateColumn Header="Birthday" Width="30">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker SelectedDate="{Binding BirthDate}" BorderThickness="0" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>-->
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <controls:ProgressRing IsActive="{Binding IsParticipantsLoading}" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <Grid Visibility="{Binding Student, Converter={StaticResource ValueToCollapsedConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        
+                        <Border BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                            <Grid>
+                                <DataGrid ItemsSource="{Binding AvailableParticipants}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding ChosenParticipant, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding IsParticipantsLoading, Converter={StaticResource BoolNegationConverter}}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Data rozp." Binding="{Binding Course.StartDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Data zak." Binding="{Binding EndDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Kat." Binding="{Binding Course.Category}" Width="50">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Typ" Binding="{Binding Course.CourseType}" Width="94">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridCheckBoxColumn Header="Teoria" Binding="{Binding IsTheory}" Width="63" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+
+                                        <!--<DataGridTemplateColumn Header="Birthday" Width="30">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker SelectedDate="{Binding BirthDate}" BorderThickness="0" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>-->
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <controls:ProgressRing IsActive="{Binding IsParticipantsLoading}" />
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                            <Grid>
+                                <DataGrid ItemsSource="{Binding AvailableInstructors}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding ChosenInstructor, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding IsInstructorChooserEnabled}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="87"/>
+
+                                        <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="83"/>
+
+                                        <DataGridTextColumn Header="Drugie imię" Binding="{Binding SecondName}" Width="92"/>
+
+                                        <DataGridTextColumn Header="Data ur." Binding="{Binding BirthDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="73">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <controls:ProgressRing IsActive="{Binding IsInstructorsLoading}"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <Grid Visibility="{Binding Car, Converter={StaticResource ValueToCollapsedConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Border BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                            <Grid>
+                                <DataGrid ItemsSource="{Binding AvailableStudents}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding ChosenStudent}" IsEnabled="{Binding IsStudentsLoading, Converter={StaticResource BoolNegationConverter}}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="87"/>
+
+                                        <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="83"/>
+
+                                        <DataGridTextColumn Header="Drugie imię" Binding="{Binding SecondName}" Width="92"/>
+
+                                        <DataGridTextColumn Header="Data ur." Binding="{Binding BirthDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="73">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <controls:ProgressRing IsActive="{Binding IsStudentsLoading}" />
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                            <Grid>
+                                <DataGrid ItemsSource="{Binding AvailableParticipants}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding ChosenParticipant, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding IsParticipantsLoading, Converter={StaticResource BoolNegationConverter}}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Data rozp." Binding="{Binding Course.StartDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Data zak." Binding="{Binding EndDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="91">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Kat." Binding="{Binding Course.Category}" Width="50">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Typ" Binding="{Binding Course.CourseType}" Width="94">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+
+                                        <DataGridCheckBoxColumn Header="Teoria" Binding="{Binding IsTheory}" Width="63" ElementStyle="{DynamicResource MetroDataGridCheckBox}"/>
+
+                                        <!--<DataGridTemplateColumn Header="Birthday" Width="30">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker SelectedDate="{Binding BirthDate}" BorderThickness="0" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>-->
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <controls:ProgressRing IsActive="{Binding IsParticipantsLoading}" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Vertical" Visibility="{Binding Car, Converter={StaticResource ValueToCollapsedNegativeConverter}}">
+                                <TextBlock Text="Rodzaj kursu"/>
+                                <ComboBox Width="115" Height="25" ItemsSource="{Binding CourseKinds}" SelectedItem="{Binding CourseKind, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical" Visibility="{Binding IsPractice, Converter={StaticResource ValueToHiddenConverter}}">
+                                <TextBlock Text="Dystans" Visibility="{Binding Distance, Converter={StaticResource ValueToHiddenConverter}}"/>
+                                <controls:NumericUpDown controls:TextBoxHelper.Watermark="Dystans" Width="115" Minimum="0" Maximum="999.99" HasDecimals="True" StringFormat="{}{0:0.##}" Culture="pl-PL" Value="{Binding Distance, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Data rozpoczęcia" Visibility="{Binding StartDate, Converter={StaticResource ValueToHiddenConverter}}"/>
+                                <DatePicker controls:TextBoxHelper.Watermark="Data rozp." Width="115" SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+                                    <!--<DatePicker.Resources>
+                                            <Style TargetType="DatePickerTextBox">
+                                                <Setter Property="IsReadOnly" Value="True"/>
+                                            </Style>
+                                        </DatePicker.Resources>-->
+                                </DatePicker>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Godzina rozpoczęcia" Visibility="{Binding StartTime, Converter={StaticResource ValueToHiddenConverter}}"/>
+                                <TextBox controls:TextBoxHelper.Watermark="Godz rozp." Width="115" Text="{Binding StartTime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Data zakończenia" Visibility="{Binding EndDate, Converter={StaticResource ValueToHiddenConverter}}"/>
+                                <DatePicker controls:TextBoxHelper.Watermark="Data zak." Width="115" SelectedDate="{Binding EndDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+                                    <!--<DatePicker.Resources>
+                                            <Style TargetType="DatePickerTextBox">
+                                                <Setter Property="IsReadOnly" Value="True"/>
+                                            </Style>
+                                        </DatePicker.Resources>-->
+                                </DatePicker>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Godzina zakończenia" Visibility="{Binding EndTime, Converter={StaticResource ValueToHiddenConverter}}"/>
+                                <TextBox controls:TextBoxHelper.Watermark="Godz zak." Width="115" Text="{Binding EndTime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Border Grid.Row="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                        <Grid>
+                            <DataGrid ItemsSource="{Binding AvailableInstructors}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding ChosenInstructor, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding IsInstructorChooserEnabled}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="87"/>
+
+                                    <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="83"/>
+
+                                    <DataGridTextColumn Header="Drugie imię" Binding="{Binding SecondName}" Width="92"/>
+
+                                    <DataGridTextColumn Header="Data ur." Binding="{Binding BirthDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="73">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <controls:ProgressRing IsActive="{Binding IsInstructorsLoading}"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </controls:MetroTabItem>
+        <controls:MetroTabItem Header="Egzamin">
+
+        </controls:MetroTabItem>
+        <controls:MetroTabItem Header="Blokada">
+
+        </controls:MetroTabItem>
+    </TabControl>
 </UserControl>

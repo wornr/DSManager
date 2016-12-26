@@ -40,8 +40,10 @@ namespace DSManager.ViewModel {
         public MetroWindow MainWindow {
             get { return _windowsInstance; }
             set {
-                if (value is MainWindow)
+                if (value is MainWindow) {
                     _windowsInstance = value;
+                    Application.Current.MainWindow = value;
+                }
             }
         }
 

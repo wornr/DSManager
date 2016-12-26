@@ -78,7 +78,7 @@
 
                     <Border Grid.Row="1" Grid.Column="0" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
                         <Grid>
-                            <DataGrid ItemsSource="{Binding Instructors}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Instructor}" IsEnabled="{Binding IsInstructorsLoading, Converter={StaticResource BoolNegationConverter}}">
+                            <DataGrid x:Name="Instructors" ItemsSource="{Binding Instructors}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Instructor}" IsEnabled="{Binding IsInstructorsLoading, Converter={StaticResource BoolNegationConverter}}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="87"/>
 
@@ -214,7 +214,7 @@
 
                     <Border Grid.Row="1" Grid.Column="0" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
                         <Grid>
-                            <DataGrid ItemsSource="{Binding Students}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Student}" IsEnabled="{Binding IsStudentsLoading, Converter={StaticResource BoolNegationConverter}}">
+                            <DataGrid x:Name="Students" ItemsSource="{Binding Students}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Student}" IsEnabled="{Binding IsStudentsLoading, Converter={StaticResource BoolNegationConverter}}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="87"/>
 
@@ -350,7 +350,7 @@
 
                     <Border Grid.Row="1" Grid.Column="0" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
                         <Grid>
-                            <DataGrid x:Name="CarsList" ItemsSource="{Binding Cars}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Car}" IsEnabled="{Binding IsCarsLoading, Converter={StaticResource BoolNegationConverter}}">
+                            <DataGrid x:Name="Cars" ItemsSource="{Binding Cars}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Car}" IsEnabled="{Binding IsCarsLoading, Converter={StaticResource BoolNegationConverter}}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Marka" Binding="{Binding Brand}" Width="110"/>
 

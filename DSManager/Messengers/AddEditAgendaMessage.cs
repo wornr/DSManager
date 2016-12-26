@@ -1,10 +1,12 @@
-﻿using DSManager.Model.Entities;
+﻿using System;
+using DSManager.Model.Entities;
 
 namespace DSManager.Messengers {
-    public class AddEditAgendaMessage<T> where T : BaseEntity<T> {
+    public class AddEditAgendaMessage<T, U>
+        where T : BaseEntity<T>
+        where U : BaseEntity<U> {
             public BaseEntity<T> Entity { get; set; }
-            public Participant Participant { get; set; }
-            public Instructor Instructor { get; set; }
-            public Car Car { get; set; }
+            public BaseEntity<U> Owner { get; set; }
+            public DateTime? StartDate { get; set; }
     }
 }
