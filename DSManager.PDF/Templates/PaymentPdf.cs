@@ -1,7 +1,5 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Linq;
 
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Shapes;
@@ -11,12 +9,10 @@ using MigraDoc.Rendering;
 using PdfSharp.Pdf;
 
 using DSManager.Model.Entities;
-using DSManager.Model.Enums;
-using DSManager.PDF.Utilities;
 
 namespace DSManager.PDF.Templates {
-    public class CoursePdf {
-        private readonly Participant _participant;
+    public class PaymentPdf {
+        private readonly Payment _payment;
 
         private Document _document;
         private TextFrame _titleFrame;
@@ -26,15 +22,16 @@ namespace DSManager.PDF.Templates {
         private Table _personTable2;
         private Table _table;
 
-        public CoursePdf(Participant participant) {
-            _participant = participant;
+        public PaymentPdf(Payment payment) {
+            _payment = payment;
             CreateDocument();
         }
 
         public void CreateDocument() {
+            // TODO przerobić cały dokument, tak aby generował potwierdzenia wpłat
             // Create a new MigraDoc document
             _document = new Document();
-            _document.Info.Title = "Karta zajęc";
+            _document.Info.Title = "Dowód wpłaty";
             _document.Info.Subject = "Dokument wygenerowany automatycznie przez aplikację DSManager";
             _document.Info.Author = "DSManager";
             _document.DefaultPageSetup.LeftMargin = 25;
@@ -120,7 +117,7 @@ namespace DSManager.PDF.Templates {
             paragraph.Format.SpaceBefore = "2.5cm";
             paragraph.Format.SpaceAfter = "0.5cm";
             paragraph.Format.Alignment = ParagraphAlignment.Center;
-            paragraph.AddText("w zakresie prawa jazdy kategorii " + _participant.Course.Category + " na kursie dla kandydatów na kierowców lub motorniczych");
+            paragraph.AddText("w zakresie prawa jazdy kategorii " + _payment.Amount + " na kursie dla kandydatów na kierowców lub motorniczych");
 
             _personTable = section.AddTable();
             _personTable.Style = "Table";
@@ -204,18 +201,14 @@ namespace DSManager.PDF.Templates {
             row.Format.Alignment = ParagraphAlignment.Center;
             row.Cells[0].AddParagraph("Nazwisko");
             row.Cells[0].Borders.Width = 0;
-            row.Cells[1].AddParagraph(_participant.Student.LastName);
+            row.Cells[1].AddParagraph(_payment.Amount.ToString());
             row.Cells[2].Borders.Width = 0;
             row.Cells[3].AddParagraph("Imię");
             row.Cells[3].Borders.Width = 0;
-            row.Cells[4].AddParagraph(_participant.Student.FirstName);
+            row.Cells[4].AddParagraph(_payment.Amount.ToString());
             row.Cells[5].Borders.Width = 0;
             row.Cells[6].AddParagraph("Nr PESEL/data ur.");
             row.Cells[6].Borders.Width = 0;
-            if (string.IsNullOrEmpty(_participant.Student.PESEL))
-                row.Cells[7].AddParagraph(_participant.Student.BirthDate.ToShortDateString());
-            else
-                row.Cells[7].AddParagraph(_participant.Student.PESEL);
 
             paragraph = section.AddParagraph();
             paragraph.Format.SpaceAfter = "0.3cm";
@@ -309,33 +302,7 @@ namespace DSManager.PDF.Templates {
         }
 
         private void FillContent() {
-            var rowNr = 1;
-            foreach(var classInfo in _participant.ClassesDates.OrderBy(x => x.StartDate)) {
-                var timeDifference = classInfo.EndDate == null ? new TimeSpan() : (TimeSpan)(classInfo.EndDate - classInfo.StartDate);
-
-                var row = _table.AddRow();
-                row.VerticalAlignment = VerticalAlignment.Center;
-                row.Height = "0.75cm";
-
-                row.Cells[0].AddParagraph(rowNr.ToString());
-                row.Cells[1].AddParagraph(classInfo.StartDate.ToShortDateString());
-                row.Cells[2].AddParagraph(classInfo.StartDate.ToShortTimeString());
-                row.Cells[3].AddParagraph(classInfo.EndDate.ToShortTimeString());
-                row.Cells[4].AddParagraph(AddLeadingZeros.Convert(timeDifference.Hours) + ":" + AddLeadingZeros.Convert(timeDifference.Minutes));
-                row.Cells[5].AddParagraph(classInfo.Distance == null ? "" : classInfo.Distance.ToString());
-                row.Cells[6].AddParagraph(classInfo.CourseKind == CourseKind.Theory ? "T" : "P");
-                row.Cells[7].AddParagraph(classInfo.Instructor.PermissionsNr);
-                rowNr++;
-            }
-
-            for (int i = rowNr; i <= 50; i++) {
-                var row = _table.AddRow();
-                row.VerticalAlignment = VerticalAlignment.Center;
-                row.Height = "0.75cm";
-
-                row.Cells[0].AddParagraph(i.ToString());
-            }
-                
+            
         }
 
         private void RenderPdf() {
@@ -349,19 +316,21 @@ namespace DSManager.PDF.Templates {
             pdfRenderer.RenderDocument();
 
             // Save and show the document
-            string path = Path.Combine(Directory.GetCurrentDirectory(), "druki", "karty zajęć");
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "druki", "dowody wpłat");
             string fileName;
-            if(string.IsNullOrEmpty(_participant.Student.SecondName))
+            if (string.IsNullOrEmpty(_payment.Participant.Student.SecondName))
                 fileName =
-                    _participant.Student.FirstName + " " +
-                    _participant.Student.SecondName + " " +
-                    _participant.Student.LastName + " - " +
-                    _participant.Course.StartDate.ToShortDateString() + ".pdf";
+                    _payment.Participant.Student.FirstName + " " +
+                    _payment.Participant.Student.SecondName + " " +
+                    _payment.Participant.Student.LastName + " - " +
+                    _payment.PaymentDate.ToShortDateString() + " - " +
+                    _payment.PaymentNr + ".pdf";
             else
                 fileName =
-                    _participant.Student.FirstName + " " +
-                    _participant.Student.LastName + " - " +
-                    _participant.Course.StartDate.ToShortDateString() + ".pdf";
+                    _payment.Participant.Student.FirstName + " " +
+                    _payment.Participant.Student.LastName + " - " +
+                    _payment.PaymentDate.ToShortDateString() + " - " +
+                    _payment.PaymentNr + ".pdf";
             string fullPath = Path.Combine(path, fileName);
 
             Directory.CreateDirectory(path);

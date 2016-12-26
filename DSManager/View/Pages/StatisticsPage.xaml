@@ -32,14 +32,6 @@
                     </Button>
 
                     <ComboBox Height="25" Width="75" Margin="5,0" ItemsSource="{Binding IncomeYearsFilter}" SelectedItem="{Binding IncomeYearFilter}"/>
-
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FilterYearIncome}">
-                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
-                            <Rectangle.OpacityMask>
-                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}"/>
-                            </Rectangle.OpacityMask>
-                        </Rectangle>
-                    </Button>
                 </StackPanel>
 
                 <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Brak danych do wyświetlenia" Visibility="{Binding IsIncomeEmpty, Converter={StaticResource ValueToCollapsedConverter}}"/>
@@ -87,14 +79,6 @@
                     </ComboBox>
 
                     <ComboBox Height="25" Width="75" Margin="5,0" ItemsSource="{Binding CarExploitationYearsFilter}" SelectedItem="{Binding CarExploitationYearFilter}"/>
-
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FilterYearCarExploitation}">
-                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
-                            <Rectangle.OpacityMask>
-                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}"/>
-                            </Rectangle.OpacityMask>
-                        </Rectangle>
-                    </Button>
                 </StackPanel>
 
                 <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Brak danych do wyświetlenia" Visibility="{Binding IsCarExploitationEmpty, Converter={StaticResource ValueToCollapsedConverter}}"/>

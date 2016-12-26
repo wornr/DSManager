@@ -1,7 +1,5 @@
 ﻿using System;
 
-using DSManager.Model.Enums;
-
 namespace DSManager.Model.Entities {
     public class Dates<T> : BaseEntity<T> where T : BaseEntity<T> {
         #region Relations
@@ -10,7 +8,7 @@ namespace DSManager.Model.Entities {
         public virtual Car Car { get; set; }
         #endregion
 
-        public virtual CourseKind CourseKind { get; set; }
         public virtual DateTime StartDate { get; set; }
+        public virtual DateTime EndDate { get; set; }
     }
 }

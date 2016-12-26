@@ -10,6 +10,8 @@ namespace DSManager.Model.Mappings {
             Map(x => x.StartDate).Not.Nullable();
             Map(x => x.EndDate).Nullable();
             Map(x => x.Distance).Nullable();
+            Map(x => x.IsAdditional).Not.Nullable();
+            Map(x => x.Price).Nullable();
 
             References(x => x.Participant).Not.Nullable();
             References(x => x.Instructor).Not.Nullable();

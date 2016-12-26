@@ -415,7 +415,7 @@
 
                                             <DataGridTextColumn Header="Nr" Binding="{Binding PaymentNr}" Width="81"/>
 
-                                            <DataGridTextColumn Header="Data wpłaty" Binding="{Binding Date, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="100">
+                                            <DataGridTextColumn Header="Data wpłaty" Binding="{Binding PaymentDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="100">
                                                 <DataGridTextColumn.ElementStyle>
                                                     <Style TargetType="{x:Type TextBlock}">
                                                         <Setter Property="HorizontalAlignment" Value="Center" />

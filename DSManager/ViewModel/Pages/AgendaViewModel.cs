@@ -332,7 +332,8 @@ namespace DSManager.ViewModel.Pages {
                         events.Add(new Event {
                             AllDay = false,
                             Start = x.StartDate,
-                            End = x.EndDate ?? DateTime.Now,
+                            End = x.EndDate,
+                            ClassesDates = x,
                             Subject = x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName,
                             Color = x.CourseKind == CourseKind.Theory ? Brushes.Green : Brushes.RoyalBlue
                         });
@@ -342,9 +343,21 @@ namespace DSManager.ViewModel.Pages {
                         events.Add(new Event {
                             AllDay = false,
                             Start = x.StartDate,
-                            End = DateTime.Now,
+                            End = x.EndDate,
+                            ExamsDates = x,
                             Subject = x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName,
-                            Color = x.CourseKind == CourseKind.Theory ? Brushes.Coral : Brushes.DarkRed
+                            Color = x.CourseKind == CourseKind.Theory ? Brushes.Coral : Brushes.DarkViolet
+                        });
+                    });
+
+                    repository.ToList<LockedDates>().Where(x => x.Instructor == _instructor).ForEach(x => {
+                        events.Add(new Event {
+                            AllDay = false,
+                            Start = x.StartDate,
+                            End = x.EndDate,
+                            LockedDates = x,
+                            Subject = x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName,
+                            Color = Brushes.DarkRed
                         });
                     });
                 }
@@ -383,7 +396,8 @@ namespace DSManager.ViewModel.Pages {
                         events.Add(new Event {
                             AllDay = false,
                             Start = x.StartDate,
-                            End = x.EndDate ?? DateTime.Now,
+                            End = x.EndDate,
+                            ClassesDates = x,
                             Subject = x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName,
                             Color = x.CourseKind == CourseKind.Theory ? Brushes.Green : Brushes.RoyalBlue
                         });
@@ -393,9 +407,21 @@ namespace DSManager.ViewModel.Pages {
                         events.Add(new Event {
                             AllDay = false,
                             Start = x.StartDate,
-                            End = DateTime.Now,
+                            End = x.EndDate,
+                            ExamsDates = x,
                             Subject = x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName,
-                            Color = x.CourseKind == CourseKind.Theory ? Brushes.Coral : Brushes.DarkRed
+                            Color = x.CourseKind == CourseKind.Theory ? Brushes.Coral : Brushes.DarkViolet
+                        });
+                    });
+
+                    repository.ToList<LockedDates>().Where(x => participants.Contains(x.Participant)).ForEach(x => {
+                        events.Add(new Event {
+                            AllDay = false,
+                            Start = x.StartDate,
+                            End = x.EndDate,
+                            LockedDates = x,
+                            Subject = x.Description,
+                            Color = Brushes.DarkRed
                         });
                     });
                 }
@@ -433,7 +459,8 @@ namespace DSManager.ViewModel.Pages {
                         events.Add(new Event {
                             AllDay = false,
                             Start = x.StartDate,
-                            End = x.EndDate ?? DateTime.Now,
+                            End = x.EndDate,
+                            ClassesDates = x,
                             Subject = "Instruktor: " + x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName + "\nKursant: " + x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName,
                             Description = x.Car.Brand + " " + x.Car.Model,
                             Color = x.CourseKind == CourseKind.Theory ? Brushes.Green : Brushes.RoyalBlue
@@ -444,10 +471,23 @@ namespace DSManager.ViewModel.Pages {
                         events.Add(new Event {
                             AllDay = false,
                             Start = x.StartDate,
-                            End = DateTime.Now,
+                            End = x.EndDate,
+                            ExamsDates = x,
                             Subject = "Instruktor: " + x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName + "\nKursant: " + x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName,
                             Description = x.Car.Brand + " " + x.Car.Model,
-                            Color = x.CourseKind == CourseKind.Theory ? Brushes.Coral : Brushes.DarkRed
+                            Color = x.CourseKind == CourseKind.Theory ? Brushes.Coral : Brushes.DarkViolet
+                        });
+                    });
+
+                    repository.ToList<LockedDates>().Where(x => x.Car == _car).ForEach(x => {
+                        events.Add(new Event {
+                            AllDay = false,
+                            Start = x.StartDate,
+                            End = x.EndDate,
+                            LockedDates = x,
+                            Subject = x.Description,
+                            Description = x.Description,
+                            Color = Brushes.DarkRed
                         });
                     });
                 }

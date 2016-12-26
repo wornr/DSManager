@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
 using System.Threading.Tasks;
 
 using GalaSoft.MvvmLight.Command;
@@ -203,14 +205,21 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand AddPayment {
             get {
                 return _addPayment ?? (_addPayment = new RelayCommand(() => {
-                    var addWindow = new AddEditWindow { Title = "Dodaj wpłatę" };
-                    Messenger.Default.Send(new AddEditPageMessage {
-                        Page = ViewModelLocator.Instance.AddEditPayment,
-                    });
-                    Messenger.Default.Send(new AddEditEntityMessage<Payment> {
-                        Entity = null
-                    });
-                    addWindow.ShowDialog();
+                    if(Participant == null) {
+                        ShowDialog("Błąd", "Nie wybrano żadnego szkolenia!");
+                    } else {
+                        var addWindow = new AddEditWindow { Title = "Dodaj wpłatę" };
+                        Messenger.Default.Send(new AddEditPageMessage {
+                            Page = ViewModelLocator.Instance.AddEditPayment,
+                        });
+                        Messenger.Default.Send(new AddEditPaymentMessage<Payment> {
+                            Entity = null,
+                            Participant = _participant
+                        });
+                        addWindow.Width = 500;
+                        addWindow.Height = 200;
+                        addWindow.ShowDialog();
+                    }
                 }));
             }
         }
@@ -226,9 +235,12 @@ namespace DSManager.ViewModel.Pages {
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditPayment,
                     });
-                    Messenger.Default.Send(new AddEditEntityMessage<Payment> {
-                        Entity = Payment
+                    Messenger.Default.Send(new AddEditPaymentMessage<Payment> {
+                        Entity = Payment,
+                        Participant = _participant
                     });
+                    editWindow.Width = 500;
+                    editWindow.Height = 200;
                     editWindow.ShowDialog();
                 }));
             }
@@ -252,9 +264,23 @@ namespace DSManager.ViewModel.Pages {
 
         public RelayCommand PrintPayment {
             get {
-                return _printPayment ?? (_printPayment = new RelayCommand(() => {
-                    // TODO dodać obsługę generowania wydruków potwierdzenia wpłat
-                    Console.WriteLine(Payment.Date); // TODO DELETE ME
+                return _printPayment ?? (_printPayment = new RelayCommand(async () => {
+                    Exception error = null;
+                    await Task.Run(() => {
+                        try {
+                            new PaymentPdf(Payment);
+                        } catch (Exception ex) {
+                            error = ex;
+                        }
+                    });
+                    if (error == null)
+                        return;
+                    if(error is DirectoryNotFoundException)
+                        ShowDialog("Błąd", "Nie można zapisać pliku!\nŚcieżka zapisu nie istnieje.");
+                    if(error is NotSupportedException)
+                        ShowDialog("Błąd", "Nie można zapisać pliku!\nBłędna nazwa pliku.");
+                    if(error is Win32Exception)
+                        ShowDialog("Błąd", "Nie można otworzyć pliku!\nPlik nie istnieje.");
                 }));
             }
         }
@@ -262,16 +288,22 @@ namespace DSManager.ViewModel.Pages {
         public RelayCommand PrintParticipant {
             get {
                 return _printParticipant ?? (_printParticipant = new RelayCommand(async () => {
-                    var error = false;
+                    Exception error = null;
                     await Task.Run(() => {
                         try {
                             new CoursePdf(_participant);
-                        } catch {
-                            error = true;
+                        } catch (Exception ex) {
+                            error = ex;
                         }
                     });
-                    if (error)
-                        ShowDialog("Błąd", "Nie można zapisać pliku!\nUpewnij się, że nie jest on otwarty.");
+                    if(error == null)
+                        return;
+                    if(error is DirectoryNotFoundException)
+                        ShowDialog("Błąd", "Nie można zapisać pliku!\nŚcieżka zapisu nie istnieje.");
+                    if(error is NotSupportedException)
+                        ShowDialog("Błąd", "Nie można zapisać pliku!\nBłędna nazwa pliku.");
+                    if(error is Win32Exception)
+                        ShowDialog("Błąd", "Nie można otworzyć pliku!\nPlik nie istnieje.");
                 }));
             }
         }

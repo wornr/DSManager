@@ -8,6 +8,6 @@ namespace DSManager.Model.Entities {
 
         public virtual decimal Amount { get; set; }
         public virtual string PaymentNr { get; set; }
-        public virtual DateTime Date { get; set; }
+        public virtual DateTime PaymentDate { get; set; }
     }
 }

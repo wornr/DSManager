@@ -64,12 +64,12 @@
       <HintPath>..\packages\HamburgerMenu.0.1.0\lib\net40\HamburgerMenu.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Livecharts, Version=0.8.1.0, Culture=neutral, PublicKeyToken=c5935629d38af058, processorArchitecture=MSIL">
-      <HintPath>..\packages\LiveCharts.0.8.1\lib\net40\Livecharts.dll</HintPath>
+    <Reference Include="Livecharts, Version=0.8.0.0, Culture=neutral, PublicKeyToken=c5935629d38af058, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.8.0\lib\net40\Livecharts.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="LiveCharts.Wpf, Version=0.8.1.0, Culture=neutral, PublicKeyToken=3b585c2a5f1a92c1, processorArchitecture=MSIL">
-      <HintPath>..\packages\LiveCharts.Wpf.0.8.1\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    <Reference Include="LiveCharts.Wpf, Version=0.8.0.0, Culture=neutral, PublicKeyToken=3b585c2a5f1a92c1, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.8.0\lib\net45\LiveCharts.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MahApps.Metro, Version=1.3.0.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
@@ -96,6 +96,7 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.103\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Printing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -114,9 +115,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WpfScheduler">
-      <HintPath>..\lib\WpfScheduler.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -132,6 +130,8 @@
     <Compile Include="Converters\ValueToCollapsedConverter.cs" />
     <Compile Include="Converters\ValueToHiddenConverter.cs" />
     <Compile Include="Interfaces\IClosable.cs" />
+    <Compile Include="Messengers\AddEditAgendaMessage.cs" />
+    <Compile Include="Messengers\AddEditPaymentMessage.cs" />
     <Compile Include="Messengers\AddEditEntityMessage.cs" />
     <Compile Include="Messengers\AddEditPageMessage.cs" />
     <Compile Include="Properties\Resources.pl-PL.Designer.cs">
@@ -139,6 +139,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.pl-PL.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\BrushesConverter.cs" />
     <Compile Include="Utilities\CheckPermissions.cs" />
     <Compile Include="Utilities\EnumToList.cs" />
     <Compile Include="Utilities\MD5Encrypter.cs" />
@@ -364,6 +365,10 @@
       <Project>{57b8be72-96e4-41ac-8819-cfe3f5af6df7}</Project>
       <Name>DSManager.PDF</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\marek\Desktop\scheduler-source-code\WpfScheduler.csproj">
+      <Project>{f9954c26-6234-43f5-8d96-8ec6e03c03b9}</Project>
+      <Name>WpfScheduler</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\lock.png" />
@@ -414,6 +419,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Menu\statistics.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.103\build\net451\System.Data.SQLite.Core.targets')" />

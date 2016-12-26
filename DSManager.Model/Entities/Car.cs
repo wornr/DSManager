@@ -7,6 +7,7 @@ namespace DSManager.Model.Entities {
         public virtual IList<CarPermissions> Permissions { get; set; }
         public virtual IList<ClassesDates> ClassesDates { get; set; }
         public virtual IList<ExamsDates> ExamsDates { get; set; }
+        public virtual IList<LockedDates> LockedDates { get; set; }
         #endregion
 
         public virtual string Brand { get; set; }

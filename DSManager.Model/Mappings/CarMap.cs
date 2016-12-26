@@ -16,6 +16,7 @@ namespace DSManager.Model.Mappings {
             HasMany(x => x.Permissions).Cascade.All();
             HasMany(x => x.ClassesDates);
             HasMany(x => x.ExamsDates);
+            HasMany(x => x.LockedDates);
         }
     }
 }

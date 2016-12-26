@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight.Messaging;
 
 using DSManager.Messengers;
 using DSManager.Model.Entities;
+using DSManager.Model.Enums;
 using DSManager.Model.Services;
 using DSManager.View.Windows;
 
@@ -113,10 +114,14 @@ namespace DSManager.ViewModel.Pages {
                     if(_user == null) {
                         ShowDialog("Błąd", "Nie wybrano żadnego użytkownika!");
                     } else {
-                        if(await ConfirmationDialog("Potwierdź", "Czy jesteś pewien, że chcesz usunąć danego użytkownika?"))
-                            using(var repository = new BaseRepository()) {
-                                repository.Delete(_user);
-                            }
+                        if (_user.AccountType == AccountType.Boss) {
+                            ShowDialog("Błąd", "Nie można usunąć użytkownika z najwyższymi uprawnieniami!");
+                        } else {
+                            if(await ConfirmationDialog("Potwierdź", "Czy jesteś pewien, że chcesz usunąć danego użytkownika?"))
+                                using(var repository = new BaseRepository()) {
+                                    repository.Delete(_user);
+                                }
+                        }
                     }
                     FillUsers(_filter);
                 }));

@@ -19,6 +19,7 @@ namespace DSManager.Model.Mappings {
             HasMany(x => x.Payments).Cascade.All();
             HasMany(x => x.ClassesDates).Cascade.All();
             HasMany(x => x.ExamsDates).Cascade.All();
+            HasMany(x => x.LockedDates).Cascade.All();
         }
     }
 }
