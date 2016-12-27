@@ -8,6 +8,7 @@ namespace DSManager.Model.Mappings {
             Id(x => x.Id);
             Map(x => x.CourseKind).Not.Nullable();
             Map(x => x.StartDate).Not.Nullable();
+            Map(x => x.EndDate).Not.Nullable();
             Map(x => x.IsPassed).Nullable();
 
             References(x => x.Participant).Not.Nullable();

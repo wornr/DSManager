@@ -334,6 +334,9 @@ namespace DSManager.ViewModel.Pages {
                             Start = x.StartDate,
                             End = x.EndDate,
                             ClassesDates = x,
+                            Instructor = x.Instructor,
+                            Participant = x.Participant,
+                            Car = x.Car,
                             Subject = x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName,
                             Color = x.CourseKind == CourseKind.Theory ? Brushes.Green : Brushes.RoyalBlue
                         });
@@ -345,6 +348,9 @@ namespace DSManager.ViewModel.Pages {
                             Start = x.StartDate,
                             End = x.EndDate,
                             ExamsDates = x,
+                            Instructor = x.Instructor,
+                            Participant = x.Participant,
+                            Car = x.Car,
                             Subject = x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName,
                             Color = x.CourseKind == CourseKind.Theory ? Brushes.Coral : Brushes.DarkViolet
                         });
@@ -356,7 +362,10 @@ namespace DSManager.ViewModel.Pages {
                             Start = x.StartDate,
                             End = x.EndDate,
                             LockedDates = x,
-                            Subject = x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName,
+                            Instructor = x.Instructor,
+                            Participant = x.Participant,
+                            Car = x.Car,
+                            Subject = x.Description,
                             Color = Brushes.DarkRed
                         });
                     });
@@ -398,6 +407,9 @@ namespace DSManager.ViewModel.Pages {
                             Start = x.StartDate,
                             End = x.EndDate,
                             ClassesDates = x,
+                            Instructor = x.Instructor,
+                            Participant = x.Participant,
+                            Car = x.Car,
                             Subject = x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName,
                             Color = x.CourseKind == CourseKind.Theory ? Brushes.Green : Brushes.RoyalBlue
                         });
@@ -409,6 +421,9 @@ namespace DSManager.ViewModel.Pages {
                             Start = x.StartDate,
                             End = x.EndDate,
                             ExamsDates = x,
+                            Instructor = x.Instructor,
+                            Participant = x.Participant,
+                            Car = x.Car,
                             Subject = x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName,
                             Color = x.CourseKind == CourseKind.Theory ? Brushes.Coral : Brushes.DarkViolet
                         });
@@ -420,6 +435,9 @@ namespace DSManager.ViewModel.Pages {
                             Start = x.StartDate,
                             End = x.EndDate,
                             LockedDates = x,
+                            Instructor = x.Instructor,
+                            Participant = x.Participant,
+                            Car = x.Car,
                             Subject = x.Description,
                             Color = Brushes.DarkRed
                         });
@@ -461,9 +479,12 @@ namespace DSManager.ViewModel.Pages {
                             Start = x.StartDate,
                             End = x.EndDate,
                             ClassesDates = x,
+                            Instructor = x.Instructor,
+                            Participant = x.Participant,
+                            Car = x.Car,
                             Subject = "Instruktor: " + x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName + "\nKursant: " + x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName,
                             Description = x.Car.Brand + " " + x.Car.Model,
-                            Color = x.CourseKind == CourseKind.Theory ? Brushes.Green : Brushes.RoyalBlue
+                            Color = Brushes.RoyalBlue
                         });
                     });
 
@@ -473,9 +494,12 @@ namespace DSManager.ViewModel.Pages {
                             Start = x.StartDate,
                             End = x.EndDate,
                             ExamsDates = x,
+                            Instructor = x.Instructor,
+                            Participant = x.Participant,
+                            Car = x.Car,
                             Subject = "Instruktor: " + x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName + "\nKursant: " + x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName,
                             Description = x.Car.Brand + " " + x.Car.Model,
-                            Color = x.CourseKind == CourseKind.Theory ? Brushes.Coral : Brushes.DarkViolet
+                            Color = Brushes.DarkViolet
                         });
                     });
 
@@ -485,6 +509,9 @@ namespace DSManager.ViewModel.Pages {
                             Start = x.StartDate,
                             End = x.EndDate,
                             LockedDates = x,
+                            Instructor = x.Instructor,
+                            Participant = x.Participant,
+                            Car = x.Car,
                             Subject = x.Description,
                             Description = x.Description,
                             Color = Brushes.DarkRed

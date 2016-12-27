@@ -385,18 +385,8 @@
                                 </StackPanel.Resources>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <Rectangle Fill="Green" Width="5" Height="5"/>
-                                    <TextBlock Text="Zajęcia teoretyczne" Margin="5,0"/>
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal">
                                     <Rectangle Fill="RoyalBlue" Width="5" Height="5"/>
                                     <TextBlock Text="Zajęcia praktyczne" Margin="5,0"/>
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <Rectangle Fill="Coral" Width="5" Height="5"/>
-                                    <TextBlock Text="Egzamin teoretyczny" Margin="5,0"/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal">

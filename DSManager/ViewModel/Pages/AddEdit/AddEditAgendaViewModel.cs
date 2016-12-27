@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 
 using GalaSoft.MvvmLight.Messaging;
 
-using MahApps.Metro.Controls;
-
 using NHibernate.Util;
 
 using DSManager.Messengers;
@@ -19,7 +17,9 @@ using DSManager.Utilities;
 
 namespace DSManager.ViewModel.Pages.AddEdit {
     public class AddEditAgendaViewModel : AddEditBaseViewModel, IDataErrorInfo {
-        private MetroTabItem _selectedTab;
+        private int _defaultTab;
+        private int _selectedTab;
+        private bool _editMode;
         private ClassesDates _classDate;
         private ExamsDates _examDate;
         private LockedDates _lockedDate;
@@ -33,6 +33,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         private string _endTime;
         private CourseKind? _courseKind;
         private decimal? _distance;
+        private string _description;
         private bool _isPractice;
         private bool _isCarChooserEnabled;
         private bool _isInstructorChooserEnabled;
@@ -76,19 +77,24 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             ClearAllValues();
             FillStudents();
             if (message.Entity != null) {
+                _editMode = true;
                 _classDate = (ClassesDates) message.Entity;
                 _instructor = (Instructor) message.Owner;
-                _courseKind = _classDate.CourseKind;
+                CourseKind = _classDate.CourseKind;
                 _startDate = _classDate.StartDate;
                 _startTime = _classDate.StartDate.ToShortTimeString();
                 _endDate = _classDate.EndDate;
                 _endTime = _classDate.EndDate.ToShortTimeString();
+                ChosenStudent = _classDate.Participant.Student;
+                ChosenParticipant = _classDate.Participant;
+                ChosenCar = _classDate.Car;
+
             } else {
                 _instructor = (Instructor) message.Owner;
                 _startDate = message.StartDate;
                 _startTime = message.StartDate?.ToShortTimeString();
-                _endDate = null;
-                _endTime = null;
+                _endDate = _startDate?.AddHours(1);
+                _endTime = _endDate?.ToShortTimeString();
             }
         }
 
@@ -96,39 +102,47 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             ClearAllValues();
             FillStudents();
             if (message.Entity != null) {
+                _editMode = true;
                 _examDate = (ExamsDates) message.Entity;
                 _instructor = (Instructor) message.Owner;
-                _courseKind = _examDate.CourseKind;
+                CourseKind = _examDate.CourseKind;
                 _startDate = _examDate.StartDate;
                 _startTime = _examDate.StartDate.ToShortTimeString();
                 _endDate = _examDate.EndDate;
                 _endTime = _examDate.EndDate.ToShortTimeString();
+                ChosenStudent = _examDate.Participant.Student;
+                ChosenParticipant = _examDate.Participant;
+                ChosenCar = _examDate.Car;
             } else {
                 _instructor = (Instructor) message.Owner;
                 _startDate = message.StartDate;
                 _startTime = message.StartDate?.ToShortTimeString();
-                _endDate = null;
-                _endTime = null;
+                _endDate = _startDate?.AddHours(1);
+                _endTime = _endDate?.ToShortTimeString();
             }
+            _defaultTab = _selectedTab = 1;
         }
 
         private void HandleInstructorLockedDatesMessage(AddEditAgendaMessage<LockedDates, Instructor> message) {
             ClearAllValues();
             FillStudents();
             if (message.Entity != null) {
+                _editMode = true;
                 _lockedDate = (LockedDates) message.Entity;
                 _instructor = (Instructor) message.Owner;
                 _startDate = _lockedDate.StartDate;
                 _startTime = _lockedDate.StartDate.ToShortTimeString();
                 _endDate = _lockedDate.EndDate;
                 _endTime = _lockedDate.EndDate.ToShortTimeString();
+                _description = _lockedDate.Description;
             } else {
                 _instructor = (Instructor) message.Owner;
                 _startDate = message.StartDate;
                 _startTime = message.StartDate?.ToShortTimeString();
-                _endDate = null;
-                _endTime = null;
+                _endDate = _startDate?.AddHours(1);
+                _endTime = _endDate?.ToShortTimeString();
             }
+            _defaultTab = _selectedTab = 2;
         }
         #endregion
 
@@ -140,8 +154,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             _student = (Student) message.Owner;
             _startDate = message.StartDate;
             _startTime = message.StartDate?.ToShortTimeString();
-            _endDate = null;
-            _endTime = null;
+            _endDate = _startDate?.AddHours(1);
+            _endTime = _endDate?.ToShortTimeString();
             FillParticipants();
         }
 
@@ -150,9 +164,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             _student = (Student) message.Owner;
             _startDate = message.StartDate;
             _startTime = message.StartDate?.ToShortTimeString();
-            _endDate = null;
-            _endTime = null;
+            _endDate = _startDate?.AddHours(1);
+            _endTime = _endDate?.ToShortTimeString();
             FillParticipants();
+            _defaultTab = _selectedTab = 1;
         }
 
         private void HandleStudentLockedDatesMessage(AddEditAgendaMessage<LockedDates, Student> message) {
@@ -160,46 +175,62 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             _student = (Student) message.Owner;
             _startDate = message.StartDate;
             _startTime = message.StartDate?.ToShortTimeString();
-            _endDate = null;
-            _endTime = null;
-            FillParticipants();
+            _endDate = _startDate?.AddHours(1);
+            _endTime = _endDate?.ToShortTimeString();
+            _defaultTab = _selectedTab = 2;
         }
         #endregion
 
         #region Edit
         private void HandleParticipantClassesDatesMessage(AddEditAgendaMessage<ClassesDates, Participant> message) {
             ClearAllValues();
+            _editMode = true;
             _classDate = (ClassesDates) message.Entity;
             _participant = (Participant) message.Owner;
-            _courseKind = _classDate.CourseKind;
+            _student = _participant.Student;
+            CourseKind = _classDate.CourseKind;
             _startDate = _classDate.StartDate;
             _startTime = _classDate.StartDate.ToShortTimeString();
             _endDate = _classDate.EndDate;
             _endTime = _classDate.EndDate.ToShortTimeString();
+            FillParticipants();
             FillInstructors();
+            ChosenParticipant = _classDate.Participant;
+            ChosenInstructor = _classDate.Instructor;
+            ChosenCar = _classDate.Car;
         }
 
         private void HandleParticipantExamsDatesMessage(AddEditAgendaMessage<ExamsDates, Participant> message) {
             ClearAllValues();
+            _editMode = true;
             _examDate = (ExamsDates) message.Entity;
             _participant = (Participant) message.Owner;
-            _courseKind = _examDate.CourseKind;
+            _student = _participant.Student;
+            CourseKind = _examDate.CourseKind;
             _startDate = _examDate.StartDate;
             _startTime = _examDate.StartDate.ToShortTimeString();
             _endDate = _examDate.EndDate;
             _endTime = _examDate.EndDate.ToShortTimeString();
+            FillParticipants();
             FillInstructors();
+            ChosenParticipant = _examDate.Participant;
+            ChosenInstructor = _examDate.Instructor;
+            ChosenCar = _examDate.Car;
+            _defaultTab = _selectedTab = 1;
         }
 
         private void HandleParticipantLockedDatesMessage(AddEditAgendaMessage<LockedDates, Participant> message) {
             ClearAllValues();
+            _editMode = true;
             _lockedDate = (LockedDates) message.Entity;
             _participant = (Participant) message.Owner;
+            _student = _participant.Student;
             _startDate = _lockedDate.StartDate;
             _startTime = _lockedDate.StartDate.ToShortTimeString();
             _endDate = _lockedDate.EndDate;
             _endTime = _lockedDate.EndDate.ToShortTimeString();
-            FillInstructors();
+            _description = _lockedDate.Description;
+            _defaultTab = _selectedTab = 2;
         }
         #endregion
 
@@ -209,19 +240,23 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         private void HandleCarClassesDatesMessage(AddEditAgendaMessage<ClassesDates, Car> message) {
             ClearAllValues();
             if (message.Entity != null) {
+                _editMode = true;
                 _classDate = (ClassesDates) message.Entity;
                 _car = (Car) message.Owner;
-                _courseKind = _classDate.CourseKind;
+                CourseKind = _classDate.CourseKind;
                 _startDate = _classDate.StartDate;
                 _startTime = _classDate.StartDate.ToShortTimeString();
                 _endDate = _classDate.EndDate;
                 _endTime = _classDate.EndDate.ToShortTimeString();
+                ChosenStudent = _classDate.Participant.Student;
+                ChosenParticipant = _classDate.Participant;
+                ChosenInstructor = _classDate.Instructor;
             } else {
                 _car = (Car) message.Owner;
                 _startDate = message.StartDate;
                 _startTime = message.StartDate?.ToShortTimeString();
-                _endDate = null;
-                _endTime = null;
+                _endDate = _startDate?.AddHours(1);
+                _endTime = _endDate?.ToShortTimeString();
             }
             CourseKind = Model.Enums.CourseKind.Practice;
             FillStudents();
@@ -230,42 +265,48 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         private void HandleCarExamsDatesMessage(AddEditAgendaMessage<ExamsDates, Car> message) {
             ClearAllValues();
             if (message.Entity != null) {
+                _editMode = true;
                 _examDate = (ExamsDates) message.Entity;
                 _car = (Car) message.Owner;
-                _courseKind = _examDate.CourseKind;
+                CourseKind = _examDate.CourseKind;
                 _startDate = _examDate.StartDate;
                 _startTime = _examDate.StartDate.ToShortTimeString();
                 _endDate = _examDate.EndDate;
                 _endTime = _examDate.EndDate.ToShortTimeString();
+                ChosenStudent = _examDate.Participant.Student;
+                ChosenParticipant = _examDate.Participant;
+                ChosenInstructor = _examDate.Instructor;
             } else {
                 _car = (Car) message.Owner;
                 _startDate = message.StartDate;
                 _startTime = message.StartDate?.ToShortTimeString();
-                _endDate = null;
-                _endTime = null;
+                _endDate = _startDate?.AddHours(1);
+                _endTime = _endDate?.ToShortTimeString();
             }
             CourseKind = Model.Enums.CourseKind.Practice;
             FillStudents();
+            _defaultTab = _selectedTab = 1;
         }
 
         private void HandleCarLockedDatesMessage(AddEditAgendaMessage<LockedDates, Car> message) {
             ClearAllValues();
             if (message.Entity != null) {
+                _editMode = true;
                 _lockedDate = (LockedDates) message.Entity;
                 _car = (Car) message.Owner;
                 _startDate = _lockedDate.StartDate;
                 _startTime = _lockedDate.StartDate.ToShortTimeString();
                 _endDate = _lockedDate.EndDate;
                 _endTime = _lockedDate.EndDate.ToShortTimeString();
+                _description = _lockedDate.Description;
             } else {
                 _car = (Car) message.Owner;
                 _startDate = message.StartDate;
                 _startTime = message.StartDate?.ToShortTimeString();
-                _endDate = null;
-                _endTime = null;
+                _endDate = _startDate?.AddHours(1);
+                _endTime = _endDate?.ToShortTimeString();
             }
-            CourseKind = Model.Enums.CourseKind.Practice;
-            FillStudents();
+            _defaultTab = _selectedTab = 2;
         }
         #endregion
 
@@ -298,6 +339,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 case "EndDate":
                     if(_endDate == null)
                         validationMessage = "Pole nie może być puste!";
+                    else if(_endDate <= _startDate)
+                        validationMessage = "Data zak. musi być późniejsza od daty rozp.!";
+                    else if (_endDate - _startDate < new TimeSpan(0, 0, 15, 0))
+                        validationMessage = "Wydarzenie musi trwać co najmniej 15 minut!";
                     break;
 
                 case "EndTime":
@@ -308,6 +353,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                     else if(int.Parse(_startTime.Substring(0, 2)) < 0 || int.Parse(_startTime.Substring(0, 2)) > 23 ||
                              int.Parse(_startTime.Substring(3, 2)) < 0 || int.Parse(_startTime.Substring(3, 2)) > 59)
                         validationMessage = "Podana godzina jest niepoprawna!";
+                    else if (_endDate <= _startDate)
+                        validationMessage = "Data zak. musi być późniejsza od daty rozp.!";
+                    else if(_endDate - _startDate < new TimeSpan(0, 0, 15, 0))
+                        validationMessage = "Wydarzenie musi trwać co najmniej 15 minut!";
                     break;
 
                 case "CourseKind":
@@ -361,9 +410,15 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 int.Parse(_endTime.Substring(0, 2)) < 0 || int.Parse(_endTime.Substring(0, 2)) > 23 ||
                 int.Parse(_endTime.Substring(3, 2)) < 0 || int.Parse(_endTime.Substring(3, 2)) > 59)
                 return false;
+
+            if (_endDate <= _startDate)
+                return false;
+
+            if (_endDate - _startDate < new TimeSpan(0, 0, 15, 0))
+                return false;
             #endregion
 
-            if (_selectedTab.Header.Equals("Zajęcia")) {
+            if (_selectedTab == 0) {
                 if (_instructor != null) {
                     if (_participant == null && _chosenParticipant == null)
                         return false;
@@ -415,30 +470,6 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                     _classDate.Distance = _isPractice ? _distance : null;
                     _classDate.IsAdditional = false; // TODO zmienić
                     _classDate.Price = null; // TODO zmienić
-                } else if(_participant != null) {
-                    if(_instructor == null && _chosenInstructor == null)
-                        return false;
-
-                    if(_courseKind == null)
-                        return false;
-
-                    if(_isPractice && (_car == null && _chosenCar == null))
-                        return false;
-
-                    _classDate.StartDate = (DateTime)_startDate;
-                    _classDate.EndDate = (DateTime)_endDate;
-                    _classDate.Instructor = _chosenInstructor ?? _instructor;
-                    _classDate.Participant = _chosenParticipant ?? _participant;
-                    _classDate.CourseKind = (CourseKind)_courseKind;
-
-                    if(_isPractice)
-                        _classDate.Car = _chosenCar ?? _car;
-                    else
-                        _classDate.Car = null;
-
-                    _classDate.Distance = _isPractice ? _distance : null;
-                    _classDate.IsAdditional = false; // TODO zmienić
-                    _classDate.Price = null; // TODO zmienić
                 } else if(_car != null) {
                     if(_instructor == null && _chosenInstructor == null)
                         return false;
@@ -457,11 +488,109 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                     _classDate.IsAdditional = false; // TODO zmienić
                     _classDate.Price = null; // TODO zmienić
                 }
-            } else if(_selectedTab.Header.Equals("Egzamin")) {
-                _examDate.StartDate = (DateTime) _startDate;
-                _examDate.CourseKind = (CourseKind)_courseKind;
-            } else if(_selectedTab.Header.Equals("Blokada")) {
-                _lockedDate.StartDate = (DateTime) _startDate;
+            } else if(_selectedTab == 1) {
+                if(_instructor != null) {
+                    if(_participant == null && _chosenParticipant == null)
+                        return false;
+
+                    if(_courseKind == null)
+                        return false;
+
+                    if(_isPractice && _car == null && _chosenCar == null)
+                        return false;
+
+                    _examDate.StartDate = (DateTime)_startDate;
+                    _examDate.EndDate = (DateTime)_endDate;
+                    _examDate.Instructor = _chosenInstructor ?? _instructor;
+                    _examDate.Participant = _chosenParticipant ?? _participant;
+                    _examDate.CourseKind = (CourseKind)_courseKind;
+
+                    if(_isPractice)
+                        _examDate.Car = _chosenCar ?? _car;
+                    else
+                        _examDate.Car = null;
+
+                    _examDate.IsPassed = false; // TODO zmienić
+                } else if(_student != null) {
+                    if(_instructor == null && _chosenInstructor == null)
+                        return false;
+
+                    if(_participant == null && _chosenParticipant == null)
+                        return false;
+
+                    if(_courseKind == null)
+                        return false;
+
+                    if(_isPractice && _car == null && _chosenCar == null)
+                        return false;
+
+                    _examDate.StartDate = (DateTime)_startDate;
+                    _examDate.EndDate = (DateTime)_endDate;
+                    _examDate.Instructor = _chosenInstructor ?? _instructor;
+                    _examDate.Participant = _chosenParticipant ?? _participant;
+                    _examDate.CourseKind = (CourseKind)_courseKind;
+
+                    if(_isPractice)
+                        _examDate.Car = _chosenCar ?? _car;
+                    else
+                        _examDate.Car = null;
+
+                    _examDate.IsPassed = false; // TODO zmienić
+                } else if(_participant != null) {
+                    if(_instructor == null && _chosenInstructor == null)
+                        return false;
+
+                    if(_courseKind == null)
+                        return false;
+
+                    if(_isPractice && (_car == null && _chosenCar == null))
+                        return false;
+
+                    _examDate.StartDate = (DateTime)_startDate;
+                    _examDate.EndDate = (DateTime)_endDate;
+                    _examDate.Instructor = _chosenInstructor ?? _instructor;
+                    _examDate.Participant = _chosenParticipant ?? _participant;
+                    _examDate.CourseKind = (CourseKind)_courseKind;
+
+                    if(_isPractice)
+                        _examDate.Car = _chosenCar ?? _car;
+                    else
+                        _examDate.Car = null;
+
+                    _examDate.IsPassed = false; // TODO zmienić
+                } else if(_car != null) {
+                    if(_instructor == null && _chosenInstructor == null)
+                        return false;
+
+                    if(_participant == null && _chosenParticipant == null)
+                        return false;
+
+                    _examDate.StartDate = (DateTime)_startDate;
+                    _examDate.EndDate = (DateTime)_endDate;
+                    _examDate.Instructor = _chosenInstructor ?? _instructor;
+                    _examDate.Participant = _chosenParticipant ?? _participant;
+                    _examDate.CourseKind = Model.Enums.CourseKind.Practice;
+                    _examDate.Car = _car;
+
+                    _examDate.IsPassed = false; // TODO zmienić
+                }
+            } else if(_selectedTab == 2) {
+                if(_instructor != null) {
+                    _lockedDate.StartDate = (DateTime)_startDate;
+                    _lockedDate.EndDate = (DateTime)_endDate;
+                    _lockedDate.Instructor = _instructor;
+                    _lockedDate.Description = _description;
+                } else if(_student != null || _participant != null) {
+                    _lockedDate.StartDate = (DateTime)_startDate;
+                    _lockedDate.EndDate = (DateTime)_endDate;
+                    _lockedDate.Participant = _participant;
+                    _lockedDate.Description = _description;
+                } else if(_car != null) {
+                    _lockedDate.StartDate = (DateTime)_startDate;
+                    _lockedDate.EndDate = (DateTime)_endDate;
+                    _lockedDate.Car = _car;
+                    _lockedDate.Description = _description;
+                }
             }
 
             return true;
@@ -472,11 +601,20 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 return false;
 
             using(var repository = new BaseRepository()) {
-                if (_selectedTab.Header.Equals("Zajęcia"))
+                if (_editMode && _defaultTab != _selectedTab) {
+                    if(_defaultTab == 0)
+                        repository.Delete(_classDate);
+                    else if(_defaultTab == 1)
+                        repository.Delete(_examDate);
+                    else if(_defaultTab == 2)
+                        repository.Delete(_lockedDate);
+                }
+
+                if (_selectedTab == 0)
                     repository.Save(_classDate);
-                else if (_selectedTab.Header.Equals("Egzamin"))
+                else if (_selectedTab == 1)
                     repository.Save(_examDate);
-                else if (_selectedTab.Header.Equals("Blokada"))
+                else if (_selectedTab == 2)
                     repository.Save(_lockedDate);
             }
 
@@ -485,7 +623,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         #endregion
 
         #region ViewElements
-        public MetroTabItem SelectedTab {
+        public int SelectedTab {
             get { return _selectedTab; }
             set {
                 _selectedTab = value;
@@ -587,6 +725,14 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             get { return _distance; }
             set {
                 _distance = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Description {
+            get { return _description; }
+            set {
+                _description = value;
                 RaisePropertyChanged();
             }
         }
@@ -737,11 +883,16 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
         private async void FillParticipants() {
             var student = _chosenStudent ?? _student;
+            if (student == null)
+                return;
+
             IsParticipantsLoading = true;
 
             await Task.Run(() => {
-                using(var repository = new BaseRepository()) {
-                    AvailableParticipants = new ObservableCollection<Participant>(repository.ToList<Participant>().Where(x => x.Student == student));
+                using (var repository = new BaseRepository()) {
+                    AvailableParticipants =
+                        new ObservableCollection<Participant>(
+                            repository.ToList<Participant>().Where(x => x.Student == student));
                 }
             });
 
@@ -749,6 +900,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         }
 
         private async void FillCars() {
+            var participant = _chosenParticipant ?? _participant;
+            if (participant == null)
+                return;
+
             var isCarChooserEnabledTemp = _isCarChooserEnabled;
 
             IsCarsLoading = true;
@@ -757,7 +912,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             await Task.Run(() => {
                 using(var repository = new BaseRepository()) {
                     var carsToEliminate = new ObservableCollection<Car>();
-                    repository.ToList<CarPermissions>().Where(x => x.Category != _chosenParticipant.Course.Category).ForEach(x => carsToEliminate.Add(x.Car));
+                    repository.ToList<CarPermissions>().Where(x => x.Category != participant.Course.Category).ForEach(x => carsToEliminate.Add(x.Car));
                     AvailableCars = new ObservableCollection<Car>(repository.ToList<Car>().Where(x => !carsToEliminate.Contains(x)));
                 }
             });
@@ -768,6 +923,9 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
         private async void FillInstructors() {
             var participant = _chosenParticipant ?? _participant;
+            if (participant == null)
+                return;
+
             var isInstructorChooserEnabledTemp = _isInstructorChooserEnabled;
 
             IsInstructorsLoading = true;
@@ -802,6 +960,9 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         }*/
 
         private void ClearAllValues() {
+            _editMode = false;
+            _defaultTab = _selectedTab = 0;
+
             _classDate = new ClassesDates();
             _examDate = new ExamsDates();
             _lockedDate = new LockedDates();
