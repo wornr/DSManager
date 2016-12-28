@@ -365,7 +365,7 @@
       <Project>{57b8be72-96e4-41ac-8819-cfe3f5af6df7}</Project>
       <Name>DSManager.PDF</Name>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\marek\Desktop\scheduler-source-code\WpfScheduler.csproj">
+    <ProjectReference Include="..\WpfScheduler\WpfScheduler.csproj">
       <Project>{f9954c26-6234-43f5-8d96-8ec6e03c03b9}</Project>
       <Name>WpfScheduler</Name>
     </ProjectReference>

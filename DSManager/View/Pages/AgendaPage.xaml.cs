@@ -10,6 +10,7 @@ using WpfScheduler;
 
 using DSManager.Messengers;
 using DSManager.Model.Entities;
+using DSManager.Model.Services;
 using DSManager.Utilities;
 using DSManager.View.Windows;
 using DSManager.ViewModel;
@@ -146,6 +147,26 @@ namespace DSManager.View.Pages {
 
         private void Scheduler_OnOnEventMouseLeave(object sender, Event e) {
             ((EventUserControl)sender).EventElement.Background = BrushesConverter.GetDarker(((EventUserControl)sender).EventElement.Background);
+        }
+
+        private async void Scheduler_OnOnEventDelete(object sender, Event e) {
+            MetroDialogSettings settings = new MetroDialogSettings() {
+                AffirmativeButtonText = "Tak",
+                NegativeButtonText = "Nie",
+                AnimateShow = true,
+                ColorScheme = MetroDialogColorScheme.Theme
+            };
+
+
+            if(await (Application.Current.MainWindow as MetroWindow).ShowMessageAsync("Potwierdź", "Czy jesteś pewien, że chcesz usunąć daną wpłatę?", MessageDialogStyle.AffirmativeAndNegative, settings) == MessageDialogResult.Affirmative)
+                using(var repository = new BaseRepository()) {
+                    if(e.ClassesDates != null)
+                        repository.Delete(e.ClassesDates);
+                    else if(e.ExamsDates != null)
+                        repository.Delete(e.ExamsDates);
+                    else if(e.LockedDates != null)
+                        repository.Delete(e.LockedDates);
+                }
         }
     }
 }

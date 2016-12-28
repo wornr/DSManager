@@ -108,7 +108,7 @@
 
                             <Border Grid.Row="0" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
                                 <Grid>
-                                    <wpfScheduler:Scheduler Events="{Binding InstructorEvents}" SelectedDate="{Binding InstructorSelectedDate}" OnScheduleDoubleClick="InstructorScheduler_OnOnScheduleDoubleClick" OnEventDoubleClick="InstructorScheduler_OnOnEventDoubleClick" OnEventMouseEnter="Scheduler_OnOnEventMouseEnter" OnEventMouseLeave="Scheduler_OnOnEventMouseLeave" Mode="Week"/>
+                                    <wpfScheduler:Scheduler Events="{Binding InstructorEvents}" SelectedDate="{Binding InstructorSelectedDate}" OnScheduleDoubleClick="InstructorScheduler_OnOnScheduleDoubleClick" OnEventDoubleClick="InstructorScheduler_OnOnEventDoubleClick" OnEventMouseEnter="Scheduler_OnOnEventMouseEnter" OnEventMouseLeave="Scheduler_OnOnEventMouseLeave" OnEventDelete="Scheduler_OnOnEventDelete" Mode="Week" />
                                     <controls:ProgressRing IsActive="{Binding IsInstructorEventsLoading}"/>
                                 </Grid>
                             </Border>
