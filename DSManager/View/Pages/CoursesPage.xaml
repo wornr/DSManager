@@ -167,18 +167,32 @@
                                         </DataGridTextColumn.ElementStyle>
                                     </DataGridTextColumn>
 
-                                    <DataGridTextColumn Header="Cena" Binding="{Binding CoursePrice, ConverterCulture='pl-PL', StringFormat={}{0:C}}" Width="82">
+                                    <DataGridTextColumn Header="Inst. prow." Width="90">
                                         <DataGridTextColumn.ElementStyle>
                                             <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                                <Setter Property="HorizontalAlignment" Value="Center" />
                                             </Style>
                                         </DataGridTextColumn.ElementStyle>
+                                        <DataGridTextColumn.Binding>
+                                            <MultiBinding StringFormat="{}{0} {1}" TargetNullValue="Brak">
+                                                <Binding Path="Instructor.FirstName"/>
+                                                <Binding Path="Instructor.LastName"/>
+                                            </MultiBinding>
+                                        </DataGridTextColumn.Binding>
                                     </DataGridTextColumn>
 
                                     <DataGridTextColumn Header="Data zak." Binding="{Binding EndDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="80">
                                         <DataGridTextColumn.ElementStyle>
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Setter Property="HorizontalAlignment" Value="Center" />
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+
+                                    <DataGridTextColumn Header="Cena" Binding="{Binding CoursePrice, ConverterCulture='pl-PL', StringFormat={}{0:C}}" Width="82">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment" Value="Right" />
                                             </Style>
                                         </DataGridTextColumn.ElementStyle>
                                     </DataGridTextColumn>

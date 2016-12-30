@@ -34,6 +34,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         private CourseKind? _courseKind;
         private decimal? _distance;
         private string _description;
+        private bool _isCourseKindChooserEnabled;
         private bool _isPractice;
         private bool _isCarChooserEnabled;
         private bool _isInstructorChooserEnabled;
@@ -194,7 +195,6 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             _endDate = _classDate.EndDate;
             _endTime = _classDate.EndDate.ToShortTimeString();
             FillParticipants();
-            FillInstructors();
             ChosenParticipant = _classDate.Participant;
             ChosenInstructor = _classDate.Instructor;
             ChosenCar = _classDate.Car;
@@ -212,7 +212,6 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             _endDate = _examDate.EndDate;
             _endTime = _examDate.EndDate.ToShortTimeString();
             FillParticipants();
-            FillInstructors();
             ChosenParticipant = _examDate.Participant;
             ChosenInstructor = _examDate.Instructor;
             ChosenCar = _examDate.Car;
@@ -243,7 +242,6 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _editMode = true;
                 _classDate = (ClassesDates) message.Entity;
                 _car = (Car) message.Owner;
-                CourseKind = _classDate.CourseKind;
                 _startDate = _classDate.StartDate;
                 _startTime = _classDate.StartDate.ToShortTimeString();
                 _endDate = _classDate.EndDate;
@@ -268,7 +266,6 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _editMode = true;
                 _examDate = (ExamsDates) message.Entity;
                 _car = (Car) message.Owner;
-                CourseKind = _examDate.CourseKind;
                 _startDate = _examDate.StartDate;
                 _startTime = _examDate.StartDate.ToShortTimeString();
                 _endDate = _examDate.EndDate;
@@ -399,6 +396,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             #region Required
             if(_startDate == null)
                 return false;
+
             if(_startTime == null || !Regex.IsMatch(_startTime, @"^[0-9]{2}:[0-9]{2}$") ||
                 int.Parse(_startTime.Substring(0, 2)) < 0 || int.Parse(_startTime.Substring(0, 2)) > 23 ||
                 int.Parse(_startTime.Substring(3, 2)) < 0 || int.Parse(_startTime.Substring(3, 2)) > 59)
@@ -406,6 +404,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
             if(_endDate == null)
                 return false;
+
             if(_endTime == null || !Regex.IsMatch(_endTime, @"^[0-9]{2}:[0-9]{2}$") ||
                 int.Parse(_endTime.Substring(0, 2)) < 0 || int.Parse(_endTime.Substring(0, 2)) > 23 ||
                 int.Parse(_endTime.Substring(3, 2)) < 0 || int.Parse(_endTime.Substring(3, 2)) > 59)
@@ -416,181 +415,108 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
             if (_endDate - _startDate < new TimeSpan(0, 0, 15, 0))
                 return false;
+
+            if(_selectedTab == 0 || _selectedTab == 1) {
+                if(_instructor == null && _chosenInstructor == null)
+                    return false;
+                _chosenInstructor = _chosenInstructor ?? _instructor;
+
+                if(_participant == null && _chosenParticipant == null)
+                    return false;
+                _chosenParticipant = _chosenParticipant ?? _participant;
+
+                if(_courseKind == null)
+                    return false;
+
+                if (_isPractice) {
+                    if (_car == null && _chosenCar == null)
+                        return false;
+                    _chosenCar = _chosenCar ?? _car;
+                } else
+                    _chosenCar = null;
+            } else if (string.IsNullOrEmpty(_description))
+                return false;
             #endregion
 
             if (_selectedTab == 0) {
-                if (_instructor != null) {
-                    if (_participant == null && _chosenParticipant == null)
-                        return false;
-
-                    if (_courseKind == null)
-                        return false;
-
-                    if (_isPractice && _car == null && _chosenCar == null)
-                        return false;
-
-                    _classDate.StartDate = (DateTime) _startDate;
-                    _classDate.EndDate = (DateTime) _endDate;
-                    _classDate.Instructor = _chosenInstructor ?? _instructor;
-                    _classDate.Participant = _chosenParticipant ?? _participant;
-                    _classDate.CourseKind = (CourseKind) _courseKind;
-
-                    if (_isPractice)
-                        _classDate.Car = _chosenCar ?? _car;
-                    else
-                        _classDate.Car = null;
-
-                    _classDate.Distance = _isPractice ? _distance : null;
-                    _classDate.IsAdditional = false; // TODO zmienić
-                    _classDate.Price = null; // TODO zmienić
-                } else if(_student != null) {
-                    if(_instructor == null && _chosenInstructor == null)
-                        return false;
-
-                    if(_participant == null && _chosenParticipant == null)
-                        return false;
-
-                    if(_courseKind == null)
-                        return false;
-
-                    if(_isPractice && _car == null && _chosenCar == null)
-                        return false;
-
-                    _classDate.StartDate = (DateTime)_startDate;
-                    _classDate.EndDate = (DateTime)_endDate;
-                    _classDate.Instructor = _chosenInstructor ?? _instructor;
-                    _classDate.Participant = _chosenParticipant ?? _participant;
-                    _classDate.CourseKind = (CourseKind)_courseKind;
-
-                    if(_isPractice)
-                        _classDate.Car = _chosenCar ?? _car;
-                    else
-                        _classDate.Car = null;
-
-                    _classDate.Distance = _isPractice ? _distance : null;
-                    _classDate.IsAdditional = false; // TODO zmienić
-                    _classDate.Price = null; // TODO zmienić
-                } else if(_car != null) {
-                    if(_instructor == null && _chosenInstructor == null)
-                        return false;
-
-                    if(_participant == null && _chosenParticipant == null)
-                        return false;
-
-                    _classDate.StartDate = (DateTime)_startDate;
-                    _classDate.EndDate = (DateTime)_endDate;
-                    _classDate.Instructor = _chosenInstructor ?? _instructor;
-                    _classDate.Participant = _chosenParticipant ?? _participant;
-                    _classDate.CourseKind = Model.Enums.CourseKind.Practice;
-                    _classDate.Car = _car;
-
-                    _classDate.Distance = _distance;
-                    _classDate.IsAdditional = false; // TODO zmienić
-                    _classDate.Price = null; // TODO zmienić
-                }
+                _classDate.StartDate = (DateTime) _startDate;
+                _classDate.EndDate = (DateTime) _endDate;
+                _classDate.Instructor = _chosenInstructor;
+                _classDate.Participant = _chosenParticipant;
+                _classDate.CourseKind = (CourseKind) _courseKind;
+                _classDate.Car = _chosenCar;
+                _classDate.Distance = _isPractice ? _distance : null;
+                _classDate.IsAdditional = false; // TODO zmienić
+                _classDate.Price = null; // TODO zmienić
             } else if(_selectedTab == 1) {
-                if(_instructor != null) {
-                    if(_participant == null && _chosenParticipant == null)
-                        return false;
-
-                    if(_courseKind == null)
-                        return false;
-
-                    if(_isPractice && _car == null && _chosenCar == null)
-                        return false;
-
-                    _examDate.StartDate = (DateTime)_startDate;
-                    _examDate.EndDate = (DateTime)_endDate;
-                    _examDate.Instructor = _chosenInstructor ?? _instructor;
-                    _examDate.Participant = _chosenParticipant ?? _participant;
-                    _examDate.CourseKind = (CourseKind)_courseKind;
-
-                    if(_isPractice)
-                        _examDate.Car = _chosenCar ?? _car;
-                    else
-                        _examDate.Car = null;
-
-                    _examDate.IsPassed = false; // TODO zmienić
-                } else if(_student != null) {
-                    if(_instructor == null && _chosenInstructor == null)
-                        return false;
-
-                    if(_participant == null && _chosenParticipant == null)
-                        return false;
-
-                    if(_courseKind == null)
-                        return false;
-
-                    if(_isPractice && _car == null && _chosenCar == null)
-                        return false;
-
-                    _examDate.StartDate = (DateTime)_startDate;
-                    _examDate.EndDate = (DateTime)_endDate;
-                    _examDate.Instructor = _chosenInstructor ?? _instructor;
-                    _examDate.Participant = _chosenParticipant ?? _participant;
-                    _examDate.CourseKind = (CourseKind)_courseKind;
-
-                    if(_isPractice)
-                        _examDate.Car = _chosenCar ?? _car;
-                    else
-                        _examDate.Car = null;
-
-                    _examDate.IsPassed = false; // TODO zmienić
-                } else if(_participant != null) {
-                    if(_instructor == null && _chosenInstructor == null)
-                        return false;
-
-                    if(_courseKind == null)
-                        return false;
-
-                    if(_isPractice && (_car == null && _chosenCar == null))
-                        return false;
-
-                    _examDate.StartDate = (DateTime)_startDate;
-                    _examDate.EndDate = (DateTime)_endDate;
-                    _examDate.Instructor = _chosenInstructor ?? _instructor;
-                    _examDate.Participant = _chosenParticipant ?? _participant;
-                    _examDate.CourseKind = (CourseKind)_courseKind;
-
-                    if(_isPractice)
-                        _examDate.Car = _chosenCar ?? _car;
-                    else
-                        _examDate.Car = null;
-
-                    _examDate.IsPassed = false; // TODO zmienić
-                } else if(_car != null) {
-                    if(_instructor == null && _chosenInstructor == null)
-                        return false;
-
-                    if(_participant == null && _chosenParticipant == null)
-                        return false;
-
-                    _examDate.StartDate = (DateTime)_startDate;
-                    _examDate.EndDate = (DateTime)_endDate;
-                    _examDate.Instructor = _chosenInstructor ?? _instructor;
-                    _examDate.Participant = _chosenParticipant ?? _participant;
-                    _examDate.CourseKind = Model.Enums.CourseKind.Practice;
-                    _examDate.Car = _car;
-
-                    _examDate.IsPassed = false; // TODO zmienić
-                }
+                _examDate.StartDate = (DateTime)_startDate;
+                _examDate.EndDate = (DateTime)_endDate;
+                _examDate.Instructor = _chosenInstructor;
+                _examDate.Participant = _chosenParticipant;
+                _examDate.CourseKind = (CourseKind)_courseKind;
+                _examDate.Car = _chosenCar;
+                _examDate.IsPassed = false; // TODO zmienić
             } else if(_selectedTab == 2) {
-                if(_instructor != null) {
-                    _lockedDate.StartDate = (DateTime)_startDate;
-                    _lockedDate.EndDate = (DateTime)_endDate;
+                _lockedDate.StartDate = (DateTime)_startDate;
+                _lockedDate.EndDate = (DateTime)_endDate;
+                _lockedDate.Description = _description;
+
+                if(_instructor != null)
                     _lockedDate.Instructor = _instructor;
-                    _lockedDate.Description = _description;
-                } else if(_student != null || _participant != null) {
-                    _lockedDate.StartDate = (DateTime)_startDate;
-                    _lockedDate.EndDate = (DateTime)_endDate;
+                else if(_student != null || _participant != null)
                     _lockedDate.Participant = _participant;
-                    _lockedDate.Description = _description;
-                } else if(_car != null) {
-                    _lockedDate.StartDate = (DateTime)_startDate;
-                    _lockedDate.EndDate = (DateTime)_endDate;
+                else if(_car != null)
                     _lockedDate.Car = _car;
-                    _lockedDate.Description = _description;
-                }
+            }
+
+            using (var repository = new BaseRepository()) {
+                if (
+                    repository
+                        .ToList<ClassesDates>()
+                        .Count(
+                            x =>
+                                _classDate.Id != x.Id &&
+                                ((_chosenInstructor != null && x.Instructor == _chosenInstructor) ||
+                                    (_chosenParticipant != null && x.Participant == _chosenParticipant) ||
+                                    (_chosenCar != null && x.Car == _chosenCar)) &&
+                                ((_startDate < x.StartDate && _endDate > x.StartDate) ||
+                                    (_endDate > x.EndDate && _startDate < x.EndDate) ||
+                                    (_startDate > x.StartDate && _endDate < x.EndDate) ||
+                                    _startDate == x.StartDate ||
+                                    _endDate == x.EndDate)
+                                )
+                    +
+                    repository
+                        .ToList<ExamsDates>()
+                        .Count(
+                            x =>
+                                _classDate.Id != x.Id &&
+                                ((_chosenInstructor != null && x.Instructor == _chosenInstructor) ||
+                                    (_chosenParticipant != null && x.Participant == _chosenParticipant) ||
+                                    (_chosenCar != null && x.Car == _chosenCar)) &&
+                                ((_startDate < x.StartDate && _endDate > x.StartDate) ||
+                                    (_endDate > x.EndDate && _startDate < x.EndDate) ||
+                                    (_startDate > x.StartDate && _endDate < x.EndDate) ||
+                                    _startDate == x.StartDate ||
+                                    _endDate == x.EndDate)
+                                )
+                    +
+                    repository
+                        .ToList<LockedDates>()
+                        .Count(
+                            x =>
+                                _classDate.Id != x.Id &&
+                                ((_chosenInstructor != null && x.Instructor == _chosenInstructor) ||
+                                    (_chosenParticipant != null && x.Participant == _chosenParticipant) ||
+                                    (_chosenCar != null && x.Car == _chosenCar)) &&
+                                ((_startDate < x.StartDate && _endDate > x.StartDate) ||
+                                    (_endDate > x.EndDate && _startDate < x.EndDate) ||
+                                    (_startDate > x.StartDate && _endDate < x.EndDate) ||
+                                    _startDate == x.StartDate ||
+                                    _endDate == x.EndDate)
+                                )
+                    > 0)
+                    return false;
             }
 
             return true;
@@ -694,8 +620,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         public string EndTime {
             get {
                 if (_endDate != null && _endTime != null && Regex.IsMatch(_endTime, @"^[0-9]{2}:[0-9]{2}$")) {
-                    var hour = int.Parse(_startTime.Substring(0, 2));
-                    var minute = int.Parse(_startTime.Substring(3, 2));
+                    var hour = int.Parse(_endTime.Substring(0, 2));
+                    var minute = int.Parse(_endTime.Substring(3, 2));
 
                     if(hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59)
                         return _endDate.Value.ToShortTimeString();
@@ -717,6 +643,14 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             set {
                 _courseKind = value;
                 IsCarChooserEnabled = IsPractice = _courseKind != null && _courseKind.Value.Equals(Model.Enums.CourseKind.Practice);
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsCourseKindChooserEnabled {
+            get { return _isCourseKindChooserEnabled; }
+            set {
+                _isCourseKindChooserEnabled = value;
                 RaisePropertyChanged();
             }
         }
@@ -774,6 +708,12 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             set {
                 _chosenParticipant = value;
                 IsInstructorChooserEnabled = _chosenParticipant != null;
+                if (_chosenParticipant != null && _chosenParticipant.IsTheory) {
+                    IsCourseKindChooserEnabled = true;
+                } else {
+                    IsCourseKindChooserEnabled = false;
+                    CourseKind = Model.Enums.CourseKind.Practice;
+                }
                 FillInstructors();
                 FillCars();
                 RaisePropertyChanged();
@@ -911,9 +851,9 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
             await Task.Run(() => {
                 using(var repository = new BaseRepository()) {
-                    var carsToEliminate = new ObservableCollection<Car>();
-                    repository.ToList<CarPermissions>().Where(x => x.Category != participant.Course.Category).ForEach(x => carsToEliminate.Add(x.Car));
-                    AvailableCars = new ObservableCollection<Car>(repository.ToList<Car>().Where(x => !carsToEliminate.Contains(x)));
+                    var carsToInclude = new ObservableCollection<Car>();
+                    repository.ToList<CarPermissions>().Where(x => x.Category == participant.Course.Category && x.Car != null).ForEach(x => carsToInclude.Add(x.Car));
+                    AvailableCars = carsToInclude;
                 }
             });
 
@@ -936,7 +876,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                     var instructorsToInclude = new ObservableCollection<Instructor>();
                     // include instructors who does have permission for selected category
                     repository.ToList<InstructorPermissions>()
-                        .Where(x => x.Category == participant.Course.Category)
+                        .Where(x => x.Category == participant.Course.Category && x.Instructor != null)
                         .ForEach(x => instructorsToInclude.Add(x.Instructor));
                     AvailableInstructors = instructorsToInclude;
                 }
@@ -985,6 +925,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             _availableStudents = null;
             _availableParticipants = null;
             _availableCars = null;
+
+            _isCourseKindChooserEnabled = true;
         }
 
         private void ParseTime(ref DateTime? date, string time) {

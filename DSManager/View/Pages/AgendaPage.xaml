@@ -23,24 +23,10 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddInstructorEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                         <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
-                            </Rectangle.OpacityMask>
-                        </Rectangle>
-                    </Button>
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
-                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
-                            <Rectangle.OpacityMask>
-                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
-                            </Rectangle.OpacityMask>
-                        </Rectangle>
-                    </Button>
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
-                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
-                            <Rectangle.OpacityMask>
-                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
@@ -159,24 +145,10 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddStudentEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                         <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
-                            </Rectangle.OpacityMask>
-                        </Rectangle>
-                    </Button>
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
-                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
-                            <Rectangle.OpacityMask>
-                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
-                            </Rectangle.OpacityMask>
-                        </Rectangle>
-                    </Button>
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
-                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
-                            <Rectangle.OpacityMask>
-                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
@@ -244,7 +216,7 @@
 
                             <Border Grid.Row="0" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
                                 <Grid>
-                                    <wpfScheduler:Scheduler Events="{Binding StudentEvents}" SelectedDate="{Binding StudentSelectedDate}" OnScheduleDoubleClick="StudentScheduler_OnOnScheduleDoubleClick" OnEventDoubleClick="StudentScheduler_OnOnEventDoubleClick" OnEventMouseEnter="Scheduler_OnOnEventMouseEnter" OnEventMouseLeave="Scheduler_OnOnEventMouseLeave" Mode="Week"/>
+                                    <wpfScheduler:Scheduler Events="{Binding StudentEvents}" SelectedDate="{Binding StudentSelectedDate}" OnScheduleDoubleClick="StudentScheduler_OnOnScheduleDoubleClick" OnEventDoubleClick="StudentScheduler_OnOnEventDoubleClick" OnEventMouseEnter="Scheduler_OnOnEventMouseEnter" OnEventMouseLeave="Scheduler_OnOnEventMouseLeave" OnEventDelete="Scheduler_OnOnEventDelete" Mode="Week"/>
                                     <controls:ProgressRing IsActive="{Binding IsStudentEventsLoading}"/>
                                 </Grid>
                             </Border>
@@ -295,24 +267,10 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddCarEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                         <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
-                            </Rectangle.OpacityMask>
-                        </Rectangle>
-                    </Button>
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
-                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
-                            <Rectangle.OpacityMask>
-                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
-                            </Rectangle.OpacityMask>
-                        </Rectangle>
-                    </Button>
-                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteEvent}" Visibility="{Binding AgendaMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
-                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
-                            <Rectangle.OpacityMask>
-                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
@@ -372,7 +330,7 @@
 
                             <Border Grid.Row="0" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
                                 <Grid>
-                                    <wpfScheduler:Scheduler Events="{Binding CarEvents}" SelectedDate="{Binding CarSelectedDate}" OnScheduleDoubleClick="CarScheduler_OnOnScheduleDoubleClick" OnEventDoubleClick="CarScheduler_OnOnEventDoubleClick" OnEventMouseEnter="Scheduler_OnOnEventMouseEnter" OnEventMouseLeave="Scheduler_OnOnEventMouseLeave" Mode="Week"/>
+                                    <wpfScheduler:Scheduler Events="{Binding CarEvents}" SelectedDate="{Binding CarSelectedDate}" OnScheduleDoubleClick="CarScheduler_OnOnScheduleDoubleClick" OnEventDoubleClick="CarScheduler_OnOnEventDoubleClick" OnEventMouseEnter="Scheduler_OnOnEventMouseEnter" OnEventMouseLeave="Scheduler_OnOnEventMouseLeave" OnEventDelete="Scheduler_OnOnEventDelete" Mode="Week"/>
                                     <controls:ProgressRing IsActive="{Binding IsCarEventsLoading}"/>
                                 </Grid>
                             </Border>

@@ -31,6 +31,7 @@ namespace DSManager.ViewModel.Pages {
         private RelayCommand _deleteCar;
         private RelayCommand _filterCars;
         private RelayCommand _refreshCars;
+        private RelayCommand _changeFiltering;
         #endregion
 
         #region View Elements
@@ -40,6 +41,9 @@ namespace DSManager.ViewModel.Pages {
         private bool _isCarsLoading;
         private bool _isClassesDatesLoading;
         private bool _isExamsDatesLoading;
+        private bool _isAll;
+        private bool _isLocked;
+        private bool _isUnlocked;
         #endregion
 
         #region Helpers
@@ -50,6 +54,7 @@ namespace DSManager.ViewModel.Pages {
 
         public CarsViewModel() {
             _filter = _prevFilter = string.Empty;
+            IsAll = true;
             FillCars(_filter);
         }
 
@@ -88,6 +93,7 @@ namespace DSManager.ViewModel.Pages {
                 RaisePropertyChanged();
             }
         }
+
         public ObservableCollection<ExamsDates> ExamsDates {
             get {
                 return _examsDates;
@@ -97,6 +103,8 @@ namespace DSManager.ViewModel.Pages {
                 RaisePropertyChanged();
             }
         }
+
+        public ObservableCollection<string> LockedCarsFilters => new ObservableCollection<string> {"Wszystkie", "Aktualne", "Nieaktualne"};
         #endregion
 
         #region Commands
@@ -178,6 +186,7 @@ namespace DSManager.ViewModel.Pages {
             set {
                 if(_filter == value)
                     return;
+
                 _filter = value;
                 RaisePropertyChanged();
             }
@@ -222,6 +231,29 @@ namespace DSManager.ViewModel.Pages {
                 RaisePropertyChanged();
             }
         }
+
+        public bool IsAll {
+            get { return _isAll; }
+            set {
+                _isAll = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsLocked {
+            get { return _isLocked; }
+            set {
+                _isLocked = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool IsUnlocked {
+            get { return _isUnlocked; }
+            set {
+                _isUnlocked = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion
 
         #region Helpers
@@ -233,7 +265,7 @@ namespace DSManager.ViewModel.Pages {
                     using (var repository = new BaseRepository()) {
                         Cars =
                             new ObservableCollection<Car>(
-                                repository.ToList<Car>().OrderBy(car => car.Brand).ToList());
+                                repository.ToList<Car>().OrderBy(car => car.Brand));
                     }
                 } else {
                     if (filter.Contains(" ")) {
@@ -248,8 +280,7 @@ namespace DSManager.ViewModel.Pages {
                                                 x =>
                                                     x.Brand.Contains(filters[0]) && x.Model.Contains(filters[1]) ||
                                                     x.Brand.Contains(filters[1]) && x.Model.Contains(filters[0]))
-                                            .OrderBy(car => car.Brand)
-                                            .ToList());
+                                            .OrderBy(car => car.Brand));
                             }
                         } else {
                             using (var repository = new BaseRepository()) {
@@ -257,8 +288,7 @@ namespace DSManager.ViewModel.Pages {
                                     new ObservableCollection<Car>(
                                         repository.ToList<Car>()
                                             .Where(x => x.Brand.Contains(filter) || x.Model.Contains(filter))
-                                            .OrderBy(car => car.Brand)
-                                            .ToList());
+                                            .OrderBy(car => car.Brand));
                             }
                         }
                     } else {
@@ -267,11 +297,15 @@ namespace DSManager.ViewModel.Pages {
                                 new ObservableCollection<Car>(
                                     repository.ToList<Car>()
                                         .Where(x => x.Brand.Contains(filter) || x.Model.Contains(filter))
-                                        .OrderBy(car => car.Brand)
-                                        .ToList());
+                                        .OrderBy(car => car.Brand));
                         }
                     }
                 }
+
+                if (_isLocked)
+                    Cars = new ObservableCollection<Car>(Cars.Where(x => x.InspectionDate < DateTime.Now || x.InsuranceDate < DateTime.Now));
+                else if(_isUnlocked)
+                    Cars = new ObservableCollection<Car>(Cars.Where(x => x.InspectionDate >= DateTime.Now && x.InsuranceDate >= DateTime.Now));
             });
 
             IsCarsLoading = false;

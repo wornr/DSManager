@@ -13,8 +13,8 @@ namespace DSManager.Model.Mappings {
             Map(x => x.CertificateNr).Nullable();
             Map(x => x.IsTheory).Not.Nullable();
 
-            References(x => x.Student).Not.Nullable();
-            References(x => x.Instructor).Not.Nullable();
+            References(x => x.Student).Nullable();
+            References(x => x.Instructor).Nullable();
             References(x => x.Course).Nullable();
             HasMany(x => x.Payments).Cascade.All();
             HasMany(x => x.ClassesDates).Cascade.All();

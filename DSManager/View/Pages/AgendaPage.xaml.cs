@@ -150,7 +150,7 @@ namespace DSManager.View.Pages {
         }
 
         private async void Scheduler_OnOnEventDelete(object sender, Event e) {
-            MetroDialogSettings settings = new MetroDialogSettings() {
+            MetroDialogSettings settings = new MetroDialogSettings{
                 AffirmativeButtonText = "Tak",
                 NegativeButtonText = "Nie",
                 AnimateShow = true,
@@ -158,7 +158,7 @@ namespace DSManager.View.Pages {
             };
 
 
-            if(await (Application.Current.MainWindow as MetroWindow).ShowMessageAsync("Potwierdź", "Czy jesteś pewien, że chcesz usunąć daną wpłatę?", MessageDialogStyle.AffirmativeAndNegative, settings) == MessageDialogResult.Affirmative)
+            if(await (Application.Current.MainWindow as MetroWindow).ShowMessageAsync("Potwierdź", "Czy jesteś pewien, że chcesz usunąć dany termin?", MessageDialogStyle.AffirmativeAndNegative, settings) == MessageDialogResult.Affirmative)
                 using(var repository = new BaseRepository()) {
                     if(e.ClassesDates != null)
                         repository.Delete(e.ClassesDates);

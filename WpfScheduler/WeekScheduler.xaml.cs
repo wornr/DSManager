@@ -274,11 +274,23 @@ namespace WpfScheduler
                         Width = columnWidth*(numEndColumn - numColumn),
                         Margin = new Thickness(marginLeft, 0, 0, 0)
                     };
-                    wEvent.MouseDoubleClick += (sender, ea) =>
-                    {
+                    wEvent.MouseEnter += (sender, ea) => {
+                        ea.Handled = true;
+                        OnEventMouseEnter(sender, wEvent.Event);
+                    };
+                    wEvent.MouseLeave += (sender, ea) => {
+                        ea.Handled = true;
+                        OnEventMouseLeave(sender, wEvent.Event);
+                    };
+                    wEvent.MouseDoubleClick += (sender, ea) => {
                         ea.Handled = true;
                         OnEventDoubleClick(sender, wEvent.Event);
                     };
+                    wEvent.Delete += (sender, ea) => {
+                        ea.Handled = true;
+                        OnEventDelete(sender, wEvent.Event);
+                    };
+
                     AllDayEvents.Children.Add(wEvent);
                 }
             }

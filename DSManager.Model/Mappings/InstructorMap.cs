@@ -21,11 +21,11 @@ namespace DSManager.Model.Mappings {
             Map(x => x.PermissionsNr).Not.Nullable().Length(20);
 
             HasOne(x => x.User).PropertyRef(x => x.Instructor);
-            HasMany(x => x.Participants);
-            HasMany(x => x.Permissions).Cascade.All();
-            HasMany(x => x.ClassesDates);
-            HasMany(x => x.ExamsDates);
-            HasMany(x => x.LockedDates);
+            HasMany(x => x.Participants).Cascade.SaveUpdate();
+            HasMany(x => x.Permissions).Cascade.All().Inverse();
+            HasMany(x => x.ClassesDates).Cascade.All().Inverse();
+            HasMany(x => x.ExamsDates).Cascade.All().Inverse();
+            HasMany(x => x.LockedDates).Cascade.All().Inverse();
         }
     }
 }

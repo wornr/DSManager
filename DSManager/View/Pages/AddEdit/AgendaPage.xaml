@@ -260,7 +260,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <StackPanel Orientation="Vertical" Visibility="{Binding Car, Converter={StaticResource ValueToCollapsedNegativeConverter}}">
+                            <StackPanel Orientation="Vertical" Visibility="{Binding IsCourseKindChooserEnabled, Converter={StaticResource ValueToCollapsedConverter}}">
                                 <TextBlock Text="Rodzaj kursu"/>
                                 <ComboBox Width="115" Height="25" ItemsSource="{Binding CourseKinds}" SelectedItem="{Binding CourseKind, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                             </StackPanel>

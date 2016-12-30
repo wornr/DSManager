@@ -46,9 +46,9 @@ namespace DSManager.ViewModel.Pages {
         #endregion
 
         #region Commands
-        private RelayCommand _addEvent;
-        private RelayCommand _editEvent;
-        private RelayCommand _deleteEvent;
+        private RelayCommand _addInstructorEvent;
+        private RelayCommand _addStudentEvent;
+        private RelayCommand _addCarEvent;
         private RelayCommand _refreshInstructorEvents;
         private RelayCommand _refreshStudentEvents;
         private RelayCommand _refreshCarEvents;
@@ -198,15 +198,60 @@ namespace DSManager.ViewModel.Pages {
         #endregion
 
         #region Commands
-        public RelayCommand AddEvent {
+        public RelayCommand AddInstructorEvent {
             get {
-                return _addEvent ?? (_addEvent = new RelayCommand(() => {
+                return _addInstructorEvent?? (_addInstructorEvent = new RelayCommand(() => {
+                    if(Instructor == null) {
+                        ShowDialog("Błąd", "Nie wybrano żadnego instruktora!");
+                        return;
+                    }
                     var addWindow = new AddEditWindow { Title = "Dodaj wydarzenie" };
                     Messenger.Default.Send(new AddEditPageMessage {
                         Page = ViewModelLocator.Instance.AddEditAgenda,
                     });
-                    Messenger.Default.Send(new AddEditEntityMessage<Course> {
-                        Entity = null
+                    Messenger.Default.Send(new AddEditAgendaMessage<ClassesDates, Instructor> {
+                        Entity = null,
+                        Owner = _instructor
+                    });
+                    addWindow.ShowDialog();
+                }));
+            }
+        }
+
+        public RelayCommand AddStudentEvent {
+            get {
+                return _addStudentEvent ?? (_addStudentEvent = new RelayCommand(() => {
+                    if(Student == null) {
+                        ShowDialog("Błąd", "Nie wybrano żadnego kursanta!");
+                        return;
+                    }
+                    var addWindow = new AddEditWindow { Title = "Dodaj wydarzenie" };
+                    Messenger.Default.Send(new AddEditPageMessage {
+                        Page = ViewModelLocator.Instance.AddEditAgenda,
+                    });
+                    Messenger.Default.Send(new AddEditAgendaMessage<ClassesDates, Student> {
+                        Entity = null,
+                        Owner = _student
+                    });
+                    addWindow.ShowDialog();
+                }));
+            }
+        }
+
+        public RelayCommand AddCarEvent {
+            get {
+                return _addCarEvent ?? (_addCarEvent = new RelayCommand(() => {
+                    if(Car == null) {
+                        ShowDialog("Błąd", "Nie wybrano żadnego pojazdu!");
+                        return;
+                    }
+                    var addWindow = new AddEditWindow { Title = "Dodaj wydarzenie" };
+                    Messenger.Default.Send(new AddEditPageMessage {
+                        Page = ViewModelLocator.Instance.AddEditAgenda,
+                    });
+                    Messenger.Default.Send(new AddEditAgendaMessage<ClassesDates, Car> {
+                        Entity = null,
+                        Owner = _car
                     });
                     addWindow.ShowDialog();
                 }));
@@ -248,9 +293,18 @@ namespace DSManager.ViewModel.Pages {
             }
         }*/
 
-        public RelayCommand RefreshInstructorEvents => _refreshInstructorEvents ?? (_refreshInstructorEvents = new RelayCommand(FillInstructorEvents));
-        public RelayCommand RefreshStudentEvents => _refreshStudentEvents ?? (_refreshStudentEvents = new RelayCommand(FillStudentEvents));
-        public RelayCommand RefreshCarEvents => _refreshCarEvents ?? (_refreshCarEvents = new RelayCommand(FillCarEvents));
+        public RelayCommand RefreshInstructorEvents => _refreshInstructorEvents ?? (_refreshInstructorEvents = new RelayCommand(() => {
+            FillInstructors();
+            FillInstructorEvents();
+        }));
+        public RelayCommand RefreshStudentEvents => _refreshStudentEvents ?? (_refreshStudentEvents = new RelayCommand(() => {
+            FillStudents();
+            FillStudentEvents();
+        }));
+        public RelayCommand RefreshCarEvents => _refreshCarEvents ?? (_refreshCarEvents = new RelayCommand(() => {
+            FillCars();
+            FillCarEvents();
+        }));
 
         #endregion
 
@@ -316,6 +370,9 @@ namespace DSManager.ViewModel.Pages {
             });
 
             IsInstructorsLoading = false;
+
+            if (!Instructors.Contains(_instructor))
+                _instructor = null;
         }
 
         private async void FillInstructorEvents() {
@@ -337,7 +394,7 @@ namespace DSManager.ViewModel.Pages {
                             Instructor = x.Instructor,
                             Participant = x.Participant,
                             Car = x.Car,
-                            Subject = x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName,
+                            Subject = x.Participant.Student?.FirstName + " " + x.Participant.Student?.SecondName + " " + x.Participant.Student?.LastName,
                             Color = x.CourseKind == CourseKind.Theory ? Brushes.Green : Brushes.RoyalBlue
                         });
                     });
@@ -351,7 +408,7 @@ namespace DSManager.ViewModel.Pages {
                             Instructor = x.Instructor,
                             Participant = x.Participant,
                             Car = x.Car,
-                            Subject = x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName,
+                            Subject = x.Participant.Student?.FirstName + " " + x.Participant.Student?.SecondName + " " + x.Participant.Student?.LastName,
                             Color = x.CourseKind == CourseKind.Theory ? Brushes.Coral : Brushes.DarkViolet
                         });
                     });
@@ -383,7 +440,7 @@ namespace DSManager.ViewModel.Pages {
 
             await Task.Run(() => {
                 using(var repository = new BaseRepository()) {
-                    Students = new ObservableCollection<Student>(repository.ToList<Student>());
+                    Students = new ObservableCollection<Student>(repository.ToList<Student>().Where(x => x.Participants.Count > 0));
                 }
             });
 
@@ -410,7 +467,7 @@ namespace DSManager.ViewModel.Pages {
                             Instructor = x.Instructor,
                             Participant = x.Participant,
                             Car = x.Car,
-                            Subject = x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName,
+                            Subject = x.Participant.Instructor == null ? "Brak instruktora" : x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName,
                             Color = x.CourseKind == CourseKind.Theory ? Brushes.Green : Brushes.RoyalBlue
                         });
                     });
@@ -424,7 +481,7 @@ namespace DSManager.ViewModel.Pages {
                             Instructor = x.Instructor,
                             Participant = x.Participant,
                             Car = x.Car,
-                            Subject = x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName,
+                            Subject = x.Participant.Instructor == null ? "Brak instruktora" : x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName,
                             Color = x.CourseKind == CourseKind.Theory ? Brushes.Coral : Brushes.DarkViolet
                         });
                     });
@@ -482,7 +539,7 @@ namespace DSManager.ViewModel.Pages {
                             Instructor = x.Instructor,
                             Participant = x.Participant,
                             Car = x.Car,
-                            Subject = "Instruktor: " + x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName + "\nKursant: " + x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName,
+                            Subject = "Instruktor: " + (x.Participant.Instructor == null ? "brak" : x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName) + "\nKursant: " + (x.Participant.Student == null ? "brak" : x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName),
                             Description = x.Car.Brand + " " + x.Car.Model,
                             Color = Brushes.RoyalBlue
                         });
@@ -497,7 +554,7 @@ namespace DSManager.ViewModel.Pages {
                             Instructor = x.Instructor,
                             Participant = x.Participant,
                             Car = x.Car,
-                            Subject = "Instruktor: " + x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName + "\nKursant: " + x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName,
+                            Subject = "Instruktor: " + (x.Participant.Instructor == null ? "brak" : x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName) + "\nKursant: " + (x.Participant.Student == null ? "brak" : x.Participant.Student.FirstName + " " + x.Participant.Student.SecondName + " " + x.Participant.Student.LastName),
                             Description = x.Car.Brand + " " + x.Car.Model,
                             Color = Brushes.DarkViolet
                         });

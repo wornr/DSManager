@@ -60,14 +60,31 @@
         </StackPanel>
 
         <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="284"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Border BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+            <StackPanel Orientation="Horizontal">
+                <RadioButton GroupName="type" Command="{Binding RefreshCars}" IsChecked="{Binding Path=IsAll}">
+                    <Label>Wszystkie</Label>
+                </RadioButton>
+                <RadioButton GroupName="type" Command="{Binding RefreshCars}" IsChecked="{Binding Path=IsUnlocked}">
+                    <Label>Aktywne</Label>
+                </RadioButton>
+                <RadioButton GroupName="type" Command="{Binding RefreshCars}" IsChecked="{Binding Path=IsLocked}">
+                    <Label>Zablokowane</Label>
+                </RadioButton>
+            </StackPanel>
+
+            <Border Grid.Row="1" Grid.Column="0" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
                 <Grid>
-                    <DataGrid x:Name="CarsList" ItemsSource="{Binding Cars}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Car}" IsEnabled="{Binding IsCarsLoading, Converter={StaticResource BoolNegationConverter}}">
+                    <DataGrid ItemsSource="{Binding Cars}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Car}" IsEnabled="{Binding IsCarsLoading, Converter={StaticResource BoolNegationConverter}}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Marka" Binding="{Binding Brand}" Width="90"/>
 
@@ -80,7 +97,7 @@
                 </Grid>
             </Border>
 
-            <Grid Grid.Column="1">
+            <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="120"/>
