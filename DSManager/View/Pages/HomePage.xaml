@@ -1,0 +1,10 @@
+﻿<UserControl x:Class="DSManager.View.Pages.HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignWidth="1235" d:DesignHeight="650">
+
+    <Image Source="/DSManager;component/Resources/Images/splash_screen.png" Stretch="None" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+</UserControl>

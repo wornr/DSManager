@@ -1,0 +1,85 @@
+﻿<mahApps:MetroWindow x:Class="DSManager.View.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mahApps="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:hamburgerMenu="clr-namespace:HamburgerMenu;assembly=HamburgerMenu"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:res="clr-namespace:DSManager.Properties"
+        xmlns:pages="clr-namespace:DSManager.ViewModel.Pages"
+        xmlns:views="clr-namespace:DSManager.View.Pages"
+        xmlns:converters="clr-namespace:DSManager.Converters"
+        mc:Ignorable="d"
+        DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
+        Title="DS Manager" Icon="/DSManager;component/Resources/Icons/app.ico" MinWidth="1250" MinHeight="650" WindowStartupLocation="CenterScreen" GlowBrush="Black">
+
+    <Window.Resources>
+        <!-- Home -->
+        <DataTemplate DataType="{x:Type pages:HomeViewModel}">
+            <views:HomePage/>
+        </DataTemplate>
+        
+        <!-- Students -->
+        <DataTemplate DataType="{x:Type pages:StudentsViewModel}">
+            <views:StudentsPage/>
+        </DataTemplate>
+        <!-- Instructors -->
+        <DataTemplate DataType="{x:Type pages:InstructorsViewModel}">
+            <views:InstructorsPage/>
+        </DataTemplate>
+        <!-- Cars -->
+        <DataTemplate DataType="{x:Type pages:CarsViewModel}">
+            <views:CarsPage/>
+        </DataTemplate>
+        <!-- Courses -->
+        <DataTemplate DataType="{x:Type pages:CoursesViewModel}">
+            <views:CoursesPage/>
+        </DataTemplate>
+        <!-- Agenda -->
+        <DataTemplate DataType="{x:Type pages:AgendaViewModel}">
+            <views:AgendaPage/>
+        </DataTemplate>
+
+        <!-- Statistics -->
+        <DataTemplate DataType="{x:Type pages:StatisticsViewModel}">
+            <views:StatisticsPage/>
+        </DataTemplate>
+        <!-- Users -->
+        <DataTemplate DataType="{x:Type pages:UsersViewModel}">
+            <views:UsersPage/>
+        </DataTemplate>
+        <!-- Settings -->
+        <DataTemplate DataType="{x:Type pages:SettingsViewModel}">
+            <views:SettingsPage/>
+        </DataTemplate>
+        
+        <converters:ValueToCollapsedConverter x:Key="ValueToCollapsedConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <mahApps:TransitioningContentControl Margin="50,0,0,0" Content="{Binding CurrentViewModel}" Transition="Left"/>
+
+        <hamburgerMenu:HamburgerMenu MaxWidth="200" Background="#151515" MenuIconColor="White" SelectionIndicatorColor="White" MenuItemForeground="White" IsOpen="True" HorizontalAlignment="Left">
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Homepage}" MaxHeight="34" SelectionCommand="{Binding OpenHomePage}" Icon="/DSManager;component/Resources/Icons/Menu/home.png"/>
+
+            <hamburgerMenu:HamburgerMenuItem IsEnabled="False"/>
+            
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Students}" MaxHeight="34" SelectionCommand="{Binding OpenStudentsPage}" Icon="/DSManager;component/Resources/Icons/Menu/student.png" Visibility="{Binding StudentsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Instructors}" MaxHeight="34" SelectionCommand="{Binding OpenInstructorsPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png" Visibility="{Binding InstructorsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Cars}" MaxHeight="34" SelectionCommand="{Binding OpenCarsPage}" Icon="/DSManager;component/Resources/Icons/Menu/car.png" Visibility="{Binding CarsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Courses}" MaxHeight="34" SelectionCommand="{Binding OpenCoursesPage}" Icon="/DSManager;component/Resources/Icons/Menu/book.png" Visibility="{Binding CoursesMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Agenda}" MaxHeight="34" SelectionCommand="{Binding OpenAgendaPage}" Icon="/DSManager;component/Resources/Icons/Menu/calendar.png"/>
+
+            <hamburgerMenu:HamburgerMenuItem IsEnabled="False"/>
+
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Statistics}" MaxHeight="34" SelectionCommand="{Binding OpenStatisticsPage}" Icon="/DSManager;component/Resources/Icons/Menu/statistics.png"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Users}" MaxHeight="34" SelectionCommand="{Binding OpenUsersPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png" Visibility="{Binding UsersMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Settings}" MaxHeight="34" SelectionCommand="{Binding OpenSettingsPage}" Icon="/DSManager;component/Resources/Icons/Menu/cog-wheel.png"/>
+
+            <hamburgerMenu:HamburgerMenuItem IsEnabled="False"/>
+
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Lock}" MaxHeight="34" SelectionCommand="{Binding Lock}" Icon="/DSManager;component/Resources/Icons/Menu/lock.png" SelectionIndicatorColor="Transparent"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.SignOut}" MaxHeight="34" SelectionCommand="{Binding SignOut}" Icon="/DSManager;component/Resources/Icons/Menu/sign-out.png" SelectionIndicatorColor="Transparent"/>
+        </hamburgerMenu:HamburgerMenu>
+    </Grid>
+</mahApps:MetroWindow>

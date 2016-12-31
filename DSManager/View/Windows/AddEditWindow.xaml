@@ -1,0 +1,67 @@
+﻿<mahApps:MetroWindow x:Class="DSManager.View.Windows.AddEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mahApps="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pages="clr-namespace:DSManager.ViewModel.Pages.AddEdit"
+        xmlns:views="clr-namespace:DSManager.View.Pages.AddEdit"
+        mc:Ignorable="d"
+        x:Name="AddEditWindowInstance"
+        DataContext="{Binding Source={StaticResource Locator}, Path=AddEdit}"
+        Width="800" Height="600" Icon="/DSManager;component/Resources/Icons/app.ico" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" GlowBrush="Black">
+
+    <Window.Resources>
+        <!-- Student -->
+        <DataTemplate DataType="{x:Type pages:AddEditStudentViewModel}">
+            <views:StudentPage/>
+        </DataTemplate>
+        <!-- Instructor -->
+        <DataTemplate DataType="{x:Type pages:AddEditInstructorViewModel}">
+            <views:InstructorPage/>
+        </DataTemplate>
+        <!-- Car -->
+        <DataTemplate DataType="{x:Type pages:AddEditCarViewModel}">
+            <views:CarPage/>
+        </DataTemplate>
+        <!-- Course -->
+        <DataTemplate DataType="{x:Type pages:AddEditCourseViewModel}">
+            <views:CoursePage/>
+        </DataTemplate>
+        <!-- Agenda -->
+        <DataTemplate DataType="{x:Type pages:AddEditAgendaViewModel}">
+            <views:AgendaPage/>
+        </DataTemplate>
+        <!-- Payment -->
+        <DataTemplate DataType="{x:Type pages:AddEditPaymentViewModel}">
+            <views:PaymentPage/>
+        </DataTemplate>
+
+        <!-- User -->
+        <DataTemplate DataType="{x:Type pages:AddEditUserViewModel}">
+            <views:UserPage/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="16"/>
+        </Grid.RowDefinitions>
+
+        <Border BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="15" Padding="8">
+            <mahApps:TransitioningContentControl Content="{Binding CurrentViewModel}" Transition="Left"/>
+        </Border>
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Width="100" Content="Anuluj" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=AddEditWindowInstance}"/>
+            <Button Grid.Column="1" Width="100" Content="Zapisz" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=AddEditWindowInstance}"/>
+        </Grid>
+    </Grid>
+</mahApps:MetroWindow>

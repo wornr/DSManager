@@ -1,0 +1,189 @@
+﻿<UserControl x:Class="DSManager.View.Pages.AddEdit.CoursePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:converters="clr-namespace:DSManager.Converters"
+      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+      mc:Ignorable="d" 
+      d:DesignWidth="800" d:DesignHeight="600">
+
+    <UserControl.Resources>
+        <converters:ObjectToBoolConverter x:Key="ObjectToBoolConverter"/>
+        <converters:ValueToHiddenConverter x:Key="ValueToHiddenConverter"/>
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Orientation="Horizontal">
+            <StackPanel.Resources>
+                <Style TargetType="StackPanel">
+                    <Setter Property="Margin" Value="10,0"/>
+                </Style>
+            </StackPanel.Resources>
+            
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Data rozpoczęcia" Visibility="{Binding StartDate, Converter={StaticResource ValueToHiddenConverter}}"/>
+                <DatePicker controls:TextBoxHelper.Watermark="Data rozpoczęcia" Width="125" SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+                    <!--<DatePicker.Resources>
+                                <Style TargetType="DatePickerTextBox">
+                                    <Setter Property="IsReadOnly" Value="True"/>
+                                </Style>
+                            </DatePicker.Resources>-->
+                </DatePicker>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Kategoria"/>
+                <ComboBox Width="120" Height="25" ItemsSource="{Binding DrivingLicenseCategories}" SelectedItem="{Binding DrivingLicenseCategory, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Typ kursu"/>
+                <ComboBox Width="120" Height="25" ItemsSource="{Binding CourseTypes}" SelectedItem="{Binding CourseType, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            </StackPanel>
+            
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="15"/>
+                <RowDefinition/>
+                <RowDefinition Height="150"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Dostępni kursanci" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="Wybrani kursanci" HorizontalAlignment="Center"/>
+
+            <!-- TODO kursanci do wyboru (lista jest wyświetlana dopiero po wybraniu powyższych trzech parametrów i na tej podstawie jest filtrowana,
+            tzn. wyświetla tylko kursantów, którzy nie mają trwającego szkolenia na daną kategorię oraz tych, którzy nie posiadają jeszcze uprawnień na daną kategorię) -->
+            <Border Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                <Grid>
+                    <DataGrid Name="AvailableStudents" ItemsSource="{Binding AvailableStudents}" SelectedItem="{Binding AvailableStudent}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True" IsEnabled="{Binding IsStudentsLoading, Converter={StaticResource BoolNegationConverter}}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" Width="114"/>
+
+                            <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" Width="114"/>
+
+                            <DataGridTextColumn Header="Drugie imię" Binding="{Binding SecondName}" Width="114"/>
+
+                            <DataGridTextColumn Header="Data ur." Binding="{Binding BirthDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="73"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <controls:ProgressRing IsActive="{Binding IsStudentsLoading}" />
+                </Grid>
+            </Border>
+
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
+                <Button x:Name="MoveStudentToRight" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding MoveStudentToRight}" IsEnabled="{Binding AvailableStudent, Converter={StaticResource ObjectToBoolConverter}}">
+                    <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_chevron_right}"/>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </Button>
+
+                <Button x:Name="MoveStudentToLeft" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding MoveStudentToLeft}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}">
+                    <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_chevron_left}"/>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </Button>
+            </StackPanel>
+
+            <Border Grid.Row="1" Grid.Column="2" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                <DataGrid Name="ChosenStudents" ItemsSource="{Binding ChosenStudents, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" SelectedItem="{Binding ChosenStudent}" SelectionMode="Single" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Nazwisko" Binding="{Binding Student.LastName}" Width="114"/>
+
+                        <DataGridTextColumn Header="Imię" Binding="{Binding Student.FirstName}" Width="114"/>
+
+                        <DataGridTextColumn Header="Drugie imię" Binding="{Binding Student.SecondName}" Width="114"/>
+
+                        <DataGridTextColumn Header="Data ur." Binding="{Binding Student.BirthDate, ConverterCulture='pl-PL', StringFormat={}{0:d}}" Width="73"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <!-- TODO wypełnianie dodatkowych danych wybranego kursanta (z prawej tabeli) 
+                pomyśleć nad ikonką edycji przy każdym wierszu prawej tabeli (jeżeli będzie możliwość przerzucania między tabelami kilku kursantów na raz - SelectionMode="Extended")
+                w innym wypadku (możliwość przerzucania jednego kursanta między tabelami - SelectionMode="Single") należy edytować kursanta aktualnie wybranego w prawej tabeli -->
+            <Border Grid.Row="2" Grid.Column="2" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Margin" Value="10,0"/>
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="KEOS" Visibility="{Binding KEOSNr, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToHiddenConverter}}"/>
+                            <TextBox controls:TextBoxHelper.Watermark="KEOS" Width="85" MaxLength="11" Text="{Binding KEOSNr, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="PKK" Visibility="{Binding PKKNr, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToHiddenConverter}}"/>
+                            <TextBox controls:TextBoxHelper.Watermark="PKK" Width="85" MaxLength="11" Text="{Binding PKKNr, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Teoria"/>
+                            <CheckBox ToolTip="Teoria" IsChecked="{Binding IsTheory, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical">
+                        <!-- TODO Instruktor prowadzący (combo box - pomyśleć też nad inną metodą wyobru) -->
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Instruktor prowadzący"/>
+                            <ComboBox Width="120" Height="25" ItemsSource="{Binding Instructors}" SelectedItem="{Binding Instructor, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} {1} {2}">
+                                                    <Binding Path="FirstName"/>
+                                                    <Binding Path="SecondName"/>
+                                                    <Binding Path="LastName"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Cena szkolenia" Visibility="{Binding CoursePrice, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToHiddenConverter}}"/>
+                            <TextBox controls:TextBoxHelper.Watermark="Cena szkolenia" Width="120" Text="{Binding CoursePrice, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Data zakończenia" Visibility="{Binding EndDate, Converter={StaticResource ValueToHiddenConverter}}"/>
+                            <DatePicker controls:TextBoxHelper.Watermark="Data zakończenia" Width="125" SelectedDate="{Binding EndDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding IsEndDateEnabled}">
+                                <!--<DatePicker.Resources>
+                                    <Style TargetType="DatePickerTextBox">
+                                        <Setter Property="IsReadOnly" Value="True"/>
+                                    </Style>
+                                </DatePicker.Resources>-->
+                            </DatePicker>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
