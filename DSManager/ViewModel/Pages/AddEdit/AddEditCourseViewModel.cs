@@ -19,6 +19,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
     public class AddEditCourseViewModel : AddEditBaseViewModel, IDataErrorInfo {
         private Course _course;
         private DateTime? _startDate;
+        private DateTime _minimalEndDate;
         private DrivingLicenseCategory? _drivingLicenseCategory;
         private CourseType? _courseType;
         private Student _availableStudent;
@@ -28,6 +29,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         private ObservableCollection<Instructor> _instructors;
 
         private bool _isStudentsLoading;
+        private bool _isEndDateEnabled;
 
         private RelayCommand _moveStudentToRight;
         private RelayCommand _moveStudentToLeft;
@@ -60,6 +62,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _chosenStudent = null;
                 _instructors = new ObservableCollection<Instructor>();
             }
+            _isEndDateEnabled = false;
         }
 
         #region IDataErrorInfo Methods
@@ -100,6 +103,12 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 case "PKKNr":
                     if (string.IsNullOrEmpty(_chosenStudent?.PKKNr))
                         validationMessage = "Pole nie może być puste!";
+                    break;
+
+                case "EndDate":
+                    if (_chosenStudent?.EndDate < _minimalEndDate)
+                        validationMessage =
+                            "Data zakończenia szkolenia musi być późniejsza niż data zaliczenia ostatniego egzaminu!";
                     break;
 
                 case "Instructor":
@@ -145,7 +154,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 if (participant.CoursePrice <= 0)
                     return false;
 
-                if(participant.Instructor == null)
+                if (participant.Instructor == null)
+                    return false;
+
+                if (participant.EndDate != null && participant.EndDate < _minimalEndDate)
                     return false;
             }
             _course.Participants = _chosenStudents;
@@ -253,6 +265,22 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             get { return _chosenStudent?.PKKNr; }
             set {
                 _chosenStudent.PKKNr = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public DateTime? EndDate {
+            get { return _chosenStudent?.EndDate; }
+            set {
+                _chosenStudent.EndDate = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsEndDateEnabled {
+            get { return _isEndDateEnabled; }
+            set {
+                _isEndDateEnabled = value;
                 RaisePropertyChanged();
             }
         }
@@ -378,6 +406,22 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             Instructor = _chosenStudent.Instructor;
             IsTheory = _chosenStudent.IsTheory;
             CoursePrice = _chosenStudent.CoursePrice;
+            EndDate = _chosenStudent.EndDate;
+
+            using (var repository = new BaseRepository()) {
+                var passedTheory = repository.ToList<ExamsDates>().Where(x => x.Participant == _chosenStudent && x.CourseKind == CourseKind.Theory && x.IsPassed == true).OrderByDescending(x => x.EndDate).ToList();
+                var passedPractice = repository.ToList<ExamsDates>().Where(x => x.Participant == _chosenStudent && x.CourseKind == CourseKind.Practice && x.IsPassed == true).OrderByDescending(x => x.EndDate).ToList();
+
+                if (passedTheory.Count != 0 && passedPractice.Count != 0) {
+                    IsEndDateEnabled = true;
+                    _minimalEndDate = passedTheory.First().EndDate > passedPractice.First().EndDate
+                        ? passedTheory.First().EndDate.Date
+                        : passedPractice.First().EndDate.Date;
+                } else {
+                    IsEndDateEnabled = false;
+                    _minimalEndDate = DateTime.Now;
+                }
+            }
         }
 
         private void RefreshTables() {

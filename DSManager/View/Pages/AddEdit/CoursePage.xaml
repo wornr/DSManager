@@ -170,6 +170,17 @@
                             <TextBlock Text="Cena szkolenia" Visibility="{Binding CoursePrice, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToHiddenConverter}}"/>
                             <TextBox controls:TextBoxHelper.Watermark="Cena szkolenia" Width="120" Text="{Binding CoursePrice, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding ChosenStudent, Converter={StaticResource ObjectToBoolConverter}}"/>
                         </StackPanel>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Data zakończenia" Visibility="{Binding EndDate, Converter={StaticResource ValueToHiddenConverter}}"/>
+                            <DatePicker controls:TextBoxHelper.Watermark="Data zakończenia" Width="125" SelectedDate="{Binding EndDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" IsEnabled="{Binding IsEndDateEnabled}">
+                                <!--<DatePicker.Resources>
+                                    <Style TargetType="DatePickerTextBox">
+                                        <Setter Property="IsReadOnly" Value="True"/>
+                                    </Style>
+                                </DatePicker.Resources>-->
+                            </DatePicker>
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
             </Border>

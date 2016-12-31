@@ -626,6 +626,13 @@
                                 <TextBox controls:TextBoxHelper.Watermark="Godz zak." Width="115" Text="{Binding EndTime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                             </StackPanel>
                         </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Zaliczony"/>
+                                <ComboBox ItemsSource="{Binding IsPassedCollection}" SelectedItem="{Binding IsPassedString, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsPassedEnabled}"/>
+                            </StackPanel>
+                        </StackPanel>
                     </StackPanel>
 
                     <Grid Grid.Row="1">

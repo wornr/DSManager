@@ -38,6 +38,9 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         private bool _isPractice;
         private bool _isCarChooserEnabled;
         private bool _isInstructorChooserEnabled;
+        private bool _isPassedEnabled;
+        private string _isPassedString;
+        private bool? _isPassed;
 
         private Instructor _chosenInstructor;
         private Student _chosenStudent;
@@ -86,10 +89,10 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _startTime = _classDate.StartDate.ToShortTimeString();
                 _endDate = _classDate.EndDate;
                 _endTime = _classDate.EndDate.ToShortTimeString();
+                Distance = _classDate.Distance;
                 ChosenStudent = _classDate.Participant.Student;
                 ChosenParticipant = _classDate.Participant;
                 ChosenCar = _classDate.Car;
-
             } else {
                 _instructor = (Instructor) message.Owner;
                 _startDate = message.StartDate;
@@ -97,6 +100,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _endDate = _startDate?.AddHours(1);
                 _endTime = _endDate?.ToShortTimeString();
             }
+            if(_endDate != null && _endDate < DateTime.Now)
+                IsPassedEnabled = true;
         }
 
         private void HandleInstructorExamsDatesMessage(AddEditAgendaMessage<ExamsDates, Instructor> message) {
@@ -111,6 +116,9 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _startTime = _examDate.StartDate.ToShortTimeString();
                 _endDate = _examDate.EndDate;
                 _endTime = _examDate.EndDate.ToShortTimeString();
+                if (_endDate < DateTime.Now)
+                    IsPassedEnabled = true;
+                IsPassed = _examDate.IsPassed;
                 ChosenStudent = _examDate.Participant.Student;
                 ChosenParticipant = _examDate.Participant;
                 ChosenCar = _examDate.Car;
@@ -121,6 +129,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _endDate = _startDate?.AddHours(1);
                 _endTime = _endDate?.ToShortTimeString();
             }
+            if(_endDate != null && _endDate < DateTime.Now)
+                IsPassedEnabled = true;
             _defaultTab = _selectedTab = 1;
         }
 
@@ -143,6 +153,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _endDate = _startDate?.AddHours(1);
                 _endTime = _endDate?.ToShortTimeString();
             }
+            if(_endDate != null && _endDate < DateTime.Now)
+                IsPassedEnabled = true;
             _defaultTab = _selectedTab = 2;
         }
         #endregion
@@ -157,6 +169,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             _startTime = message.StartDate?.ToShortTimeString();
             _endDate = _startDate?.AddHours(1);
             _endTime = _endDate?.ToShortTimeString();
+            if(_endDate != null && _endDate < DateTime.Now)
+                IsPassedEnabled = true;
             FillParticipants();
         }
 
@@ -167,6 +181,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             _startTime = message.StartDate?.ToShortTimeString();
             _endDate = _startDate?.AddHours(1);
             _endTime = _endDate?.ToShortTimeString();
+            if(_endDate != null && _endDate < DateTime.Now)
+                IsPassedEnabled = true;
             FillParticipants();
             _defaultTab = _selectedTab = 1;
         }
@@ -178,6 +194,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             _startTime = message.StartDate?.ToShortTimeString();
             _endDate = _startDate?.AddHours(1);
             _endTime = _endDate?.ToShortTimeString();
+            if(_endDate != null && _endDate < DateTime.Now)
+                IsPassedEnabled = true;
             _defaultTab = _selectedTab = 2;
         }
         #endregion
@@ -194,6 +212,9 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             _startTime = _classDate.StartDate.ToShortTimeString();
             _endDate = _classDate.EndDate;
             _endTime = _classDate.EndDate.ToShortTimeString();
+            if(_endDate != null && _endDate < DateTime.Now)
+                IsPassedEnabled = true;
+            Distance = _classDate.Distance;
             FillParticipants();
             ChosenParticipant = _classDate.Participant;
             ChosenInstructor = _classDate.Instructor;
@@ -211,6 +232,9 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             _startTime = _examDate.StartDate.ToShortTimeString();
             _endDate = _examDate.EndDate;
             _endTime = _examDate.EndDate.ToShortTimeString();
+            if(_endDate != null && _endDate < DateTime.Now)
+                IsPassedEnabled = true;
+            IsPassed = _examDate.IsPassed;
             FillParticipants();
             ChosenParticipant = _examDate.Participant;
             ChosenInstructor = _examDate.Instructor;
@@ -228,6 +252,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             _startTime = _lockedDate.StartDate.ToShortTimeString();
             _endDate = _lockedDate.EndDate;
             _endTime = _lockedDate.EndDate.ToShortTimeString();
+            if(_endDate != null && _endDate < DateTime.Now)
+                IsPassedEnabled = true;
             _description = _lockedDate.Description;
             _defaultTab = _selectedTab = 2;
         }
@@ -246,6 +272,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _startTime = _classDate.StartDate.ToShortTimeString();
                 _endDate = _classDate.EndDate;
                 _endTime = _classDate.EndDate.ToShortTimeString();
+                Distance = _classDate.Distance;
                 ChosenStudent = _classDate.Participant.Student;
                 ChosenParticipant = _classDate.Participant;
                 ChosenInstructor = _classDate.Instructor;
@@ -258,6 +285,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             }
             CourseKind = Model.Enums.CourseKind.Practice;
             FillStudents();
+            if(_endDate != null && _endDate < DateTime.Now)
+                IsPassedEnabled = true;
         }
 
         private void HandleCarExamsDatesMessage(AddEditAgendaMessage<ExamsDates, Car> message) {
@@ -270,6 +299,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _startTime = _examDate.StartDate.ToShortTimeString();
                 _endDate = _examDate.EndDate;
                 _endTime = _examDate.EndDate.ToShortTimeString();
+                IsPassed = _examDate.IsPassed;
                 ChosenStudent = _examDate.Participant.Student;
                 ChosenParticipant = _examDate.Participant;
                 ChosenInstructor = _examDate.Instructor;
@@ -282,6 +312,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             }
             CourseKind = Model.Enums.CourseKind.Practice;
             FillStudents();
+            if(_endDate != null && _endDate < DateTime.Now)
+                IsPassedEnabled = true;
             _defaultTab = _selectedTab = 1;
         }
 
@@ -303,6 +335,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _endDate = _startDate?.AddHours(1);
                 _endTime = _endDate?.ToShortTimeString();
             }
+            if(_endDate != null && _endDate < DateTime.Now)
+                IsPassedEnabled = true;
             _defaultTab = _selectedTab = 2;
         }
         #endregion
@@ -448,14 +482,14 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _classDate.Distance = _isPractice ? _distance : null;
                 _classDate.IsAdditional = false; // TODO zmienić
                 _classDate.Price = null; // TODO zmienić
-            } else if(_selectedTab == 1) {
-                _examDate.StartDate = (DateTime)_startDate;
+            } else if (_selectedTab == 1) {
+                _examDate.StartDate = (DateTime) _startDate;
                 _examDate.EndDate = (DateTime)_endDate;
                 _examDate.Instructor = _chosenInstructor;
                 _examDate.Participant = _chosenParticipant;
-                _examDate.CourseKind = (CourseKind)_courseKind;
+                _examDate.CourseKind = (CourseKind) _courseKind;
                 _examDate.Car = _chosenCar;
-                _examDate.IsPassed = false; // TODO zmienić
+                _examDate.IsPassed = IsPassedConverter();
             } else if(_selectedTab == 2) {
                 _lockedDate.StartDate = (DateTime)_startDate;
                 _lockedDate.EndDate = (DateTime)_endDate;
@@ -591,12 +625,13 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                         repository.Delete(_lockedDate);
                 }
 
-                if (_selectedTab == 0)
+                if (_selectedTab == 0) {
                     repository.Save(_classDate);
-                else if (_selectedTab == 1)
+                } else if (_selectedTab == 1) {
                     repository.Save(_examDate);
-                else if (_selectedTab == 2)
+                } else if (_selectedTab == 2) {
                     repository.Save(_lockedDate);
+                }
             }
 
             return true;
@@ -668,6 +703,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             set {
                 _endDate = value;
                 EndTime = value?.ToShortTimeString();
+                if(_endDate != null && _endDate < DateTime.Now)
+                    IsPassedEnabled = true;
                 RaisePropertyChanged();
             }
         }
@@ -714,6 +751,26 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             get { return _distance; }
             set {
                 _distance = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ObservableCollection<string> IsPassedCollection => new ObservableCollection<string> { "Nie odbył się", "Nie", "Tak" };
+
+        public bool? IsPassed {
+            get { return _isPassed; }
+            set {
+                _isPassed = value;
+                _isPassedString = IsPassedBackConverter();
+                RaisePropertyChanged();
+            }
+        }
+
+        public string IsPassedString {
+            get { return _isPassedString; }
+            set {
+                _isPassedString = value;
+                _isPassed = IsPassedConverter();
                 RaisePropertyChanged();
             }
         }
@@ -847,10 +904,18 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             }
         }
 
-        public bool IsCarChooserEnabled{
+        public bool IsCarChooserEnabled {
             get { return _isCarChooserEnabled; }
             set {
                 _isCarChooserEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsPassedEnabled {
+            get { return _isPassedEnabled; }
+            set {
+                _isPassedEnabled = value;
                 RaisePropertyChanged();
             }
         }
@@ -970,6 +1035,9 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             _startDate = null;
             _endDate = null;
             _courseKind = null;
+            _distance = null;
+            _isPassed = null;
+            _isPassedString = "Nie odbył się";
 
             _chosenInstructor = null;
             _chosenStudent = null;
@@ -982,6 +1050,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             _availableCars = null;
 
             _isCourseKindChooserEnabled = true;
+            _isPassedEnabled = false;
         }
 
         private void ParseTime(ref DateTime? date, string time) {
@@ -992,6 +1061,24 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59)
                     date = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, hour, minute, 0);
             }
+        }
+
+        private bool? IsPassedConverter() {
+            if (_isPassedString.Equals("Nie"))
+                return false;
+            if (_isPassedString.Equals("Tak"))
+                return true;
+
+            return null;
+        }
+
+        private string IsPassedBackConverter() {
+            if (_isPassed == false)
+                return "Nie";
+            if (_isPassed == true)
+                return "Tak";
+
+            return "Nie odbył się";
         }
         #endregion
     }
