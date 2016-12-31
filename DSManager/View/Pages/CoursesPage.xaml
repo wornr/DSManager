@@ -48,7 +48,7 @@
                 </Rectangle>
             </Button>
 
-            <TextBox controls:TextBoxHelper.Watermark="Filtruj" controls:TextBoxHelper.ClearTextButton="True" Width="155" Height="12" Text="{Binding Filter}"/>
+            <!--<TextBox controls:TextBoxHelper.Watermark="Filtruj" controls:TextBoxHelper.ClearTextButton="True" Width="155" Height="12" Text="{Binding Filter}"/>
 
             <Button x:Name="SearchCourses" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FilterCourses}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
@@ -56,7 +56,7 @@
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
-            </Button>
+            </Button>-->
         </StackPanel>
 
         <Grid Grid.Row="1">

@@ -469,57 +469,112 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                     _lockedDate.Car = _car;
             }
 
-            using (var repository = new BaseRepository()) {
-                if (
-                    repository
-                        .ToList<ClassesDates>()
-                        .Count(
-                            x =>
-                                _classDate.Id != x.Id &&
-                                ((_chosenInstructor != null && x.Instructor == _chosenInstructor) ||
-                                    (_chosenParticipant != null && x.Participant == _chosenParticipant) ||
-                                    (_chosenCar != null && x.Car == _chosenCar)) &&
-                                ((_startDate < x.StartDate && _endDate > x.StartDate) ||
-                                    (_endDate > x.EndDate && _startDate < x.EndDate) ||
-                                    (_startDate > x.StartDate && _endDate < x.EndDate) ||
-                                    _startDate == x.StartDate ||
-                                    _endDate == x.EndDate)
-                                )
-                    +
-                    repository
-                        .ToList<ExamsDates>()
-                        .Count(
-                            x =>
-                                _classDate.Id != x.Id &&
-                                ((_chosenInstructor != null && x.Instructor == _chosenInstructor) ||
-                                    (_chosenParticipant != null && x.Participant == _chosenParticipant) ||
-                                    (_chosenCar != null && x.Car == _chosenCar)) &&
-                                ((_startDate < x.StartDate && _endDate > x.StartDate) ||
-                                    (_endDate > x.EndDate && _startDate < x.EndDate) ||
-                                    (_startDate > x.StartDate && _endDate < x.EndDate) ||
-                                    _startDate == x.StartDate ||
-                                    _endDate == x.EndDate)
-                                )
-                    +
-                    repository
-                        .ToList<LockedDates>()
-                        .Count(
-                            x =>
-                                _classDate.Id != x.Id &&
-                                ((_chosenInstructor != null && x.Instructor == _chosenInstructor) ||
-                                    (_chosenParticipant != null && x.Participant == _chosenParticipant) ||
-                                    (_chosenCar != null && x.Car == _chosenCar)) &&
-                                ((_startDate < x.StartDate && _endDate > x.StartDate) ||
-                                    (_endDate > x.EndDate && _startDate < x.EndDate) ||
-                                    (_startDate > x.StartDate && _endDate < x.EndDate) ||
-                                    _startDate == x.StartDate ||
-                                    _endDate == x.EndDate)
-                                )
-                    > 0)
-                    return false;
+            return CheckCollisions(_selectedTab);
+        }
+
+        public bool CheckCollisions(int tab) {
+            var rowCount = 0;
+            var id = 0;
+
+            switch(tab) {
+                case 0:
+                id = _classDate.Id;
+                break;
+                case 1:
+                id = _examDate.Id;
+                break;
+                case 2:
+                id = _lockedDate.Id;
+                break;
             }
 
-            return true;
+            using (var repository = new BaseRepository()) {
+                if (_isPractice) {
+                    rowCount += repository
+                        .ToList<ClassesDates>()
+                        .Count(x =>
+                            tab == 0 && x.Id != id &&
+                            (_chosenInstructor != null && x.Instructor == _chosenInstructor ||
+                            _chosenParticipant != null && x.Participant == _chosenParticipant ||
+                            _chosenCar != null && x.Car == _chosenCar) &&
+                            ((_startDate < x.StartDate &&
+                              _endDate > x.StartDate) ||
+                             (_endDate > x.EndDate && _startDate < x.EndDate) ||
+                             (_startDate > x.StartDate && _endDate < x.EndDate) ||
+                             _startDate == x.StartDate ||
+                             _endDate == x.EndDate));
+                    rowCount += repository
+                        .ToList<ExamsDates>()
+                        .Count(x =>
+                            tab == 1 && x.Id != id &&
+                            (_chosenInstructor != null && x.Instructor == _chosenInstructor ||
+                            _chosenParticipant != null && x.Participant == _chosenParticipant ||
+                            _chosenCar != null && x.Car == _chosenCar) &&
+                            ((_startDate < x.StartDate &&
+                              _endDate > x.StartDate) ||
+                             (_endDate > x.EndDate && _startDate < x.EndDate) ||
+                             (_startDate > x.StartDate && _endDate < x.EndDate) ||
+                             _startDate == x.StartDate ||
+                             _endDate == x.EndDate));
+                    rowCount += repository
+                        .ToList<LockedDates>()
+                        .Count(x =>
+                            tab == 2 && x.Id != id &&
+                            (_chosenInstructor != null && x.Instructor == _chosenInstructor ||
+                            _chosenParticipant != null && x.Participant == _chosenParticipant ||
+                            _chosenCar != null && x.Car == _chosenCar) &&
+                            ((_startDate < x.StartDate &&
+                              _endDate > x.StartDate) ||
+                             (_endDate > x.EndDate && _startDate < x.EndDate) ||
+                             (_startDate > x.StartDate && _endDate < x.EndDate) ||
+                             _startDate == x.StartDate ||
+                             _endDate == x.EndDate));
+                } else {
+                    rowCount += repository
+                        .ToList<ClassesDates>()
+                        .Count(x =>
+                            tab == 0 && x.Id != id &&
+                            (_chosenInstructor != null && x.Instructor == _chosenInstructor ||
+                            _chosenParticipant != null && x.Participant == _chosenParticipant ||
+                            _chosenCar != null && x.Car == _chosenCar) &&
+                            x.CourseKind == Model.Enums.CourseKind.Practice &&
+                            ((_startDate < x.StartDate &&
+                              _endDate > x.StartDate) ||
+                             (_endDate > x.EndDate && _startDate < x.EndDate) ||
+                             (_startDate > x.StartDate && _endDate < x.EndDate) ||
+                             _startDate == x.StartDate ||
+                             _endDate == x.EndDate));
+                    rowCount += repository
+                        .ToList<ExamsDates>()
+                        .Count(x =>
+                            tab == 1 && x.Id != id &&
+                            (_chosenInstructor != null && x.Instructor == _chosenInstructor ||
+                            _chosenParticipant != null && x.Participant == _chosenParticipant ||
+                            _chosenCar != null && x.Car == _chosenCar) &&
+                            x.CourseKind == Model.Enums.CourseKind.Practice &&
+                            ((_startDate < x.StartDate &&
+                              _endDate > x.StartDate) ||
+                             (_endDate > x.EndDate && _startDate < x.EndDate) ||
+                             (_startDate > x.StartDate && _endDate < x.EndDate) ||
+                             _startDate == x.StartDate ||
+                             _endDate == x.EndDate));
+                    rowCount += repository
+                        .ToList<LockedDates>()
+                        .Count(x =>
+                            tab == 2 && x.Id != id &&
+                            (_chosenInstructor != null && x.Instructor == _chosenInstructor ||
+                            _chosenParticipant != null && x.Participant == _chosenParticipant ||
+                            _chosenCar != null && x.Car == _chosenCar) &&
+                            ((_startDate < x.StartDate &&
+                              _endDate > x.StartDate) ||
+                             (_endDate > x.EndDate && _startDate < x.EndDate) ||
+                             (_startDate > x.StartDate && _endDate < x.EndDate) ||
+                             _startDate == x.StartDate ||
+                             _endDate == x.EndDate));
+                }
+            }
+
+            return rowCount == 0;
         }
 
         public override bool Save() {

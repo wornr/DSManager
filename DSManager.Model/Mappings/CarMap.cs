@@ -13,7 +13,7 @@ namespace DSManager.Model.Mappings {
             Map(x => x.InspectionDate).Not.Nullable();
             Map(x => x.InsuranceDate).Not.Nullable();
 
-            HasMany(x => x.Permissions).Cascade.All();
+            HasMany(x => x.Permissions).Cascade.All().Inverse();
             HasMany(x => x.ClassesDates);
             HasMany(x => x.ExamsDates);
             HasMany(x => x.LockedDates);
