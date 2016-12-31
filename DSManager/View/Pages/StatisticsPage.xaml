@@ -38,7 +38,11 @@
 
                 <wpf:CartesianChart Grid.Row="1" Series="{Binding IncomeCollection}" LegendLocation="Left" Visibility="{Binding IsIncomeEmpty, Converter={StaticResource ValueToCollapsedNegativeConverter}}">
                     <wpf:CartesianChart.AxisX>
-                        <wpf:Axis Labels="{Binding IncomeLabels}"/>
+                        <wpf:Axis Labels="{Binding IncomeLabels}">
+                            <wpf:Axis.Separator>
+                                <wpf:Separator Step="1"/>
+                            </wpf:Axis.Separator>
+                        </wpf:Axis>
                     </wpf:CartesianChart.AxisX>
                     <wpf:CartesianChart.AxisY>
                         <wpf:Axis LabelFormatter="{Binding IncomeFormatter}"/>
@@ -85,7 +89,11 @@
 
                 <wpf:CartesianChart Grid.Row="1" Series="{Binding CarExploitationCollection}" LegendLocation="Left" Visibility="{Binding IsCarExploitationEmpty, Converter={StaticResource ValueToCollapsedNegativeConverter}}">
                     <wpf:CartesianChart.AxisX>
-                        <wpf:Axis Labels="{Binding CarExploitationLabels}"/>
+                        <wpf:Axis Labels="{Binding CarExploitationLabels}">
+                            <wpf:Axis.Separator>
+                                <wpf:Separator Step="1"/>
+                            </wpf:Axis.Separator>
+                        </wpf:Axis>
                     </wpf:CartesianChart.AxisX>
                     <wpf:CartesianChart.AxisY>
                         <wpf:Axis LabelFormatter="{Binding CarExploitationFormatter}"/>
@@ -125,7 +133,11 @@
 
                 <wpf:CartesianChart Grid.Row="1" Series="{Binding InstructorPassRateCollection}" LegendLocation="Left" Visibility="{Binding IsInstructorPassRateEmpty, Converter={StaticResource ValueToCollapsedNegativeConverter}}">
                     <wpf:CartesianChart.AxisX>
-                        <wpf:Axis Labels="{Binding InstructorPassRateLabels}"/>
+                        <wpf:Axis Labels="{Binding InstructorPassRateLabels}">
+                            <wpf:Axis.Separator>
+                                <wpf:Separator Step="1"/>
+                            </wpf:Axis.Separator>
+                        </wpf:Axis>
                     </wpf:CartesianChart.AxisX>
                     <wpf:CartesianChart.AxisY>
                         <wpf:Axis MaxValue="100" MinValue="0" LabelFormatter="{Binding InstructorPassRateFormatter}"/>

@@ -65,6 +65,7 @@
     <Compile Include="Templates\PaymentPdf.cs" />
     <Compile Include="Templates\CoursePdf.cs" />
     <Compile Include="Utilities\AddLeadingZeros.cs" />
+    <Compile Include="Utilities\ValueToText.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DSManager.Model\DSManager.Model.csproj">
@@ -74,6 +75,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

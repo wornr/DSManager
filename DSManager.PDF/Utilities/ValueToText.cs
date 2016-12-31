@@ -129,8 +129,8 @@ namespace DSManager.Utilities {
 
             if(values.Length == 2)
                 return (showSign ? Sign + " " : "") + Parse(totalPart, groupsOnly) + totalCurrency + " " + Parse(decimalPart, groupsOnly) + decimalCurrency;
-            else
-                return (showSign ? Sign + " " : "") + Parse(totalPart, groupsOnly) + totalCurrency;
+            
+            return (showSign ? Sign + " " : "") + Parse(totalPart, groupsOnly) + totalCurrency;
         }
     }
 }

@@ -150,7 +150,6 @@
     <Compile Include="Utilities\PESELToDate.cs" />
     <Compile Include="Validators\BirthDateValidator.cs" />
     <Compile Include="Validators\PESELValidator.cs" />
-    <Compile Include="Utilities\ValueToText.cs" />
     <Compile Include="ViewModel\AddEditBaseViewModel.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\Pages\AddEdit\AddEditPaymentViewModel.cs" />

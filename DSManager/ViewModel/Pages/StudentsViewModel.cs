@@ -275,6 +275,8 @@ namespace DSManager.ViewModel.Pages {
                     });
                     if (error == null)
                         return;
+                    if(error is IOException)
+                        ShowDialog("Błąd", "Nie można zapisać pliku!\nPlik jest w użyciu, zamknij plik i ponów próbę");
                     if(error is DirectoryNotFoundException)
                         ShowDialog("Błąd", "Nie można zapisać pliku!\nŚcieżka zapisu nie istnieje.");
                     if(error is NotSupportedException)
@@ -298,6 +300,8 @@ namespace DSManager.ViewModel.Pages {
                     });
                     if(error == null)
                         return;
+                    if(error is IOException)
+                        ShowDialog("Błąd", "Nie można zapisać pliku!\nPlik jest w użyciu, zamknij plik i ponów próbę");
                     if(error is DirectoryNotFoundException)
                         ShowDialog("Błąd", "Nie można zapisać pliku!\nŚcieżka zapisu nie istnieje.");
                     if(error is NotSupportedException)

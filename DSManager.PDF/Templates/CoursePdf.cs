@@ -37,6 +37,8 @@ namespace DSManager.PDF.Templates {
             _document.Info.Title = "Karta zajęc";
             _document.Info.Subject = "Dokument wygenerowany automatycznie przez aplikację DSManager";
             _document.Info.Author = "DSManager";
+            _document.DefaultPageSetup.PageHeight = "29.7cm";
+            _document.DefaultPageSetup.PageWidth = "21cm";
             _document.DefaultPageSetup.LeftMargin = 25;
             _document.DefaultPageSetup.RightMargin = 25;
             _document.DefaultPageSetup.TopMargin = 35;
