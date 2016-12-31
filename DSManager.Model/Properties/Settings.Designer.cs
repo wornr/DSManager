@@ -70,5 +70,17 @@ namespace DSManager.Model.Properties {
                 this["DBPassword"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DeveloperMode {
+            get {
+                return ((bool)(this["DeveloperMode"]));
+            }
+            set {
+                this["DeveloperMode"] = value;
+            }
+        }
     }
 }

@@ -49,36 +49,41 @@ namespace DSManager.Model {
                 .BuildSessionFactory();*/
 
             // MySQL
-            return Fluently
-                .Configure()
-                .Database(
-                    MySQLConfiguration
-                        .Standard
-                        .Dialect<MySQL5Dialect>()
-                        .ConnectionString(cs => cs
-                            .Server(Properties.Settings.Default.DBHost)
-                            .Database(Properties.Settings.Default.DBName)
-                            .Username(Properties.Settings.Default.DBUser)
-                            .Password(Properties.Settings.Default.DBPassword)
-                        )
-                        .ShowSql
-                )
-                .Mappings(m => m.FluentMappings
-                        .AddFromAssembly(Assembly.Load("DSManager.Model"))
-                        .Conventions.Add(DefaultLazy.Never())
-                )
-                .ExposeConfiguration(BuildMySQLSchema)
-                .BuildSessionFactory();
-
-            // SQLite
-            /*return Fluently.Configure()
-                .Database(SQLiteConfiguration.Standard.UsingFile(dbPath).ShowSql)
-                .Mappings(m => m.FluentMappings
+            if (!Properties.Settings.Default.DeveloperMode)
+                return Fluently
+                    .Configure()
+                    .Database(
+                        MySQLConfiguration
+                            .Standard
+                            .Dialect<MySQL5Dialect>()
+                            .ConnectionString(cs => cs
+                                .Server(Properties.Settings.Default.DBHost)
+                                .Database(Properties.Settings.Default.DBName)
+                                .Username(Properties.Settings.Default.DBUser)
+                                .Password(Properties.Settings.Default.DBPassword)
+                            )
+                            .ShowSql
+                    )
+                    .Mappings(m => m.FluentMappings
                             .AddFromAssembly(Assembly.Load("DSManager.Model"))
                             .Conventions.Add(DefaultLazy.Never())
-                         )
+                    )
+                    .ExposeConfiguration(BuildMySQLSchema)
+                    .BuildSessionFactory();
+
+            // SQLite
+            return Fluently.Configure()
+                .Database(SQLiteConfiguration
+                    .Standard
+                    .UsingFile(dbPath)
+                    //.ShowSql
+                )
+                .Mappings(m => m.FluentMappings
+                    .AddFromAssembly(Assembly.Load("DSManager.Model"))
+                    .Conventions.Add(DefaultLazy.Never())
+                )
                 .ExposeConfiguration(BuildSchema)
-                .BuildSessionFactory();*/
+                .BuildSessionFactory();
         }
 
         // Method for MySQL
