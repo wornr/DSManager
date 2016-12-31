@@ -119,6 +119,7 @@ namespace DSManager.ViewModel.Pages {
                         Entity = null
                     });
                     addWindow.ShowDialog();
+                    FillCars(_filter);
                 }));
             }
         }
@@ -138,6 +139,8 @@ namespace DSManager.ViewModel.Pages {
                         Entity = _car
                     });
                     editWindow.ShowDialog();
+                    FillCars(_filter);
+                    Car = _car;
                 }));
             }
         }

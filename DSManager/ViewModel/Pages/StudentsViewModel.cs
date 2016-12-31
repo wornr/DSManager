@@ -142,6 +142,7 @@ namespace DSManager.ViewModel.Pages {
                         Entity = null
                     });
                     addWindow.ShowDialog();
+                    FillStudents(_filter);
                 }));
             }
         }
@@ -161,6 +162,8 @@ namespace DSManager.ViewModel.Pages {
                         Entity = _student
                     });
                     editWindow.ShowDialog();
+                    FillStudents(_filter);
+                    Student = _student;
                 }));
             }
         }
@@ -219,6 +222,7 @@ namespace DSManager.ViewModel.Pages {
                         addWindow.Width = 500;
                         addWindow.Height = 200;
                         addWindow.ShowDialog();
+                        FillPayment(_participant);
                     }
                 }));
             }
@@ -242,6 +246,8 @@ namespace DSManager.ViewModel.Pages {
                     editWindow.Width = 500;
                     editWindow.Height = 200;
                     editWindow.ShowDialog();
+                    FillPayment(_participant);
+                    Payment = Payment;
                 }));
             }
         }

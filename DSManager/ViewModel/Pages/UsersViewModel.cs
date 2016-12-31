@@ -86,6 +86,7 @@ namespace DSManager.ViewModel.Pages {
                         Entity = null
                     });
                     addWindow.ShowDialog();
+                    FillUsers(_filter);
                 }));
             }
         }
@@ -105,6 +106,8 @@ namespace DSManager.ViewModel.Pages {
                         Entity = User
                     });
                     editWindow.ShowDialog();
+                    FillUsers(_filter);
+                    User = _user;
                 }));
             }
         }

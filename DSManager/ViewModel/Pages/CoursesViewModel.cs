@@ -100,6 +100,7 @@ namespace DSManager.ViewModel.Pages {
                     });
                     addWindow.Width = 986;
                     addWindow.ShowDialog();
+                    FillCourses();
                 }));
             }
         }
@@ -119,6 +120,8 @@ namespace DSManager.ViewModel.Pages {
                         Entity = _course
                     });
                     editWindow.ShowDialog();
+                    FillCourses();
+                    Course = _course;
                 }));
             }
         }

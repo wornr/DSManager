@@ -129,6 +129,7 @@ namespace DSManager.ViewModel.Pages {
                         Entity = null
                     });
                     addWindow.ShowDialog();
+                    FillInstructors(_filter);
                 }));
             }
         }
@@ -148,6 +149,8 @@ namespace DSManager.ViewModel.Pages {
                         Entity = _instructor
                     });
                     editWindow.ShowDialog();
+                    FillInstructors(_filter);
+                    Instructor = _instructor;
                 }));
             }
         }
