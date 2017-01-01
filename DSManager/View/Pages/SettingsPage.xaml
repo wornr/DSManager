@@ -2,10 +2,300 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:converters="clr-namespace:DSManager.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            <TextBlock Text="Ustawienia"/>
-    </Grid>
+             d:DesignWidth="1235" d:DesignHeight="650">
+
+    <UserControl.Resources>
+        <converters:ObjectToBoolConverter x:Key="ObjectToBoolConverter"/>
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
+    </UserControl.Resources>
+
+    <TabControl>
+        <controls:MetroTabItem Header="Ceny szkoleń">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddPrice}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditPrice}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeletePrice}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding RefreshPrices}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_refresh}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+
+                    <!--<TextBox controls:TextBoxHelper.Watermark="Filtruj" controls:TextBoxHelper.ClearTextButton="True" Width="155" Height="12" Text="{Binding Filter}"/>
+
+                    <Button x:Name="SearchUsers" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FilterUsers}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>-->
+                </StackPanel>
+
+                <Border Grid.Row="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                    <Grid>
+                        <DataGrid ItemsSource="{Binding Prices}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedPrice}" IsEnabled="{Binding IsPricesLoading, Converter={StaticResource BoolNegationConverter}}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Kategoria" Binding="{Binding Category}" Width="90">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Typ szkolenia" Binding="{Binding CourseType}" Width="140">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Rodzaj szkolenia" Binding="{Binding CourseKind}" Width="140">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Data pocz. obow." Binding="{Binding StartDate}" Width="130">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Data końc. obow." Binding="{Binding EndDate}" Width="130">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Cena" Binding="{Binding Price}" Width="110">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <controls:ProgressRing IsActive="{Binding IsPricesLoading}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </controls:MetroTabItem>
+        
+        <controls:MetroTabItem Header="Czasy trwania szkoleń">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddDurationTime}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditDurationTime}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteDurationTime}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding RefreshDurationTimes}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_refresh}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+
+                    <!--<TextBox controls:TextBoxHelper.Watermark="Filtruj" controls:TextBoxHelper.ClearTextButton="True" Width="155" Height="12" Text="{Binding Filter}"/>
+
+                    <Button x:Name="SearchUsers" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FilterUsers}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>-->
+                </StackPanel>
+
+                <Border Grid.Row="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                    <Grid>
+                        <DataGrid ItemsSource="{Binding DurationTimes}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedDurationTime}" IsEnabled="{Binding IsDurationTimesLoading, Converter={StaticResource BoolNegationConverter}}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Kategoria" Binding="{Binding Category}" Width="90">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Rodzaj szkolenia" Binding="{Binding CourseKind}" Width="140">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Data pocz. obow." Binding="{Binding StartDate}" Width="130">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Ilość godzin" Binding="{Binding Time}" Width="110">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <controls:ProgressRing IsActive="{Binding IsDurationTimesLoading}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </controls:MetroTabItem>
+
+        <controls:MetroTabItem Header="Minimalny wiek">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddMinimalAge}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditMinimalAge}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteMinimalAge}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                    <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding RefreshMinimalAges}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_refresh}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+
+                    <!--<TextBox controls:TextBoxHelper.Watermark="Filtruj" controls:TextBoxHelper.ClearTextButton="True" Width="155" Height="12" Text="{Binding Filter}"/>
+
+                    <Button x:Name="SearchUsers" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FilterUsers}">
+                        <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}"/>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>-->
+                </StackPanel>
+
+                <Border Grid.Row="1" BorderBrush="DimGray" BorderThickness="1" CornerRadius="3" Margin="5" Padding="1">
+                    <Grid>
+                        <DataGrid ItemsSource="{Binding MinimalAges}" SelectionMode="Single" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding SelectedMinimalAge}" IsEnabled="{Binding IsMinimalAgesLoading, Converter={StaticResource BoolNegationConverter}}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Kategoria" Binding="{Binding Category}" Width="90">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Data pocz. obow." Binding="{Binding StartDate}" Width="130">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Wiek" Binding="{Binding Age}" Width="110">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <controls:ProgressRing IsActive="{Binding IsMinimalAgesLoading}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </controls:MetroTabItem>
+    </TabControl>
 </UserControl>

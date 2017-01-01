@@ -41,6 +41,19 @@
         <DataTemplate DataType="{x:Type pages:AddEditUserViewModel}">
             <views:UserPage/>
         </DataTemplate>
+
+        <!-- Prices -->
+        <DataTemplate DataType="{x:Type pages:AddEditPricesViewModel}">
+            <views:PricesPage/>
+        </DataTemplate>
+        <!-- DurationTime -->
+        <DataTemplate DataType="{x:Type pages:AddEditDurationTimeViewModel}">
+            <views:DurationTimePage/>
+        </DataTemplate>
+        <!-- MinimalAge -->
+        <DataTemplate DataType="{x:Type pages:AddEditMinimalAgeViewModel}">
+            <views:MinimalAgePage/>
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>

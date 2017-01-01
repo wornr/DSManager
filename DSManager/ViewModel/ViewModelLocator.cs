@@ -79,6 +79,10 @@ namespace DSManager.ViewModel {
             SimpleIoc.Default.Register<AddEditAgendaViewModel>();
 
             SimpleIoc.Default.Register<AddEditUserViewModel>();
+
+            SimpleIoc.Default.Register<AddEditPricesViewModel>();
+            SimpleIoc.Default.Register<AddEditDurationTimeViewModel>();
+            SimpleIoc.Default.Register<AddEditMinimalAgeViewModel>();
             #endregion
 
             #endregion
@@ -112,6 +116,10 @@ namespace DSManager.ViewModel {
         public AddEditPaymentViewModel AddEditPayment => ServiceLocator.Current.GetInstance<AddEditPaymentViewModel>();
 
         public AddEditUserViewModel AddEditUser => ServiceLocator.Current.GetInstance<AddEditUserViewModel>();
+
+        public AddEditPricesViewModel AddEditPrices => ServiceLocator.Current.GetInstance<AddEditPricesViewModel>();
+        public AddEditDurationTimeViewModel AddEditDurationTime => ServiceLocator.Current.GetInstance<AddEditDurationTimeViewModel>();
+        public AddEditMinimalAgeViewModel AddEditMinimalAge => ServiceLocator.Current.GetInstance<AddEditMinimalAgeViewModel>();
         #endregion
 
         #endregion
@@ -145,6 +153,10 @@ namespace DSManager.ViewModel {
             SimpleIoc.Default.Unregister<AddEditAgendaViewModel>();
 
             SimpleIoc.Default.Unregister<AddEditUserViewModel>();
+
+            SimpleIoc.Default.Unregister<AddEditPricesViewModel>();
+            SimpleIoc.Default.Unregister<AddEditDurationTimeViewModel>();
+            SimpleIoc.Default.Unregister<AddEditMinimalAgeViewModel>();
             #endregion
 
             #endregion

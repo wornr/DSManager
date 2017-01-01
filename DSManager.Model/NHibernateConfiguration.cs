@@ -76,7 +76,7 @@ namespace DSManager.Model {
                 .Database(SQLiteConfiguration
                     .Standard
                     .UsingFile(dbPath)
-                    //.ShowSql
+                    .ShowSql
                 )
                 .Mappings(m => m.FluentMappings
                     .AddFromAssembly(Assembly.Load("DSManager.Model"))

@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="DSManager.View.Pages.AddEdit.DurationTimePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:converters="clr-namespace:DSManager.Converters"
+      mc:Ignorable="d" 
+      d:DesignWidth="752" d:DesignHeight="481">
+
+    <UserControl.Resources>
+        <converters:ValueToHiddenConverter x:Key="ValueToHiddenConverter"/>
+    </UserControl.Resources>
+
+    <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Margin" Value="10,0"/>
+                    </Style>
+                </StackPanel.Resources>
+
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Kategoria"/>
+                    <ComboBox Width="120" Height="25" ItemsSource="{Binding Categories}" SelectedItem="{Binding Category, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Rodzaj szkolenia"/>
+                    <ComboBox Width="120" Height="25" ItemsSource="{Binding CourseKinds}" SelectedItem="{Binding CourseKind, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Data pocz. obow." Visibility="{Binding StartDate, Converter={StaticResource ValueToHiddenConverter}}"/>
+                    <DatePicker controls:TextBoxHelper.Watermark="Data pocz. obow." Width="125" SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Ilość godzin" Visibility="{Binding Time, Converter={StaticResource ValueToHiddenConverter}}"/>
+                    <controls:NumericUpDown controls:TextBoxHelper.Watermark="Ilość godz." Width="115" Value="{Binding Time, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</UserControl>
