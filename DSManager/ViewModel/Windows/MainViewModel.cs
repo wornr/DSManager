@@ -22,6 +22,7 @@ namespace DSManager.ViewModel.Windows {
         private RelayCommand _openStatisticsPageCommand;
         private RelayCommand _openUsersPageCommand;
         private RelayCommand _openSettingsPageCommand;
+        private RelayCommand _openAboutPageCommand;
         private RelayCommand _lockCommand;
         private RelayCommand _signOutCommand;
 
@@ -41,6 +42,8 @@ namespace DSManager.ViewModel.Windows {
         public RelayCommand OpenStatisticsPage => _openStatisticsPageCommand ?? (_openStatisticsPageCommand = new RelayCommand(() => NavigateTo(ViewModelLocator.Instance.Statistics)));
         public RelayCommand OpenUsersPage => _openUsersPageCommand ?? (_openUsersPageCommand = new RelayCommand(() => NavigateTo(ViewModelLocator.Instance.Users)));
         public RelayCommand OpenSettingsPage => _openSettingsPageCommand ?? (_openSettingsPageCommand = new RelayCommand(() => NavigateTo(ViewModelLocator.Instance.Settings)));
+
+        public RelayCommand OpenAboutPage => _openAboutPageCommand ?? (_openAboutPageCommand = new RelayCommand(() => NavigateTo(ViewModelLocator.Instance.About)));
 
         public RelayCommand Lock => _lockCommand ?? (_lockCommand = new RelayCommand(() => {
             NavigateTo(ViewModelLocator.Instance.Home);

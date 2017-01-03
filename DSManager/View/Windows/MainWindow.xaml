@@ -52,9 +52,20 @@
         <DataTemplate DataType="{x:Type pages:SettingsViewModel}">
             <views:SettingsPage/>
         </DataTemplate>
-        
+
+        <!-- About -->
+        <DataTemplate DataType="{x:Type pages:AboutViewModel}">
+            <views:AboutPage/>
+        </DataTemplate>
+
         <converters:ValueToCollapsedConverter x:Key="ValueToCollapsedConverter"/>
     </Window.Resources>
+
+    <mahApps:MetroWindow.RightWindowCommands>
+        <mahApps:WindowCommands>
+            <Button Content="O programie" Command="{Binding OpenAboutPage}"/>
+        </mahApps:WindowCommands>
+    </mahApps:MetroWindow.RightWindowCommands>
 
     <Grid>
         <mahApps:TransitioningContentControl Margin="50,0,0,0" Content="{Binding CurrentViewModel}" Transition="Left"/>

@@ -28,6 +28,9 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         private ObservableCollection<Participant> _chosenStudents;
         private ObservableCollection<Instructor> _instructors;
 
+        private decimal? _priceWithTheory;
+        private decimal? _priceWithoutTheory;
+
         private bool _isStudentsLoading;
         private bool _isEndDateEnabled;
 
@@ -196,6 +199,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 ChosenStudents = new ObservableCollection<Participant>();
                 FillStudents();
                 FillInstructors();
+                ResolvePrices();
                 RaisePropertyChanged();
             }
         }
@@ -208,6 +212,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _courseType = value;
                 ChosenStudents = new ObservableCollection<Participant>();
                 FillStudents();
+                ResolvePrices();
                 RaisePropertyChanged();
             }
         }
@@ -305,6 +310,13 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             get { return _chosenStudent != null && _chosenStudent.IsTheory; }
             set {
                 _chosenStudent.IsTheory = value;
+                if (value) {
+                    if (_priceWithoutTheory == CoursePrice)
+                        CoursePrice = _priceWithTheory;
+                } else {
+                    if (_priceWithTheory == CoursePrice)
+                        CoursePrice = _priceWithoutTheory;
+                }
                 RaisePropertyChanged();
             }
         }
@@ -326,7 +338,9 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                         return;
                     ChosenStudents.Add(new Participant {
                         Student = AvailableStudent,
-                        Course = _course
+                        Course = _course,
+                        IsTheory = true,
+                        CoursePrice = _priceWithTheory ?? 0m
                     });
                     AvailableStudents.Remove(AvailableStudent);
                     RefreshTables();
@@ -408,18 +422,20 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             CoursePrice = _chosenStudent.CoursePrice;
             EndDate = _chosenStudent.EndDate;
 
-            using (var repository = new BaseRepository()) {
-                var passedTheory = repository.ToList<ExamsDates>().Where(x => x.Participant == _chosenStudent && x.CourseKind == CourseKind.Theory && x.IsPassed == true).OrderByDescending(x => x.EndDate).ToList();
-                var passedPractice = repository.ToList<ExamsDates>().Where(x => x.Participant == _chosenStudent && x.CourseKind == CourseKind.Practice && x.IsPassed == true).OrderByDescending(x => x.EndDate).ToList();
+            if (_chosenStudent.Id != 0) {
+                using (var repository = new BaseRepository()) {
+                    var passedTheory = repository.ToList<ExamsDates>().Where(x => x.Participant == _chosenStudent && x.CourseKind == CourseKind.Theory && x.IsPassed == true).OrderByDescending(x => x.EndDate).ToList();
+                    var passedPractice = repository.ToList<ExamsDates>().Where(x => x.Participant == _chosenStudent && x.CourseKind == CourseKind.Practice && x.IsPassed == true).OrderByDescending(x => x.EndDate).ToList();
 
-                if (passedTheory.Count != 0 && passedPractice.Count != 0) {
-                    IsEndDateEnabled = true;
-                    _minimalEndDate = passedTheory.First().EndDate > passedPractice.First().EndDate
-                        ? passedTheory.First().EndDate.Date
-                        : passedPractice.First().EndDate.Date;
-                } else {
-                    IsEndDateEnabled = false;
-                    _minimalEndDate = DateTime.Now;
+                    if (passedTheory.Count != 0 && passedPractice.Count != 0) {
+                        IsEndDateEnabled = true;
+                        _minimalEndDate = passedTheory.First().EndDate > passedPractice.First().EndDate
+                            ? passedTheory.First().EndDate.Date
+                            : passedPractice.First().EndDate.Date;
+                    } else {
+                        IsEndDateEnabled = false;
+                        _minimalEndDate = DateTime.Now;
+                    }
                 }
             }
         }
@@ -435,6 +451,16 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                     .ThenBy(x => x.FirstName)
                     .ThenBy(x => x.SecondName)
                     .ThenBy(x => x.BirthDate));
+        }
+
+        private void ResolvePrices() {
+            if (_drivingLicenseCategory == null || _courseType == null)
+                return;
+            
+            using (var repository = new BaseRepository()) {
+                _priceWithoutTheory = repository.ToList<Prices>().FirstOrDefault(x => x.Category == _drivingLicenseCategory && x.CourseType == _courseType && x.CourseKind == CourseKind.Practice)?.Price ?? 0m;
+                _priceWithTheory = repository.ToList<Prices>().FirstOrDefault(x => x.Category == _drivingLicenseCategory && x.CourseType == _courseType && x.CourseKind == CourseKind.Theory)?.Price + (_priceWithoutTheory ?? 0m) ?? 0m;
+            }
         }
         #endregion
     }

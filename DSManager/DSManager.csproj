@@ -170,6 +170,7 @@
     <Compile Include="ViewModel\Pages\SettingsViewModel.cs" />
     <Compile Include="ViewModel\Pages\StudentsViewModel.cs" />
     <Compile Include="ViewModel\Pages\HomeViewModel.cs" />
+    <Compile Include="ViewModel\Pages\AboutViewModel.cs" />
     <Compile Include="ViewModel\Pages\UsersViewModel.cs" />
     <Compile Include="ViewModel\Windows\AddEditViewModel.cs" />
     <Compile Include="ViewModel\Windows\MainViewModel.cs" />
@@ -228,6 +229,9 @@
     </Compile>
     <Compile Include="View\Pages\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pages\AboutPage.xaml.cs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Pages\UsersPage.xaml.cs">
       <DependentUpon>UsersPage.xaml</DependentUpon>
@@ -315,6 +319,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Pages\HomePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Pages\AboutPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

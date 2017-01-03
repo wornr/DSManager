@@ -70,6 +70,8 @@ namespace DSManager.ViewModel {
             SimpleIoc.Default.Register<UsersViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
 
+            SimpleIoc.Default.Register<AboutViewModel>();
+
             #region AddEdit
             SimpleIoc.Default.Register<AddEditStudentViewModel>();
             SimpleIoc.Default.Register<AddEditInstructorViewModel>();
@@ -107,6 +109,8 @@ namespace DSManager.ViewModel {
         public UsersViewModel Users => ServiceLocator.Current.GetInstance<UsersViewModel>();
         public SettingsViewModel Settings => ServiceLocator.Current.GetInstance<SettingsViewModel>();
 
+        public AboutViewModel About => ServiceLocator.Current.GetInstance<AboutViewModel>();
+
         #region AddEdit
         public AddEditStudentViewModel AddEditStudent => ServiceLocator.Current.GetInstance<AddEditStudentViewModel>();
         public AddEditInstructorViewModel AddEditInstructor => ServiceLocator.Current.GetInstance<AddEditInstructorViewModel>();
@@ -143,6 +147,8 @@ namespace DSManager.ViewModel {
             SimpleIoc.Default.Unregister<StatisticsViewModel>();
             SimpleIoc.Default.Unregister<UsersViewModel>();
             SimpleIoc.Default.Unregister<SettingsViewModel>();
+
+            SimpleIoc.Default.Unregister<AboutViewModel>();
 
             #region AddEdit
             SimpleIoc.Default.Unregister<AddEditStudentViewModel>();
