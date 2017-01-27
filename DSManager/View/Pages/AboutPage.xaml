@@ -96,6 +96,10 @@
 
                 <TextBlock Text="ModernUI" FontSize="12" TextAlignment="Left"/>
                 <TextBlock Text="FontAwesome" FontSize="12" TextAlignment="Left"/>
+
+                <TextBlock Text="Splash Screen" FontSize="14" TextAlignment="Center"/>
+
+                <TextBlock Text="doszkalanie.edu.pl za zgodą autora" FontSize="12" TextAlignment="Left"/>
             </StackPanel>
         </Grid>
     </Grid>

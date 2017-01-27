@@ -88,15 +88,15 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             return true;
         }
 
-        public override bool Save() {
+        public override int Save() {
             if(!Validate())
-                return false;
+                return 1;
 
             using(var repository = new BaseRepository()) {
                 repository.Save(_minimalAge);
             }
 
-            return true;
+            return 0;
         }
         #endregion
 

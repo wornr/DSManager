@@ -5,11 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:converters="clr-namespace:DSManager.Converters"
+             x:Name="SettingsPageInstance"
              mc:Ignorable="d" 
              d:DesignWidth="1235" d:DesignHeight="650">
 
     <UserControl.Resources>
-        <converters:ObjectToBoolConverter x:Key="ObjectToBoolConverter"/>
+        <converters:ValueToHiddenConverter x:Key="ValueToHiddenConverter"/>
         <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
     </UserControl.Resources>
 
@@ -296,6 +297,83 @@
                     </Grid>
                 </Border>
             </Grid>
+        </controls:MetroTabItem>
+
+        <controls:MetroTabItem Header="Poczta">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Dane serwera SMTP" Margin="20,15,0,5" FontSize="18"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Margin" Value="10,0"/>
+                            </Style>
+                        </StackPanel.Resources>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Host" Visibility="{Binding Host, Converter={StaticResource ValueToHiddenConverter}}"/>
+                            <TextBox controls:TextBoxHelper.Watermark="Host" Width="95" MaxLength="25" Text="{Binding Host, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Port" Visibility="{Binding Port, Converter={StaticResource ValueToHiddenConverter}}"/>
+                            <TextBox controls:TextBoxHelper.Watermark="Port" Width="95" MaxLength="50" Text="{Binding Port, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Margin" Value="10,0"/>
+                            </Style>
+                        </StackPanel.Resources>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Login" Visibility="{Binding Username, Converter={StaticResource ValueToHiddenConverter}}"/>
+                            <TextBox controls:TextBoxHelper.Watermark="Login" Width="95" MaxLength="25" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Hasło"/>
+                            <PasswordBox x:Name="Password" controls:TextBoxHelper.Watermark="Hasło" Width="95" MaxLength="25"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Margin" Value="10,0"/>
+                            </Style>
+                        </StackPanel.Resources>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="E-mail" Visibility="{Binding Email, Converter={StaticResource ValueToHiddenConverter}}"/>
+                            <TextBox controls:TextBoxHelper.Watermark="E-mail" Width="210" MaxLength="100" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Margin" Value="10,0"/>
+                            </Style>
+                        </StackPanel.Resources>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="SSL"/>
+                            <CheckBox ToolTip="SSL" IsChecked="{Binding IsSSL, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Powiadomienia o błędach"/>
+                            <CheckBox ToolTip="Czy powiadamiać o błędach podczas wysyłania maila?" IsChecked="{Binding IsNotificationEnabled, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Button Width="100" Content="Zapisz" Command="{Binding SaveSMTP}" CommandParameter="{Binding ElementName=SettingsPageInstance}"/>
+                </StackPanel>
+            </StackPanel>
         </controls:MetroTabItem>
     </TabControl>
 </UserControl>

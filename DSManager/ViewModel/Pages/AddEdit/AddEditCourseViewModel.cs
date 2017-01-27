@@ -169,15 +169,15 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             return true;
         }
 
-        public override bool Save() {
+        public override int Save() {
             if (!Validate())
-                return false;
+                return 1;
 
             using (var repository = new BaseRepository()) {
                 repository.Save(_course);
             }
 
-            return true;
+            return 0;
         }
         #endregion
 
@@ -424,8 +424,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
             if (_chosenStudent.Id != 0) {
                 using (var repository = new BaseRepository()) {
-                    var passedTheory = repository.ToList<ExamsDates>().Where(x => x.Participant == _chosenStudent && x.CourseKind == CourseKind.Theory && x.IsPassed == true).OrderByDescending(x => x.EndDate).ToList();
-                    var passedPractice = repository.ToList<ExamsDates>().Where(x => x.Participant == _chosenStudent && x.CourseKind == CourseKind.Practice && x.IsPassed == true).OrderByDescending(x => x.EndDate).ToList();
+                    var passedTheory = repository.ToList<ExamsDates>().Where(x => x.Participant == _chosenStudent && x.CourseKind == CourseKind.Teoria && x.IsPassed == true).OrderByDescending(x => x.EndDate).ToList();
+                    var passedPractice = repository.ToList<ExamsDates>().Where(x => x.Participant == _chosenStudent && x.CourseKind == CourseKind.Praktyka && x.IsPassed == true).OrderByDescending(x => x.EndDate).ToList();
 
                     if (passedTheory.Count != 0 && passedPractice.Count != 0) {
                         IsEndDateEnabled = true;
@@ -458,8 +458,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 return;
             
             using (var repository = new BaseRepository()) {
-                _priceWithoutTheory = repository.ToList<Prices>().FirstOrDefault(x => x.Category == _drivingLicenseCategory && x.CourseType == _courseType && x.CourseKind == CourseKind.Practice)?.Price ?? 0m;
-                _priceWithTheory = repository.ToList<Prices>().FirstOrDefault(x => x.Category == _drivingLicenseCategory && x.CourseType == _courseType && x.CourseKind == CourseKind.Theory)?.Price + (_priceWithoutTheory ?? 0m) ?? 0m;
+                _priceWithoutTheory = repository.ToList<Prices>().FirstOrDefault(x => x.Category == _drivingLicenseCategory && x.CourseType == _courseType && x.CourseKind == CourseKind.Praktyka)?.Price ?? 0m;
+                _priceWithTheory = repository.ToList<Prices>().FirstOrDefault(x => x.Category == _drivingLicenseCategory && x.CourseType == _courseType && x.CourseKind == CourseKind.Teoria)?.Price + (_priceWithoutTheory ?? 0m) ?? 0m;
             }
         }
         #endregion

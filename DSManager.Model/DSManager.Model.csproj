@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Dictionaries\Settings.cs" />
     <Compile Include="Entities\LockedDates.cs" />
     <Compile Include="Entities\Dictionaries\AccountPermissions.cs" />
     <Compile Include="Entities\BaseEntity.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Enums\CourseType.cs" />
     <Compile Include="Enums\Currency.cs" />
     <Compile Include="Enums\DrivingLicenseCategory.cs" />
+    <Compile Include="Mappings\SettingsMap.cs" />
     <Compile Include="Mappings\AccountPermissionsMap.cs" />
     <Compile Include="Mappings\CarMap.cs" />
     <Compile Include="Mappings\CarPermissionsMap.cs" />

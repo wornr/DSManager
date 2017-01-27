@@ -117,7 +117,7 @@ namespace DSManager.ViewModel.Pages {
                     if(_user == null) {
                         ShowDialog("Błąd", "Nie wybrano żadnego użytkownika!");
                     } else {
-                        if (_user.AccountType == AccountType.Boss) {
+                        if (_user.AccountType == AccountType.Szef) {
                             ShowDialog("Błąd", "Nie można usunąć użytkownika z najwyższymi uprawnieniami!");
                         } else {
                             if(await ConfirmationDialog("Potwierdź", "Czy jesteś pewien, że chcesz usunąć danego użytkownika?"))

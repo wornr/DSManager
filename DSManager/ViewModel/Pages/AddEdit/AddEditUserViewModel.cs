@@ -63,7 +63,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 case "Login":
                     if(string.IsNullOrEmpty(_user.Login))
                         validationMessage = "Pole nie może być puste!";
-                    else if (!Regex.IsMatch(_user.Login, @"^[0-9a-zA-Z]+$"))
+                    else if (!Regex.IsMatch(_user.Login, @"^[\S]+$"))
                         validationMessage = "Podano niepoprawny login!";
                     break;
 
@@ -86,7 +86,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             if(_user.LastName == null || !Regex.IsMatch(_user.LastName, @"^[a-ząćęłńóśźżA-ZĄĆĘŁŃÓŚŹŻ]+$"))
                 return false;
 
-            if(_user.Login == null || !Regex.IsMatch(_user.Login, @"^[0-9a-zA-Z]+$"))
+            if(_user.Login == null || !Regex.IsMatch(_user.Login, @"^[\S]+$"))
                 return false;
 
             if (!_editMode && string.IsNullOrEmpty(_password))
@@ -103,15 +103,15 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             return true;
         }
 
-        public override bool Save() {
+        public override int Save() {
             if(!Validate())
-                return false;
+                return 1;
 
             using(var repository = new BaseRepository()) {
                 repository.Save(_user);
             }
 
-            return true;
+            return 0;
         }
         #endregion
 

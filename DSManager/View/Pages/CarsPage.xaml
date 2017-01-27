@@ -10,6 +10,7 @@
 
     <UserControl.Resources>
         <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
+        <converters:ValueToCollapsedConverter x:Key="ValueToCollapsedConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -19,21 +20,21 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-            <Button x:Name="AddCar" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddCar}">
+            <Button x:Name="AddCar" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddCar}" Visibility="{Binding CarsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <Button x:Name="EditCar" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditCar}">
+            <Button x:Name="EditCar" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditCar}" Visibility="{Binding CarsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <Button x:Name="DeleteCar" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteCar}">
+            <Button x:Name="DeleteCar" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteCar}" Visibility="{Binding CarsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>

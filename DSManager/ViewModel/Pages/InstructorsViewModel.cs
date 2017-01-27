@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.Messaging;
 using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Services;
+using DSManager.Utilities;
 using DSManager.View.Windows;
 
 namespace DSManager.ViewModel.Pages {
@@ -40,6 +41,7 @@ namespace DSManager.ViewModel.Pages {
         private bool _isParticipantsLoading;
         private bool _isClassesDatesLoading;
         private bool _isExamsDatesLoading;
+        private bool _instructorsMgmtPermission;
         #endregion
 
         #region Helpers
@@ -48,6 +50,7 @@ namespace DSManager.ViewModel.Pages {
 
         #endregion
         public InstructorsViewModel() {
+            _instructorsMgmtPermission = CheckPermissions.CheckPermission(SignedUser.AccountType, "InstructorsManagement");
             _filter = _prevFilter = string.Empty;
             FillInstructors(_filter);
         }
@@ -232,6 +235,14 @@ namespace DSManager.ViewModel.Pages {
             get { return _isExamsDatesLoading; }
             set {
                 _isExamsDatesLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool InstructorsMgmtPermission {
+            get { return _instructorsMgmtPermission; }
+            set {
+                _instructorsMgmtPermission = value;
                 RaisePropertyChanged();
             }
         }

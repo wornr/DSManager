@@ -283,7 +283,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _endDate = _startDate?.AddHours(1);
                 _endTime = _endDate?.ToShortTimeString();
             }
-            CourseKind = Model.Enums.CourseKind.Practice;
+            CourseKind = Model.Enums.CourseKind.Praktyka;
             FillStudents();
             if(_endDate != null && _endDate < DateTime.Now)
                 IsPassedEnabled = true;
@@ -310,7 +310,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 _endDate = _startDate?.AddHours(1);
                 _endTime = _endDate?.ToShortTimeString();
             }
-            CourseKind = Model.Enums.CourseKind.Practice;
+            CourseKind = Model.Enums.CourseKind.Praktyka;
             FillStudents();
             if(_endDate != null && _endDate < DateTime.Now)
                 IsPassedEnabled = true;
@@ -571,7 +571,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                             (_chosenInstructor != null && x.Instructor == _chosenInstructor ||
                             _chosenParticipant != null && x.Participant == _chosenParticipant ||
                             _chosenCar != null && x.Car == _chosenCar) &&
-                            x.CourseKind == Model.Enums.CourseKind.Practice &&
+                            x.CourseKind == Model.Enums.CourseKind.Praktyka &&
                             ((_startDate < x.StartDate &&
                               _endDate > x.StartDate) ||
                              (_endDate > x.EndDate && _startDate < x.EndDate) ||
@@ -585,7 +585,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                             (_chosenInstructor != null && x.Instructor == _chosenInstructor ||
                             _chosenParticipant != null && x.Participant == _chosenParticipant ||
                             _chosenCar != null && x.Car == _chosenCar) &&
-                            x.CourseKind == Model.Enums.CourseKind.Practice &&
+                            x.CourseKind == Model.Enums.CourseKind.Praktyka &&
                             ((_startDate < x.StartDate &&
                               _endDate > x.StartDate) ||
                              (_endDate > x.EndDate && _startDate < x.EndDate) ||
@@ -611,9 +611,9 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             return rowCount == 0;
         }
 
-        public override bool Save() {
+        public override int Save() {
             if(!Validate())
-                return false;
+                return 1;
 
             using(var repository = new BaseRepository()) {
                 if (_editMode && _defaultTab != _selectedTab) {
@@ -634,7 +634,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 }
             }
 
-            return true;
+            return 0;
         }
         #endregion
 
@@ -734,7 +734,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             get { return _courseKind; }
             set {
                 _courseKind = value;
-                IsCarChooserEnabled = IsPractice = _courseKind != null && _courseKind.Value.Equals(Model.Enums.CourseKind.Practice);
+                IsCarChooserEnabled = IsPractice = _courseKind != null && _courseKind.Value.Equals(Model.Enums.CourseKind.Praktyka);
                 RaisePropertyChanged();
             }
         }
@@ -824,7 +824,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                     IsCourseKindChooserEnabled = true;
                 } else {
                     IsCourseKindChooserEnabled = false;
-                    CourseKind = Model.Enums.CourseKind.Practice;
+                    CourseKind = Model.Enums.CourseKind.Praktyka;
                 }
                 FillInstructors();
                 FillCars();

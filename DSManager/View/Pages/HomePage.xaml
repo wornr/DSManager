@@ -6,5 +6,7 @@
       mc:Ignorable="d" 
       d:DesignWidth="1235" d:DesignHeight="650">
 
-    <Image Source="/DSManager;component/Resources/Images/splash_screen.png" Stretch="None" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    <Grid Height="400">
+        <Image Source="/DSManager;component/Resources/Images/splash_screen.png" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    </Grid>
 </UserControl>

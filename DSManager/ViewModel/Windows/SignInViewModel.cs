@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics.Contracts;
+using System.Windows;
 
 using GalaSoft.MvvmLight.Command;
 
@@ -42,18 +43,31 @@ namespace DSManager.ViewModel.Windows {
                         if(windowInstance != null) {
                             string password = MD5Encrypter.Encrypt(windowInstance.Password.Password);
                             User user = UserRepository.GetUser(_login, password);
+                            User newUser = null;
 
                             if (SignedUser == null) {
-                                if (user != null && user.Active) {
-                                    SignedUser = user;
-                                    Locked = false;
-                                    MainWindow = new MainWindow();
-                                    MainWindow.Show();
-                                    windowInstance.Close();
-                                    return;
+                                if (user == null) {
+                                    newUser = UserRepository.GetNewUser(_login, password);
                                 }
-                                if (user != null && !user.Active) {
-                                    windowInstance.ShowMessageAsync("Błąd", "Konto jest nieaktywne!\nSkontaktuj się z administratorem.");
+                                if (newUser == null) {
+                                    if (user != null && user.Active) {
+                                        SignedUser = user;
+                                        Locked = false;
+                                        MainWindow = new MainWindow();
+                                        MainWindow.Show();
+                                        windowInstance.Close();
+                                        return;
+                                    }
+                                    if (user != null && !user.Active) {
+                                        windowInstance.ShowMessageAsync("Błąd", "Konto jest nieaktywne!\nSkontaktuj się z administratorem.");
+                                        return;
+                                    }
+                                } else {
+                                    SignedUser = newUser;
+                                    Locked = false;
+                                    var createAccountWindow = new CreateAccountWindow();
+                                    createAccountWindow.Show();
+                                    windowInstance.Close();
                                     return;
                                 }
                             } else {

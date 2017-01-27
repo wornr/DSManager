@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight.Messaging;
 using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Services;
+using DSManager.Utilities;
 using DSManager.View.Windows;
 
 namespace DSManager.ViewModel.Pages {
@@ -31,7 +32,6 @@ namespace DSManager.ViewModel.Pages {
         private RelayCommand _deleteCar;
         private RelayCommand _filterCars;
         private RelayCommand _refreshCars;
-        private RelayCommand _changeFiltering;
         #endregion
 
         #region View Elements
@@ -44,6 +44,7 @@ namespace DSManager.ViewModel.Pages {
         private bool _isAll;
         private bool _isLocked;
         private bool _isUnlocked;
+        private bool _carsMgmtPermission;
         #endregion
 
         #region Helpers
@@ -56,6 +57,7 @@ namespace DSManager.ViewModel.Pages {
             _filter = _prevFilter = string.Empty;
             IsAll = true;
             FillCars(_filter);
+            _carsMgmtPermission = CheckPermissions.CheckPermission(SignedUser.AccountType, "CarsManagement");
         }
 
         #region Methods
@@ -254,6 +256,14 @@ namespace DSManager.ViewModel.Pages {
             get { return _isUnlocked; }
             set {
                 _isUnlocked = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool CarsMgmtPermission {
+            get { return _carsMgmtPermission; }
+            set {
+                _carsMgmtPermission = value;
                 RaisePropertyChanged();
             }
         }

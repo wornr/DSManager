@@ -10,6 +10,7 @@
 
     <UserControl.Resources>
         <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
+        <converters:ValueToCollapsedConverter x:Key="ValueToCollapsedConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -19,21 +20,21 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-            <Button x:Name="AddInstructor" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddInstructor}">
+            <Button x:Name="AddInstructor" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddInstructor}" Visibility="{Binding InstructorsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <Button x:Name="EditInstructor" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditInstructor}">
+            <Button x:Name="EditInstructor" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditInstructor}" Visibility="{Binding InstructorsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <Button x:Name="DeleteInstructor" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteInstructor}">
+            <Button x:Name="DeleteInstructor" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteInstructor}" Visibility="{Binding InstructorsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>

@@ -54,6 +54,7 @@ namespace DSManager.ViewModel {
             #region Windows
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<SignInViewModel>();
+            SimpleIoc.Default.Register<CreateAccountViewModel>();
             SimpleIoc.Default.Register<AddEditViewModel>();
             #endregion
 
@@ -93,6 +94,7 @@ namespace DSManager.ViewModel {
         #region Windows
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
         public SignInViewModel SignIn => ServiceLocator.Current.GetInstance<SignInViewModel>();
+        public CreateAccountViewModel CreateAccount => ServiceLocator.Current.GetInstance<CreateAccountViewModel>();
         public AddEditViewModel AddEdit => ServiceLocator.Current.GetInstance<AddEditViewModel>();
         #endregion
 
@@ -132,6 +134,7 @@ namespace DSManager.ViewModel {
             #region Windows
             SimpleIoc.Default.Unregister<MainViewModel>();
             SimpleIoc.Default.Unregister<SignInViewModel>();
+            SimpleIoc.Default.Unregister<CreateAccountViewModel>();
             SimpleIoc.Default.Unregister<AddEditViewModel>();
             #endregion
 

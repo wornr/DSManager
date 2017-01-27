@@ -10,6 +10,7 @@
     
     <UserControl.Resources>
         <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
+        <converters:ValueToCollapsedConverter x:Key="ValueToCollapsedConverter"/>
     </UserControl.Resources>
     
     <Grid>
@@ -19,21 +20,21 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-            <Button x:Name="AddStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddStudent}">
+            <Button x:Name="AddStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddStudent}" Visibility="{Binding StudentsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <Button x:Name="EditStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditStudent}">
+            <Button x:Name="EditStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditStudent}" Visibility="{Binding StudentsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <Button x:Name="DeleteStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteStudent}">
+            <Button x:Name="DeleteStudent" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteStudent}" Visibility="{Binding StudentsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>
@@ -371,7 +372,7 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
-                            <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
+                            <StackPanel Orientation="Horizontal" Margin="5,0,5,0" Visibility="{Binding StudentsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                                 <Button x:Name="AddPayment" Width="25" Height="25" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddPayment}">
                                     <Rectangle Width="9" Height="9" Fill="{DynamicResource BlackBrush}">
                                         <Rectangle.OpacityMask>

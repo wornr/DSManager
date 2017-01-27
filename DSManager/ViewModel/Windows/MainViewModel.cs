@@ -11,6 +11,13 @@ namespace DSManager.ViewModel.Windows {
         private bool _carsMgmtPermission;
         private bool _coursesMgmtPermission;
         private bool _usersMgmtPermission;
+        private bool _settingsMgmtPermission;
+
+        private bool _studentsExplorePermission;
+        private bool _instructorsExplorePermission;
+        private bool _carsExplorePermission;
+        private bool _coursesExplorePermission;
+        private bool _statisticsExplorePermission;
         #endregion
 
         private RelayCommand _openHomePageCommand;
@@ -74,31 +81,38 @@ namespace DSManager.ViewModel.Windows {
             _carsMgmtPermission = CheckPermissions.CheckPermission(SignedUser.AccountType, "CarsManagement");
             _coursesMgmtPermission = CheckPermissions.CheckPermission(SignedUser.AccountType, "CoursesManagement");
             _usersMgmtPermission = CheckPermissions.CheckPermission(SignedUser.AccountType, "UsersManagement");
+            _statisticsExplorePermission = CheckPermissions.CheckPermission(SignedUser.AccountType, "StatisticsExplore");
+            _settingsMgmtPermission = CheckPermissions.CheckPermission(SignedUser.AccountType, "SettingsManagement");
+
+            _studentsExplorePermission = CheckPermissions.CheckPermission(SignedUser.AccountType, "StudentsExplore");
+            _instructorsExplorePermission = CheckPermissions.CheckPermission(SignedUser.AccountType, "InstructorsExplore");
+            _carsExplorePermission = CheckPermissions.CheckPermission(SignedUser.AccountType, "CarsExplore");
+            _coursesExplorePermission = CheckPermissions.CheckPermission(SignedUser.AccountType, "CoursesExplore");
         }
 
         public bool StudentsMgmtPermission {
-            get { return _studentsMgmtPermission; }
+            get { return _studentsMgmtPermission || _studentsExplorePermission; }
             set {
                 _studentsMgmtPermission = value;
                 RaisePropertyChanged();
             }
         }
         public bool InstructorsMgmtPermission {
-            get { return _instructorsMgmtPermission; }
+            get { return _instructorsMgmtPermission || _instructorsExplorePermission; }
             set {
                 _instructorsMgmtPermission = value;
                 RaisePropertyChanged();
             }
         }
         public bool CarsMgmtPermission {
-            get { return _carsMgmtPermission; }
+            get { return _carsMgmtPermission || _carsExplorePermission; }
             set {
                 _carsMgmtPermission = value;
                 RaisePropertyChanged();
             }
         }
         public bool CoursesMgmtPermission {
-            get { return _coursesMgmtPermission; }
+            get { return _coursesMgmtPermission || _coursesExplorePermission; }
             set {
                 _coursesMgmtPermission = value;
                 RaisePropertyChanged();
@@ -111,6 +125,54 @@ namespace DSManager.ViewModel.Windows {
                 RaisePropertyChanged();
             }
         }
+
+        public bool StatisticsExplorePermission {
+            get { return _statisticsExplorePermission; }
+            set {
+                _statisticsExplorePermission = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool SettingsMgmtPermission {
+            get { return _settingsMgmtPermission; }
+            set {
+                _settingsMgmtPermission = value;
+                RaisePropertyChanged();
+            }
+        }/*
+
+        public bool StudentsExplorePermission {
+            get { return _studentsExplorePermission; }
+            set {
+                _studentsExplorePermission = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool InstructorsExplorePermission {
+            get { return _instructorsExplorePermission; }
+            set {
+                _instructorsExplorePermission = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool CarsExplorePermission {
+            get { return _carsExplorePermission; }
+            set {
+                _carsExplorePermission = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool CoursesExplorePermission {
+            get { return _coursesExplorePermission; }
+            set {
+                _coursesExplorePermission = value;
+                RaisePropertyChanged();
+            }
+        }*/
         #endregion
     }
 }

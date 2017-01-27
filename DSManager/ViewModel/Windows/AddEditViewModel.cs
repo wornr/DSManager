@@ -32,9 +32,17 @@ namespace DSManager.ViewModel.Windows {
         }
 
         private void Save(IClosable window) {
-            if (!((AddEditBaseViewModel) Page).Save()) {
+            var errorCode = ((AddEditBaseViewModel) Page).Save();
+
+            if (errorCode == 1) {
                 window?.ShowDialog("Błąd", "Nie można zapisać zmian, ponieważ wystąpiły błędy walidacji!");
                 return;
+            }
+
+            if (errorCode == 2) {
+                ShowDialog("Błąd", "Próba wysłania danych do logowania na podany adres mailowy nie powiodła się! Przekroczono dopuszczalny czas oczekiwania!");
+            } else if (errorCode == 3) {
+                ShowDialog("Błąd", "Nie podjęto próby wysłania danych do logowania na podany adres mailowy, ponieważ serwer poczty wychodzącej nie jest skonfigurowany!");
             }
 
             window?.Close();

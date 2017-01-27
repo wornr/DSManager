@@ -73,8 +73,8 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Button Width="100" Content="Anuluj" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=AddEditWindowInstance}"/>
-            <Button Grid.Column="1" Width="100" Content="Zapisz" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=AddEditWindowInstance}"/>
+            <Button Width="100" Content="Anuluj" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding ElementName=AddEditWindowInstance}" IsCancel="True"/>
+            <Button Grid.Column="1" Width="100" Content="Zapisz" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=AddEditWindowInstance}" IsDefault="True"/>
         </Grid>
     </Grid>
 </mahApps:MetroWindow>

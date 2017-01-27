@@ -11,7 +11,7 @@
         xmlns:converters="clr-namespace:DSManager.Converters"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
-        Title="DS Manager" Icon="/DSManager;component/Resources/Icons/app.ico" MinWidth="1250" MinHeight="650" WindowStartupLocation="CenterScreen" GlowBrush="Black">
+        Title="DS Manager" Icon="/DSManager;component/Resources/Icons/app.ico" MinWidth="1250" MinHeight="650" WindowStartupLocation="CenterScreen" GlowBrush="Black" UseLayoutRounding="True">
 
     <Window.Resources>
         <!-- Home -->
@@ -83,9 +83,9 @@
 
             <hamburgerMenu:HamburgerMenuItem IsEnabled="False"/>
 
-            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Statistics}" MaxHeight="34" SelectionCommand="{Binding OpenStatisticsPage}" Icon="/DSManager;component/Resources/Icons/Menu/statistics.png"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Statistics}" MaxHeight="34" SelectionCommand="{Binding OpenStatisticsPage}" Icon="/DSManager;component/Resources/Icons/Menu/statistics.png" Visibility="{Binding StatisticsExplorePermission, Converter={StaticResource ValueToCollapsedConverter}}"/>
             <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Users}" MaxHeight="34" SelectionCommand="{Binding OpenUsersPage}" Icon="/DSManager;component/Resources/Icons/Menu/user.png" Visibility="{Binding UsersMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}"/>
-            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Settings}" MaxHeight="34" SelectionCommand="{Binding OpenSettingsPage}" Icon="/DSManager;component/Resources/Icons/Menu/cog-wheel.png"/>
+            <hamburgerMenu:HamburgerMenuItem Text="{x:Static res:Resources.Settings}" MaxHeight="34" SelectionCommand="{Binding OpenSettingsPage}" Icon="/DSManager;component/Resources/Icons/Menu/cog-wheel.png" Visibility="{Binding SettingsMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}"/>
 
             <hamburgerMenu:HamburgerMenuItem IsEnabled="False"/>
 

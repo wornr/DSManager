@@ -12,6 +12,7 @@ using NHibernate.Util;
 
 using DSManager.Messengers;
 using DSManager.Model.Entities;
+using DSManager.Model.Entities.Dictionaries;
 using DSManager.Model.Enums;
 using DSManager.Model.Services;
 using DSManager.Utilities;
@@ -19,7 +20,9 @@ using DSManager.Validators;
 
 namespace DSManager.ViewModel.Pages.AddEdit {
     public class AddEditStudentViewModel : AddEditBaseViewModel, IDataErrorInfo {
+        private bool _editMode;
         private Student _student;
+        private User _user;
         private DateTime? _birthDate;
         private DateTime? _drivingLicenseIssueDate;
         private bool _PESELValid;
@@ -27,6 +30,8 @@ namespace DSManager.ViewModel.Pages.AddEdit {
         private DrivingLicensePermissions _chosenCategory;
         private ObservableCollection<DrivingLicensePermissions> _availableCategories;
         private ObservableCollection<DrivingLicensePermissions> _chosenCategories;
+        private string _oldMail;
+        private Settings _smtpSettings;
 
         private RelayCommand _PESELToDate;
         private RelayCommand _moveCategoryToLeft;
@@ -41,9 +46,15 @@ namespace DSManager.ViewModel.Pages.AddEdit {
                 if (message.Entity.GetType() != typeof(Student))
                     return;
 
+                using(var repository = new BaseRepository()) {
+                    _smtpSettings = repository.ToList<Settings>().FirstOrDefault();
+                }
+
+                _editMode = true;
                 _student = (Student) message.Entity;
                 _birthDate = _student.BirthDate;
                 _PESELValid = PESELValidator.Validate(_student.PESEL);
+                _oldMail = _student.Email;
 
                 if (_student.DrivingLicense != null) {
                     _drivingLicenseIssueDate = _student.DrivingLicense.IssueDate;
@@ -56,6 +67,7 @@ namespace DSManager.ViewModel.Pages.AddEdit {
 
                 _chosenCategories = new ObservableCollection<DrivingLicensePermissions>(_student.DrivingLicense.DrivingLicensePermissions);
             } else {
+                _editMode = false;
                 _student = new Student();
                 _birthDate = null;
                 _PESELValid = false;
@@ -225,15 +237,62 @@ namespace DSManager.ViewModel.Pages.AddEdit {
             return true;
         }
 
-        public override bool Save() {
+        public override int Save() {
             if (!Validate())
-                return false;
+                return 1;
 
             using (var repository = new BaseRepository()) {
                 repository.Save(_student);
             }
 
-            return true;
+            if (string.IsNullOrEmpty(Email))
+                return 0;
+
+            if (_editMode) {
+                if (!_oldMail.Equals(_student.Email)) {
+                    try {
+                        using(var repository = new BaseRepository()) {
+                            _user = repository.ToList<User>().FirstOrDefault(x => x.Student == _student);
+                            if (_user != null) {
+                                _user.Login = Email;
+                                _user.Email = Email;
+                                repository.Save(_user);
+                                if (!MailSender.Instance.SendChangeEmailAdressMail(_oldMail, Email, FirstName, LastName))
+                                    if (_smtpSettings != null && _smtpSettings.IsNotificationEnabled)
+                                        return 3;
+                            }
+                        }
+                    } catch {
+                        if(_smtpSettings != null && _smtpSettings.IsNotificationEnabled)
+                            return 2;
+                    }
+                }
+            } else {
+                try {
+                    var hash = MD5Encrypter.Encrypt(Email).Substring(0, 8);
+                    _user = new User {
+                        Login = Email,
+                        Email = Email,
+                        FirstName = FirstName,
+                        LastName = LastName,
+                        AccountType = AccountType.Kursant,
+                        Active = false,
+                        Student = _student,
+                        ConfirmationKey = MD5Encrypter.Encrypt(hash)
+                    };
+                    using(var repository = new BaseRepository()) {
+                        repository.Save(_user);
+                    }
+                    if (!MailSender.Instance.SendNewAccountMail(Email, FirstName, LastName, hash))
+                        if(_smtpSettings != null && _smtpSettings.IsNotificationEnabled)
+                            return 3;
+                } catch {
+                    if(_smtpSettings != null && _smtpSettings.IsNotificationEnabled)
+                        return 2;
+                }
+            }
+
+            return 0;
         }
         #endregion
 

@@ -52,13 +52,9 @@ namespace DSManager.ViewModel.Pages {
         private RelayCommand _refreshInstructorEvents;
         private RelayCommand _refreshStudentEvents;
         private RelayCommand _refreshCarEvents;
-        private RelayCommand _filterInstructors;
-        private RelayCommand _filterStudents;
-        private RelayCommand _filterCars;
         #endregion
 
         #region View Elements
-        private string _filter;
         private bool _isInstructorsLoading;
         private bool _isInstructorEventsLoading;
         private bool _isStudentsLoading;
@@ -68,7 +64,6 @@ namespace DSManager.ViewModel.Pages {
         #endregion
 
         #region Helpers
-        private string _prevFilter;
         #endregion
 
         #endregion
@@ -395,7 +390,7 @@ namespace DSManager.ViewModel.Pages {
                             Participant = x.Participant,
                             Car = x.Car,
                             Subject = x.Participant.Student?.FirstName + " " + x.Participant.Student?.SecondName + " " + x.Participant.Student?.LastName,
-                            Color = x.CourseKind == CourseKind.Theory ? Brushes.Green : Brushes.RoyalBlue
+                            Color = x.CourseKind == CourseKind.Teoria ? Brushes.Green : Brushes.RoyalBlue
                         });
                     });
 
@@ -409,7 +404,7 @@ namespace DSManager.ViewModel.Pages {
                             Participant = x.Participant,
                             Car = x.Car,
                             Subject = x.Participant.Student?.FirstName + " " + x.Participant.Student?.SecondName + " " + x.Participant.Student?.LastName,
-                            Color = x.CourseKind == CourseKind.Theory ? Brushes.Coral : Brushes.DarkViolet
+                            Color = x.CourseKind == CourseKind.Teoria ? Brushes.Coral : Brushes.DarkViolet
                         });
                     });
 
@@ -468,7 +463,7 @@ namespace DSManager.ViewModel.Pages {
                             Participant = x.Participant,
                             Car = x.Car,
                             Subject = x.Participant.Instructor == null ? "Brak instruktora" : x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName,
-                            Color = x.CourseKind == CourseKind.Theory ? Brushes.Green : Brushes.RoyalBlue
+                            Color = x.CourseKind == CourseKind.Teoria ? Brushes.Green : Brushes.RoyalBlue
                         });
                     });
 
@@ -482,7 +477,7 @@ namespace DSManager.ViewModel.Pages {
                             Participant = x.Participant,
                             Car = x.Car,
                             Subject = x.Participant.Instructor == null ? "Brak instruktora" : x.Participant.Instructor.FirstName + " " + x.Participant.Instructor.SecondName + " " + x.Participant.Instructor.LastName,
-                            Color = x.CourseKind == CourseKind.Theory ? Brushes.Coral : Brushes.DarkViolet
+                            Color = x.CourseKind == CourseKind.Teoria ? Brushes.Coral : Brushes.DarkViolet
                         });
                     });
 

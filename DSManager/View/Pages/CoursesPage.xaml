@@ -10,6 +10,7 @@
 
     <UserControl.Resources>
         <converters:BoolNegationConverter x:Key="BoolNegationConverter"/>
+        <converters:ValueToCollapsedConverter x:Key="ValueToCollapsedConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -19,21 +20,21 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
-            <Button x:Name="AddCourse" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddCourse}">
+            <Button x:Name="AddCourse" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding AddCourse}" Visibility="{Binding CoursesMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <Button x:Name="EditCourse" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditCourse}">
+            <Button x:Name="EditCourse" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding EditCourse}" Visibility="{Binding CoursesMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}"/>
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
-            <Button x:Name="DeleteCourse" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteCourse}">
+            <Button x:Name="DeleteCourse" Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding DeleteCourse}" Visibility="{Binding CoursesMgmtPermission, Converter={StaticResource ValueToCollapsedConverter}}">
                 <Rectangle Width="17" Height="17" Fill="{DynamicResource BlackBrush}">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}"/>

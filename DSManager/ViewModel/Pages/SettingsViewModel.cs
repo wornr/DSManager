@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using GalaSoft.MvvmLight.Command;
@@ -7,17 +9,20 @@ using GalaSoft.MvvmLight.Messaging;
 
 using DSManager.Messengers;
 using DSManager.Model.Entities;
+using DSManager.Model.Entities.Dictionaries;
 using DSManager.Model.Services;
+using DSManager.View.Pages;
 using DSManager.View.Windows;
 
 namespace DSManager.ViewModel.Pages {
-    public class SettingsViewModel : BaseViewModel {
+    public class SettingsViewModel : BaseViewModel, IDataErrorInfo {
         #region Variables
 
         #region Selections
         private Prices _selectedPrice;
         private DurationTime _selectedDurationTime;
         private MinimalAge _selectedMinimalAge;
+        private Settings _smtpSettings;
         #endregion
 
         #region Lists
@@ -39,6 +44,7 @@ namespace DSManager.ViewModel.Pages {
         private RelayCommand _editMinimalAge;
         private RelayCommand _deleteMinimalAge;
         private RelayCommand _refreshMinimalAges;
+        private RelayCommand<object> _saveSMTP;
         #endregion
 
         #region View Elements
@@ -53,6 +59,7 @@ namespace DSManager.ViewModel.Pages {
             FillPrices();
             FillDurationTimes();
             FillMinimalAges();
+            FillEmailSettings();
         }
 
         #region Methods
@@ -298,6 +305,29 @@ namespace DSManager.ViewModel.Pages {
                 }));
             }
         }
+
+        public RelayCommand<object> SaveSMTP {
+            get {
+                return _saveSMTP ?? (_saveSMTP = new RelayCommand<object>(param => {
+                    var pageInstance = param as SettingsPage;
+                    
+                    if ((!string.IsNullOrEmpty(_smtpSettings.SmtpHost) && !Regex.IsMatch(_smtpSettings.SmtpHost, @"^[a-zA-Z0-9\.]*$")) ||
+                            (!string.IsNullOrEmpty(_smtpSettings.SmtpPort.ToString()) && !Regex.IsMatch(_smtpSettings.SmtpPort.ToString(), @"^[0-9]+$")) ||
+                            pageInstance == null ||
+                            string.IsNullOrEmpty(pageInstance.Password.Password)) {
+                        ShowDialog("Błąd", "Wystąpił błąd walidacji! Pamiętaj, że dla każdej zmiany trzeba podać hasło!");
+                        return;
+                    }
+
+                    _smtpSettings.SmtpPassword = pageInstance.Password.Password;
+
+                    using (var repository = new BaseRepository()) {
+                        repository.Save(_smtpSettings);
+                    }
+                    ShowDialog("Sukces", "Pomyślnie zapisano zmiany!");
+                }));
+            }
+        }
         #endregion
 
         #region View Elements
@@ -321,6 +351,54 @@ namespace DSManager.ViewModel.Pages {
             get { return _isMinimalAgesLoading; }
             set {
                 _isMinimalAgesLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Host {
+            get { return _smtpSettings.SmtpHost; }
+            set {
+                _smtpSettings.SmtpHost = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int Port {
+            get { return _smtpSettings.SmtpPort; }
+            set {
+                _smtpSettings.SmtpPort = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Username {
+            get { return _smtpSettings.SmtpUsername; }
+            set {
+                _smtpSettings.SmtpUsername = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Email {
+            get { return _smtpSettings.SmtpMail; }
+            set {
+                _smtpSettings.SmtpMail = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsSSL {
+            get { return _smtpSettings.SmtpSsl; }
+            set {
+                _smtpSettings.SmtpSsl = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsNotificationEnabled {
+            get { return _smtpSettings.IsNotificationEnabled; }
+            set {
+                _smtpSettings.IsNotificationEnabled = value;
                 RaisePropertyChanged();
             }
         }
@@ -362,8 +440,39 @@ namespace DSManager.ViewModel.Pages {
 
             IsDurationTimesLoading = false;
         }
+
+        private void FillEmailSettings() {
+            using (var repository = new BaseRepository()) {
+                _smtpSettings = repository.ToList<Settings>().FirstOrDefault();
+                if (_smtpSettings == null) {
+                    _smtpSettings = new Settings();
+                }
+            }
+        }
         #endregion
 
         #endregion
+
+        public string this[string columnName] => Validate(columnName);
+
+        public string Error => "Błąd!";
+
+        private string Validate(string propertyName) {
+            var validationMessage = string.Empty;
+
+            switch(propertyName) {
+                case "Host":
+                    if(!string.IsNullOrEmpty(_smtpSettings.SmtpHost) && !Regex.IsMatch(_smtpSettings.SmtpHost, @"^[a-zA-Z0-9\.]*$"))
+                        validationMessage = "Podany host jest nieprawidłowy!";
+                    break;
+
+                case "Port":
+                    if (!Regex.IsMatch(_smtpSettings.SmtpPort.ToString(), @"^[0-9]+$"))
+                        validationMessage = "Podany port jest nieprawidłowy!";
+                    break;
+            }
+
+            return validationMessage;
+        }
     }
 }

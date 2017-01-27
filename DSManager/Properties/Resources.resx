@@ -132,14 +132,26 @@
   <data name="Cars" xml:space="preserve">
     <value>Cars</value>
   </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
   <data name="Courses" xml:space="preserve">
     <value>Courses</value>
+  </data>
+  <data name="CreateAccountWindow" xml:space="preserve">
+    <value>Create Account</value>
   </data>
   <data name="EnterAuthenticationData" xml:space="preserve">
     <value>Enter your credentials</value>
   </data>
   <data name="EnterCredentials" xml:space="preserve">
     <value>Enter your credentials</value>
+  </data>
+  <data name="EnterNewPassword" xml:space="preserve">
+    <value>Enter your new password</value>
   </data>
   <data name="Homepage" xml:space="preserve">
     <value>Homepage</value>

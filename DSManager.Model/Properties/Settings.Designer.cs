@@ -25,7 +25,7 @@ namespace DSManager.Model.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("johnny.heliohost.org")]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
         public string DBHost {
             get {
                 return ((string)(this["DBHost"]));
@@ -37,7 +37,7 @@ namespace DSManager.Model.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("wornr_dsmanager")]
+        [global::System.Configuration.DefaultSettingValueAttribute("dsmanager")]
         public string DBName {
             get {
                 return ((string)(this["DBName"]));
@@ -49,7 +49,7 @@ namespace DSManager.Model.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("wornr_dsmanager")]
+        [global::System.Configuration.DefaultSettingValueAttribute("postgres")]
         public string DBUser {
             get {
                 return ((string)(this["DBUser"]));
@@ -61,7 +61,7 @@ namespace DSManager.Model.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Qwerty!234")]
+        [global::System.Configuration.DefaultSettingValueAttribute("tajne")]
         public string DBPassword {
             get {
                 return ((string)(this["DBPassword"]));
@@ -73,7 +73,7 @@ namespace DSManager.Model.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool DeveloperMode {
             get {
                 return ((bool)(this["DeveloperMode"]));

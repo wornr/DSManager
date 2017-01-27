@@ -14,5 +14,6 @@ namespace DSManager.Model.Entities {
         public virtual string LastName { get; set; }
         public virtual AccountType AccountType { get; set; }
         public virtual bool Active { get; set; }
+        public virtual string ConfirmationKey { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.Messaging;
 using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Services;
+using DSManager.Utilities;
 using DSManager.View.Windows;
 
 namespace DSManager.ViewModel.Pages {
@@ -36,6 +37,7 @@ namespace DSManager.ViewModel.Pages {
         private string _filter;
         private bool _isCoursesLoading;
         private bool _isParticipantsLoading;
+        private bool _coursesMgmtPermission;
         #endregion
 
         #region Helpers
@@ -45,6 +47,7 @@ namespace DSManager.ViewModel.Pages {
         #endregion
         
         public CoursesViewModel() {
+            _coursesMgmtPermission = CheckPermissions.CheckPermission(SignedUser.AccountType, "CoursesManagement");
             FillCourses();
         }
 
@@ -165,6 +168,14 @@ namespace DSManager.ViewModel.Pages {
             get { return _isParticipantsLoading; }
             set {
                 _isParticipantsLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool CoursesMgmtPermission {
+            get { return _coursesMgmtPermission; }
+            set {
+                _coursesMgmtPermission = value;
                 RaisePropertyChanged();
             }
         }

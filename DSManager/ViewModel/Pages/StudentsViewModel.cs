@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,7 +13,9 @@ using DSManager.Messengers;
 using DSManager.Model.Entities;
 using DSManager.Model.Services;
 using DSManager.PDF.Templates;
+using DSManager.Utilities;
 using DSManager.View.Windows;
+using LiveCharts.Helpers;
 
 namespace DSManager.ViewModel.Pages {
     public class StudentsViewModel : BaseViewModel {
@@ -51,6 +54,7 @@ namespace DSManager.ViewModel.Pages {
         private bool _isParticipantsLoading;
         private bool _isClassesDatesLoading;
         private bool _isPaymentsLoading;
+        private bool _studentsMgmtPermission;
         #endregion
 
         #region Helpers
@@ -60,6 +64,7 @@ namespace DSManager.ViewModel.Pages {
         #endregion
         
         public StudentsViewModel() {
+            _studentsMgmtPermission = CheckPermissions.CheckPermission(SignedUser.AccountType, "StudentsManagement");
             _filter = _prevFilter = string.Empty;
             FillStudents(_filter);
         }
@@ -174,10 +179,20 @@ namespace DSManager.ViewModel.Pages {
                     if(_student == null) {
                         ShowDialog("Błąd", "Nie wybrano żadnego kursanta!");
                     } else {
-                        if(await ConfirmationDialog("Potwierdź", "Czy jesteś pewien, że chcesz usunąć danego kursanta?"))
+                        if(await ConfirmationDialog("Potwierdź", "Czy jesteś pewien, że chcesz usunąć danego kursanta?")) {
+                            using (var repository = new BaseRepository()) {
+                                var accounts = repository.ToList<User>().Where(x => x.Student == _student).ToList();
+                            
+                                if (accounts.Count > 0) {
+                                    foreach (var account in accounts) {
+                                        repository.Delete(account);
+                                    }
+                                }
+                            }
                             using(var repository = new BaseRepository()) {
                                 repository.Delete(_student);
                             }
+                        }
                     }
                     FillStudents(_filter);
                 }));
@@ -374,6 +389,14 @@ namespace DSManager.ViewModel.Pages {
             get { return _isPaymentsLoading; }
             set {
                 _isPaymentsLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool StudentsMgmtPermission {
+            get { return _studentsMgmtPermission; }
+            set {
+                _studentsMgmtPermission = value;
                 RaisePropertyChanged();
             }
         }

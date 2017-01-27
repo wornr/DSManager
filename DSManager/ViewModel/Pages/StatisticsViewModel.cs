@@ -280,9 +280,9 @@ namespace DSManager.ViewModel.Pages {
                     .Where(x => x.PaymentDate >= firstDayOfYear && x.PaymentDate <= lastDayOfYear)
                     .GroupBy(g => g.PaymentDate.Month).Select(s => new {
                         value = s.Sum(amount => amount.Amount),
-                        date = s.First().PaymentDate
+                        date = s.First().PaymentDate.Month
                     }).ForEach(x => {
-                            label.Add(x.date.ToString("MMMM", CultureInfo.CurrentCulture));
+                            label.Add(new DateTime(2000, x.date, 1).ToString("MMMM", CultureInfo.CurrentCulture));
                             columnSeries.Values.Add(x.value);
                         }
                     );
@@ -313,7 +313,7 @@ namespace DSManager.ViewModel.Pages {
             var firstDayOfYear = new DateTime(int.Parse(filter), 1, 1, 0, 0, 0);
             var lastDayOfYear = new DateTime(int.Parse(filter), 12, 31, 23, 59, 59);
 
-            var lineSeries = new LineSeries {
+            var lineSeries = new ColumnSeries {
                 Title = firstDayOfYear.Year.ToString(),
                 Values = new ChartValues<decimal>()
             };
@@ -324,9 +324,9 @@ namespace DSManager.ViewModel.Pages {
                     .Where(x => x.StartDate >= firstDayOfYear && x.StartDate <= lastDayOfYear && x.Car == car && x.Distance != null)
                     .GroupBy(g => g.StartDate.Month).Select(s => new {
                         value = s.Sum(distance => distance.Distance),
-                        date = s.First().StartDate
+                        date = s.First().StartDate.Month
                     }).ForEach(x => {
-                            label.Add(x.date.ToString("MMMM", CultureInfo.CurrentCulture));
+                            label.Add(new DateTime(2000, x.date, 1).ToString("MMMM", CultureInfo.CurrentCulture));
                             lineSeries.Values.Add(x.value);
                         }
                     );
@@ -349,22 +349,32 @@ namespace DSManager.ViewModel.Pages {
             var label = new List<string>();
 
             using(var repository = new BaseRepository()) {
-                repository.ToList<ExamsDates>()
-                    .Where(x => x.IsPassed == true)
-                    .GroupBy(g => g.Instructor).Select(s => new {
-                        countPassed = s.Count(),
-                        instructor = s.First().Instructor
-                        //date = s.First().StartDate
-                    }).ForEach(x => {
-                        repository.ToList<ExamsDates>()
+                var instructorsGroupedByPassedExam =
+                    repository.ToList<ExamsDates>()
+                        .Where(x => x.IsPassed == true)
+                        .GroupBy(g => g.Instructor.Id).Select(s => new {
+                            countPassed = s.Count(),
+                            instructorId = s.First().Instructor.Id,
+                            //date = s.First().StartDate
+                        });
+
+                var instructorsGroupedByNotPassedExam =
+                    repository.ToList<ExamsDates>()
                         .Where(y => y.IsPassed != null)
-                            .GroupBy(g => g.Instructor).Select(s => new {
-                                count = s.Count(),
-                            }).ForEach(y => {
-                                label.Add(x.instructor.FirstName + " " + x.instructor.LastName);
-                                columnSeries.Values.Add(decimal.Multiply(decimal.Divide(x.countPassed, y.count), 100));
-                            });
+                        .GroupBy(g => g.Instructor).Select(s => new {
+                            count = s.Count(),
+                            instructorId = s.First().Instructor.Id
+                        });
+
+                instructorsGroupedByPassedExam.ForEach(x => {
+                    instructorsGroupedByNotPassedExam.ForEach(y => {
+                        if (x.instructorId == y.instructorId) {
+                            var instructor = repository.ToList<Instructor>().First(z => z.Id == x.instructorId);
+                            label.Add(instructor.FirstName + " " + instructor.LastName);
+                            columnSeries.Values.Add(decimal.Multiply(decimal.Divide(x.countPassed, y.count), 100));
+                        }
                     });
+                });
             }
 
             InstructorPassRateCollection = new SeriesCollection { columnSeries };

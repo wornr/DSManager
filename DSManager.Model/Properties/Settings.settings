@@ -3,19 +3,19 @@
   <Profiles />
   <Settings>
     <Setting Name="DBHost" Type="System.String" Scope="User">
-      <Value Profile="(Default)">johnny.heliohost.org</Value>
+      <Value Profile="(Default)">localhost</Value>
     </Setting>
     <Setting Name="DBName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">wornr_dsmanager</Value>
+      <Value Profile="(Default)">dsmanager</Value>
     </Setting>
     <Setting Name="DBUser" Type="System.String" Scope="User">
-      <Value Profile="(Default)">wornr_dsmanager</Value>
+      <Value Profile="(Default)">postgres</Value>
     </Setting>
     <Setting Name="DBPassword" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Qwerty!234</Value>
+      <Value Profile="(Default)">tajne</Value>
     </Setting>
     <Setting Name="DeveloperMode" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

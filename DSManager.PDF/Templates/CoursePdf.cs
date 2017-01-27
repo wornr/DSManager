@@ -325,7 +325,7 @@ namespace DSManager.PDF.Templates {
                 row.Cells[3].AddParagraph(classInfo.EndDate.ToShortTimeString());
                 row.Cells[4].AddParagraph(AddLeadingZeros.Convert(timeDifference.Hours) + ":" + AddLeadingZeros.Convert(timeDifference.Minutes));
                 row.Cells[5].AddParagraph(classInfo.Distance == null ? "" : classInfo.Distance.ToString());
-                row.Cells[6].AddParagraph(classInfo.CourseKind == CourseKind.Theory ? "T" : "P");
+                row.Cells[6].AddParagraph(classInfo.CourseKind == CourseKind.Teoria ? "T" : "P");
                 row.Cells[7].AddParagraph(classInfo.Instructor.PermissionsNr);
                 rowNr++;
             }
